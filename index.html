@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#e9eef1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Ridge">
+<title>Ridge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1e2c35;
+    --ink-soft:#43525c;
+    --paper:#e9eef1;
+    --paper-2:#dfe6ea;
+    --valley:#e9eef1;
+    --valley-2:#dfe6ea;
+    --surface:#ffffff;
+    --surface-2:#eef3f6;
+    --line:#d8e0e5;
+    --line-2:#c4cfd6;
+    --ridge-1:#b7c5cf;
+    --ridge-2:#93a6b2;
+    --ridge-3:#aebcc5;
+    --haze:#43525c;
+    --mist:#1e2c35;
+    --muted:#677781;
+    --gold:#a85638;
+    --gold-2:#bd6a48;
+    --pine:#3f6f57;
+    --radius:14px;
+    --maxw:520px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{overscroll-behavior:none}
+  html,body{margin:0;padding:0}
+  body{
+    background:linear-gradient(180deg,#edf1f4 0%, #dfe6ea 100%);
+    background-attachment:fixed;
+    color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    min-height:100dvh;
+  }
+  /* faint topographic texture */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.055;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='160' viewBox='0 0 220 160'><g fill='none' stroke='%2323241f' stroke-width='1'><path d='M-10,120 C40,90 80,150 130,110 C170,80 200,130 240,100'/><path d='M-10,95 C40,65 80,125 130,85 C170,55 200,105 240,75'/><path d='M-10,70 C40,40 80,100 130,60 C170,30 200,80 240,50'/><path d='M-10,45 C40,15 80,75 130,35 C170,5 200,55 240,25'/></g></svg>");
+  }
+  .app{position:relative;z-index:1;max-width:var(--maxw);margin:0 auto;padding:0 16px calc(96px + env(safe-area-inset-bottom)) 16px;}
+
+  /* ---- header ---- */
+  header{position:sticky;top:0;z-index:6;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:calc(14px + env(safe-area-inset-top)) 2px 12px;background:linear-gradient(180deg,rgba(244,243,238,.94) 78%,rgba(244,243,238,0));backdrop-filter:blur(7px)}
+  .brand{display:flex;align-items:center;gap:10px}
+  .brand svg{display:block}
+  .brand .word{font-family:'Space Grotesk';font-weight:600;font-size:25px;letter-spacing:.12em;text-transform:uppercase;line-height:1}
+  .brand .sub{font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+  .weekpick{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px 6px}
+  .weekpick button{all:unset;cursor:pointer;width:32px;height:32px;display:grid;place-items:center;border-radius:50%;color:var(--haze);font-size:17px}
+  .weekpick button:hover{background:var(--surface-2);color:var(--mist)}
+  .weekpick .wk{font-family:'Space Mono';font-size:12px;letter-spacing:.02em;color:var(--mist);min-width:96px;text-align:center}
+  .weekpick .wk small{display:block;font-size:9px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase}
+
+  /* ---- tabs content ---- */
+  .view{animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+  .eyebrow{font-family:'Space Grotesk';text-transform:uppercase;letter-spacing:.2em;font-size:11px;color:var(--haze);margin:6px 2px 12px;display:flex;align-items:center;gap:8px}
+  .eyebrow::after{content:"";flex:1;height:14px;opacity:.4;background:repeat-x center / auto 14px url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='14' viewBox='0 0 120 14'><g fill='none' stroke='%2323241f' stroke-width='1'><path d='M0,7 C20,2 40,12 60,7 C80,2 100,12 120,7'/><path d='M0,11 C24,7 44,14 64,11 C84,8 104,14 120,11'/></g></svg>")}
+
+  /* ---- day cards ---- */
+  .day{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:10px;overflow:hidden}
+  .day.today{border-color:var(--ink);box-shadow:0 0 0 1px rgba(35,36,31,.12)}
+  .day-head{display:flex;align-items:center;gap:12px;padding:13px 15px;cursor:pointer;user-select:none}
+  .day-name{font-family:'Space Grotesk';font-weight:600;font-size:16px;letter-spacing:.12em;text-transform:uppercase}
+  .day-date{font-family:'Space Mono';font-size:11px;color:var(--muted)}
+  .today-tag{font-family:'Space Grotesk';font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--surface);background:var(--ink);padding:2px 7px;border-radius:999px;font-weight:600}
+  .day-meta{margin-left:auto;display:flex;align-items:center;gap:10px}
+  .day-count{font-family:'Space Mono';font-size:11px;color:var(--haze)}
+  .chev{color:var(--muted);transition:transform .2s;font-size:13px}
+  .day.open .chev{transform:rotate(90deg)}
+  .day-body{display:none;padding:0 15px 13px}
+  .day.open .day-body{display:block}
+
+  .act{display:flex;align-items:center;gap:11px;padding:10px 0;border-top:1px solid var(--line)}
+  .check{flex:none;width:22px;height:22px;border-radius:7px;border:1.5px solid var(--ridge-3);background:transparent;cursor:pointer;display:grid;place-items:center;transition:.15s}
+  .check svg{opacity:0;transform:scale(.6);transition:.15s;color:var(--valley)}
+  .check.done{background:var(--ink);border-color:var(--ink)}
+  .check.done svg{opacity:1;transform:scale(1)}
+  .act-main{flex:1;min-width:0;cursor:pointer}
+  .act-type{font-family:'Space Grotesk';font-size:11px;letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:6px}
+  .act-type .dot{width:7px;height:7px;border-radius:50%}
+  .act-detail{font-family:'Space Mono';font-size:13px;color:var(--mist);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .act.is-done .act-detail{color:var(--muted)}
+  .act-del{all:unset;cursor:pointer;color:var(--muted);font-size:18px;line-height:1;width:36px;height:36px;display:grid;place-items:center;margin-right:-6px}
+  .act-del:hover{color:#e88}
+
+  .add-btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;margin-top:10px;padding:10px;background:transparent;border:1px dashed var(--line);border-radius:11px;color:var(--haze);font-family:'Space Grotesk';font-size:12px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:.15s}
+  .add-btn:hover{border-color:var(--haze);color:var(--mist);background:rgba(109,151,184,.06)}
+  .empty{font-size:13px;color:var(--muted);padding:4px 0 2px;border-top:1px solid var(--line);font-style:italic}
+
+  /* ---- quests / ascent ---- */
+  .ascent{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:0;overflow:hidden;margin-bottom:16px;position:relative}
+  .ascent svg{display:block;width:100%;height:auto}
+  .ascent-cap{display:flex;justify-content:space-between;align-items:baseline;padding:12px 15px 4px}
+  .ascent-cap .t{font-family:'Space Grotesk';letter-spacing:.16em;text-transform:uppercase;font-size:12px}
+  .ascent-cap .n{font-family:'Space Mono';font-size:11px;color:var(--gold-2)}
+
+  .quest{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:15px;margin-bottom:12px;transition:.2s}
+  .quest.done{border-color:var(--gold);box-shadow:0 0 0 1px rgba(168,86,56,.18);background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='170' height='130' viewBox='0 0 170 130'><g fill='none' stroke='%23a85638' stroke-width='1.2' opacity='0.16'><ellipse cx='130' cy='100' rx='18' ry='13'/><ellipse cx='130' cy='100' rx='34' ry='25'/><ellipse cx='130' cy='100' rx='52' ry='38'/><ellipse cx='130' cy='100' rx='72' ry='52'/></g></svg>");background-repeat:no-repeat;background-position:right -6px bottom -8px}
+  .q-top{display:flex;align-items:center;gap:10px}
+  .q-icon{flex:none;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--surface-2);color:var(--haze)}
+  .quest.done .q-icon{background:var(--gold);color:var(--valley)}
+  .q-tier{font-family:'Space Grotesk';font-weight:600;letter-spacing:.16em;text-transform:uppercase;font-size:14px}
+  .q-budget{font-family:'Space Mono';font-size:11px;color:var(--muted)}
+  .q-prog-num{margin-left:auto;font-family:'Space Mono';font-size:13px;color:var(--mist)}
+  .quest.done .q-prog-num{color:var(--gold-2)}
+
+  .q-config{display:flex;align-items:center;gap:8px;margin:13px 0 11px;font-family:'Space Mono';font-size:12px;color:var(--muted);flex-wrap:wrap}
+  .q-config select,.q-config input{font-family:'Space Mono';font-size:13px;background:var(--valley);color:var(--mist);border:1px solid var(--line);border-radius:8px;padding:6px 8px}
+  .q-config input{width:54px;text-align:center}
+  .q-config select{cursor:pointer}
+
+  .bar{height:8px;border-radius:999px;background:var(--valley);overflow:hidden;border:1px solid var(--line)}
+  .bar > i{display:block;height:100%;border-radius:999px;background:var(--ink);transition:width .4s ease}
+  .quest.done .bar > i{background:var(--gold)}
+
+  .reward{margin-top:13px;border-top:1px solid var(--line);padding-top:13px}
+  .reward-lead{display:flex;align-items:center;gap:7px;font-family:'Space Grotesk';letter-spacing:.14em;text-transform:uppercase;font-size:11px;color:var(--gold-2);margin-bottom:10px}
+  .cats{display:flex;gap:6px;margin-bottom:11px;flex-wrap:wrap}
+  .cat{font-family:'Space Grotesk';font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:5px 9px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;transition:.15s}
+  .cat.active{border-color:var(--gold);color:var(--gold-2);background:rgba(232,164,76,.08)}
+  .prize{display:flex;align-items:center;gap:12px;background:var(--valley);border:1px solid var(--line);border-radius:12px;padding:12px}
+  .prize .info{flex:1;min-width:0}
+  .prize .name{font-family:'Space Grotesk';font-weight:500;font-size:15px;letter-spacing:.02em}
+  .prize .note{font-size:12px;color:var(--muted);margin-top:2px}
+  .prize .price{font-family:'Space Mono';font-weight:700;color:var(--gold-2);font-size:14px;white-space:nowrap}
+  .reroll{all:unset;cursor:pointer;flex:none;width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:var(--surface-2);color:var(--haze);transition:.2s}
+  .reroll:hover{color:var(--gold-2)}
+  .reroll:active{transform:rotate(180deg)}
+  .locked{display:flex;align-items:center;gap:8px;margin-top:13px;font-size:12px;color:var(--muted);font-style:italic}
+
+  /* ---- bottom nav ---- */
+  nav{position:fixed;left:0;right:0;bottom:0;z-index:5;display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom);
+      background:linear-gradient(180deg,rgba(14,26,43,0),var(--valley) 38%);}
+  nav .bar2{display:flex;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px;margin:0 16px 14px;box-shadow:0 6px 22px rgba(35,36,31,.12)}
+  nav button{all:unset;cursor:pointer;display:flex;align-items:center;gap:8px;padding:10px 22px;border-radius:999px;color:var(--muted);font-family:'Space Grotesk';font-size:13px;letter-spacing:.14em;text-transform:uppercase;transition:.18s}
+  nav button.active{color:var(--surface);background:var(--ink)}
+  nav button svg{display:block}
+
+  /* ---- bottom sheet ---- */
+  .scrim{position:fixed;inset:0;z-index:20;background:rgba(35,36,31,.38);backdrop-filter:blur(2px);opacity:0;pointer-events:none;transition:.2s}
+  .scrim.show{opacity:1;pointer-events:auto}
+  .sheet{position:fixed;left:0;right:0;bottom:0;z-index:21;max-width:var(--maxw);margin:0 auto;background:var(--surface);border:1px solid var(--line);border-bottom:none;border-radius:22px 22px 0 0;padding:8px 18px calc(20px + env(safe-area-inset-bottom));transform:translateY(110%);transition:transform .26s cubic-bezier(.22,.61,.36,1)}
+  .sheet.show{transform:translateY(0)}
+  .grab{width:38px;height:4px;border-radius:999px;background:var(--line);margin:6px auto 14px}
+  .sheet h3{font-family:'Space Grotesk';font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:15px;margin:0 0 14px}
+  .seg{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:16px}
+  .seg button{all:unset;cursor:pointer;text-align:center;padding:10px 4px;border-radius:11px;border:1px solid var(--line);font-family:'Space Grotesk';font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);transition:.15s}
+  .seg button.active{color:var(--mist);border-color:transparent}
+  .field{margin-bottom:13px}
+  .field label{display:block;font-family:'Space Grotesk';font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .field input{width:100%;font-family:'Space Mono';font-size:15px;background:var(--valley);color:var(--mist);border:1px solid var(--line);border-radius:11px;padding:12px 13px}
+  .field input:focus{outline:none;border-color:var(--haze)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+  .setlbl{display:block;font-family:'Space Grotesk';font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:2px 0 9px}
+  .setrow{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+  .setnum{font-family:'Space Mono';font-size:12px;color:var(--haze);width:16px;text-align:center;flex:none}
+  .setrow input{flex:1;min-width:0;font-family:'Space Mono';font-size:15px;background:var(--valley);color:var(--mist);border:1px solid var(--line);border-radius:10px;padding:11px 8px;text-align:center}
+  .setrow input:focus{outline:none;border-color:var(--haze)}
+  .setrow .x{color:var(--muted);font-family:'Space Mono';flex:none}
+  .setdel{all:unset;cursor:pointer;flex:none;width:30px;height:30px;display:grid;place-items:center;color:var(--muted);font-size:18px;border-radius:8px}
+  .setdel:hover{color:#e88}
+  .add-set{all:unset;cursor:pointer;display:block;text-align:center;width:100%;padding:9px;border:1px dashed var(--line);border-radius:10px;color:var(--haze);font-family:'Space Grotesk';font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-top:2px}
+  .add-set:hover{border-color:var(--haze);color:var(--mist)}
+  .sheet-actions{display:flex;gap:10px;margin-top:18px}
+  .btn{all:unset;cursor:pointer;text-align:center;flex:1;padding:14px;border-radius:13px;font-family:'Space Grotesk';letter-spacing:.14em;text-transform:uppercase;font-size:13px;font-weight:500;transition:.15s}
+  .btn.primary{background:var(--gold);color:var(--valley)}
+  .btn.primary:hover{background:var(--gold-2)}
+  .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--muted)}
+  .btn.ghost:hover{color:var(--mist)}
+  .btn.danger{flex:none;width:52px;border:1px solid #e0c5bc;color:#a8472f}
+
+  /* ---- lift launcher (in add sheet) ---- */
+  .launch{display:flex;flex-direction:column;gap:9px}
+  .launch-lbl{font-family:'Space Grotesk';font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:8px 0 0}
+  .routine-pick{all:unset;cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:13px;border:1px solid var(--line);border-radius:12px}
+  .routine-pick:hover{border-color:var(--haze)}
+  .routine-pick b{font-family:'Space Grotesk';font-size:14px;letter-spacing:.04em}
+  .routine-pick i{display:block;font-style:normal;font-family:'Space Mono';font-size:11px;color:var(--muted);margin-top:2px}
+  .routine-pick .go{font-family:'Space Grotesk';font-size:11px;letter-spacing:.1em;color:var(--haze)}
+  .link-btn{all:unset;cursor:pointer;text-align:center;color:var(--haze);font-family:'Space Grotesk';font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:8px;margin-top:2px}
+  .link-btn:hover{color:var(--mist)}
+
+  /* ---- full workout screen ---- */
+  .workout{position:fixed;inset:0;z-index:40;background:linear-gradient(180deg,var(--valley),var(--valley-2));display:none;flex-direction:column;overflow:hidden}
+  .workout.show{display:flex}
+  #workoutBody{display:flex;flex-direction:column;flex:1;min-height:0;width:100%}
+  .wo-head{display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.86);backdrop-filter:blur(6px)}
+  .wo-back{all:unset;cursor:pointer;font-size:24px;color:var(--haze);width:30px;text-align:center;line-height:1}
+  .wo-name{flex:1;min-width:0;background:transparent;border:none;color:var(--mist);font-family:'Space Grotesk';font-weight:600;font-size:18px;letter-spacing:.06em}
+  .wo-name:focus{outline:none}
+  .wo-finish{all:unset;cursor:pointer;background:var(--gold);color:var(--valley);font-family:'Space Grotesk';font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;padding:9px 16px;border-radius:999px}
+  .wo-scroll{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;max-width:var(--maxw);width:100%;margin:0 auto;padding:14px 14px calc(28px + env(safe-area-inset-bottom))}
+  .wo-empty{text-align:center;color:var(--muted);font-style:italic;padding:36px 0;line-height:1.6}
+  .ex-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:13px;margin-bottom:12px}
+  .ex-head{display:flex;align-items:center;gap:10px}
+  .ex-name{flex:1;font-family:'Space Grotesk';font-weight:500;font-size:15px;letter-spacing:.03em;color:var(--gold-2)}
+  .ex-del{all:unset;cursor:pointer;font-family:'Space Grotesk';font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .ex-del:hover{color:#e88}
+  .ex-note{width:100%;background:transparent;border:none;border-bottom:1px solid var(--line);color:var(--mist);font-size:13px;padding:7px 0;margin:8px 0 4px}
+  .ex-note:focus{outline:none;border-color:var(--haze)}
+  .set-head,.set-row{display:grid;grid-template-columns:26px 50px 1fr 1fr 34px 30px;gap:6px;align-items:center}
+  .set-head{padding:9px 0 5px}
+  .set-head span{font-family:'Space Grotesk';font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:center}
+  .set-row{padding:5px 0}
+  .set-row.done{background:rgba(35,36,31,.045);border-radius:8px}
+  .set-row.pr-row{box-shadow:inset 3px 0 0 var(--gold)}
+  .set-num{all:unset;cursor:pointer;text-align:center;font-family:'Space Mono';font-size:13px;color:var(--mist)}
+  .set-num.warm{color:var(--gold)}
+  .set-prev{font-family:'Space Mono';font-size:11px;color:var(--muted);text-align:center;white-space:nowrap;overflow:hidden}
+  .pr-tag{color:var(--gold-2);font-weight:700}
+  .set-w,.set-r{min-width:0;width:100%;font-family:'Space Mono';font-size:14px;text-align:center;background:var(--valley);color:var(--mist);border:1px solid var(--line);border-radius:8px;padding:9px 4px}
+  .set-w:focus,.set-r:focus{outline:none;border-color:var(--haze)}
+  .set-check{all:unset;cursor:pointer;width:32px;height:32px;display:grid;place-items:center;border-radius:8px;border:1.5px solid var(--ridge-3);color:transparent;font-size:15px;font-weight:700}
+  .set-check.on{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+  .set-del{all:unset;cursor:pointer;text-align:center;color:var(--muted);font-size:18px;height:32px;line-height:32px}
+  .set-del:hover{color:#e88}
+  .ex-addset{all:unset;cursor:pointer;display:block;text-align:center;width:100%;padding:8px;margin-top:8px;border:1px dashed var(--line);border-radius:9px;color:var(--haze);font-family:'Space Grotesk';font-size:10px;letter-spacing:.14em;text-transform:uppercase}
+  .ex-addset:hover{border-color:var(--haze);color:var(--mist)}
+  .wo-add{all:unset;cursor:pointer;display:block;text-align:center;width:100%;padding:13px;border-radius:12px;background:var(--surface-2);color:var(--mist);font-family:'Space Grotesk';font-size:12px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
+  .wo-add:hover{background:#e8e7e0}
+  .wo-saveroutine{all:unset;cursor:pointer;display:block;text-align:center;width:100%;padding:11px;border:1px solid var(--line);border-radius:12px;color:var(--haze);font-family:'Space Grotesk';font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+  .wo-saveroutine:hover{color:var(--mist);border-color:var(--haze)}
+
+  /* ---- picker / routine manager ---- */
+  .search{width:100%;font-size:15px;background:var(--valley);color:var(--mist);border:1px solid var(--line);border-radius:11px;padding:12px 13px;margin-bottom:6px;font-family:'Inter'}
+  .search:focus{outline:none;border-color:var(--haze)}
+  .grp{font-family:'Space Grotesk';font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--haze);margin:14px 0 7px}
+  .ex-pick{all:unset;cursor:pointer;display:block;padding:11px 12px;border-radius:10px;font-size:14px;color:var(--mist)}
+  .ex-pick:hover{background:var(--surface-2)}
+  .ex-pick.added{color:var(--gold-2)}
+  .custom-add{all:unset;cursor:pointer;display:block;text-align:center;padding:11px;border:1px dashed var(--gold);border-radius:11px;color:var(--gold-2);font-size:13px;margin:6px 0}
+  .rt-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)}
+  .rt-row b{font-family:'Space Grotesk';font-size:14px}
+  .rt-row i{display:block;font-style:normal;font-family:'Space Mono';font-size:11px;color:var(--muted);margin-top:2px}
+  #sheet2{max-height:82vh;overflow:auto}
+
+  /* toast */
+  .toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%) translateY(10px);z-index:60;background:var(--surface-2);color:var(--mist);border:1px solid var(--line);padding:10px 16px;border-radius:999px;font-size:13px;opacity:0;pointer-events:none;transition:.2s}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* ---- week plan/log layout ---- */
+  .weekset{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:8px 2px 12px}
+  .eyebrow-t{font-family:'Space Grotesk';text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:var(--haze)}
+  .set-week-btn{all:unset;cursor:pointer;font-family:'Space Grotesk';font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);border:1px solid var(--ink);border-radius:999px;padding:7px 14px}
+  .set-week-btn:hover{background:var(--ink);color:var(--surface)}
+  .day2{display:grid;grid-template-columns:108px 1fr;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:10px;overflow:hidden}
+  .day2.today{border-color:var(--ink);box-shadow:0 0 0 1px rgba(35,36,31,.12)}
+  .plan-col{padding:12px 11px;border-right:1px solid var(--line);background:var(--surface-2);cursor:pointer}
+  .plan-col:hover{background:#edece5}
+  .d-name{font-family:'Space Grotesk';font-weight:600;font-size:14px;letter-spacing:.1em;text-transform:uppercase}
+  .d-date{font-family:'Space Mono';font-size:10px;color:var(--muted);margin-left:5px;letter-spacing:0}
+  .plan-chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+  .pchip{font-family:'Space Grotesk';font-size:9px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:3px 7px;border-radius:999px;border:1px solid var(--ink);color:var(--ink)}
+  .pchip.rest{border-style:dashed;border-color:var(--muted);color:var(--muted)}
+  .plan-empty{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);font-style:italic;margin-top:8px}
+  .log-col{padding:7px 12px 10px}
+  .log-col .act:first-child{border-top:none}
+  /* ---- planner sheet ---- */
+  .plan-note{font-size:12px;color:var(--muted);margin:-4px 0 14px}
+  .plan-prow{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+  .plan-prow .pday{font-family:'Space Grotesk';font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;width:40px;flex:none;padding-top:7px}
+  .plan-toggles{display:flex;flex-wrap:wrap;gap:5px}
+  .ptog{all:unset;cursor:pointer;font-family:'Space Grotesk';font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:7px 11px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+  .ptog.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+  .ptog.rest.on{background:var(--muted);border-color:var(--muted)}
+
+  /* ---- hero numbers + branded empties ---- */
+  .hero{padding:16px 4px 18px;border-bottom:1px solid var(--line);margin-bottom:16px}
+  .hero-num{font-family:'Space Grotesk';font-weight:700;font-size:46px;line-height:.92;letter-spacing:-.02em;color:var(--ink)}
+  .hero-unit{font-family:'Space Grotesk';font-weight:500;font-size:17px;color:var(--muted);margin-left:6px;letter-spacing:0}
+  .hero-sub{font-family:'Space Grotesk';text-transform:uppercase;letter-spacing:.16em;font-size:10px;color:var(--muted);margin-top:5px}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:16px;margin-top:13px;font-family:'Space Mono';font-size:12px;color:var(--ink-soft)}
+  .hero-stats b{color:var(--ink)}
+  .hero-empty{display:flex;flex-direction:column;align-items:flex-start;gap:9px}
+  .hero-prompt{font-family:'Space Grotesk';font-size:16px;color:var(--ink);letter-spacing:.01em}
+  .empty2{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);font-style:italic;padding:7px 0}
+
+  /* ---- responsive plan/log + quest config + streak + welcome ---- */
+  .plan-head{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  @media (max-width:440px){
+    .day2{grid-template-columns:1fr}
+    .plan-col{border-right:none;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px}
+    .plan-col .plan-chips,.plan-col .plan-empty{margin-top:0}
+    .hero-num{font-size:40px}
+  }
+  .q-config2{margin:13px 0 11px}
+  .stepper{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .stepper .step{all:unset;cursor:pointer;width:30px;height:30px;display:grid;place-items:center;border:1px solid var(--line);border-radius:9px;font-size:18px;color:var(--ink)}
+  .stepper .step:hover{border-color:var(--ink)}
+  .step-val{font-family:'Space Mono';font-weight:700;font-size:18px;min-width:24px;text-align:center}
+  .step-lbl{font-family:'Space Grotesk';font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .qseg{display:flex;flex-wrap:wrap;gap:5px}
+  .qsegb{all:unset;cursor:pointer;font-family:'Space Grotesk';font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:7px 11px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+  .qsegb.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+  .streak{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-soft);margin:4px 2px 14px}
+  .streak svg{flex:none}
+  .streak b{font-family:'Space Mono';font-weight:700;color:var(--ink);font-size:15px}
+  .peaks{display:flex;flex-direction:column;gap:8px}
+  .peak{all:unset;cursor:pointer;display:flex;align-items:center;gap:12px;padding:11px 13px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+  .peak:hover{border-color:var(--haze)}
+  .peak.cur{border-color:var(--ink)}
+  .peak-range{font-family:'Space Mono';font-size:13px;color:var(--ink);flex:1}
+  .peak-dots{display:flex;gap:5px}
+  .peak-dots i{width:8px;height:8px;border-radius:50%;border:1.4px solid var(--ridge-2);display:block}
+  .peak-dots i.on{background:var(--gold);border-color:var(--gold)}
+  .peak-label{font-family:'Space Grotesk';font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);width:52px;text-align:right}
+  .toast{display:flex;align-items:center;gap:14px}
+  .toast.show{pointer-events:auto}
+  .toast-undo{all:unset;cursor:pointer;font-family:'Space Grotesk';font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);font-weight:600}
+  .arm{color:#b03b22 !important;font-weight:700;transform:scale(1.15)}
+  .welcome{position:fixed;inset:0;z-index:70;background:linear-gradient(180deg,#eef2f5,#dfe6ea);display:none;align-items:center;justify-content:center;padding:28px}
+  .welcome.show{display:flex}
+  .welcome-inner{max-width:360px;width:100%;text-align:center}
+  .welcome h2{font-family:'Space Grotesk';font-weight:600;font-size:30px;letter-spacing:.16em;margin:14px 0 2px}
+  .tagline{color:var(--ink-soft);font-size:15px;margin:0 0 26px}
+  .wsteps{display:flex;flex-direction:column;gap:15px;text-align:left;margin-bottom:26px}
+  .wstep{display:flex;align-items:center;gap:13px}
+  .wstep .wn{flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--ink);display:grid;place-items:center;font-family:'Space Grotesk';font-weight:600;font-size:13px}
+  .wstep b{font-family:'Space Grotesk';font-weight:600;letter-spacing:.03em;display:block;font-size:14px}
+  .wstep span{font-size:12.5px;color:var(--muted)}
+  .welcome .btn.primary{margin-bottom:4px}
+
+  /* ---- mobile polish ---- */
+  button{touch-action:manipulation;-webkit-user-select:none;user-select:none}
+  .wo-scroll,#sheet,#sheet2{-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+  .btn:active,.wo-add:active,.add-btn:active,.set-week-btn:active,.wo-finish:active,nav button:active,.set-check:active,.step:active{transform:scale(.97)}
+  @media (max-width:440px){
+    input,textarea,select{font-size:16px}
+    .set-w,.set-r{font-size:16px;padding:10px 4px}
+    .ex-note{font-size:14px}
+    .search,.field input{font-size:16px}
+  }
+
+  /* ---- final cleanups: icons, settings, streak, finish ---- */
+  .ic{width:1em;height:1em;display:inline-block;vertical-align:-.13em;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+  .ic-sun,.ic-peak{width:1.05em;height:1.05em;display:inline-block;vertical-align:-.16em;flex:none}
+  .pr-mark{color:var(--gold);font-weight:700}
+  .ex-del{all:unset;cursor:pointer;color:var(--muted);width:34px;height:34px;display:grid;place-items:center;font-size:18px}
+  .ex-del:hover{color:#b03b22}
+  .hdr-right{display:flex;align-items:center;gap:8px}
+  .gear{all:unset;cursor:pointer;width:38px;height:38px;display:grid;place-items:center;border-radius:50%;color:var(--haze);font-size:20px}
+  .gear:hover{background:var(--surface-2);color:var(--ink)}
+  .wk{cursor:pointer}
+  .streak-top{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:13px 15px;margin-bottom:14px;font-size:14px;color:var(--ink-soft)}
+  .streak-top svg{flex:none}
+  .streak-top b{font-family:'Space Mono';font-weight:700;color:var(--ink);font-size:17px}
+  .set-list{display:flex;flex-direction:column;gap:9px;margin-top:4px}
+  .set-row2{all:unset;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px;border:1px solid var(--line);border-radius:12px}
+  .set-row2:hover{border-color:var(--haze)}
+  .set-row2 b{font-family:'Space Grotesk';font-size:14px;letter-spacing:.02em;display:block}
+  .set-row2 span{font-size:12px;color:var(--muted);display:block;margin-top:2px}
+  .set-row2.danger-row b{color:#a8472f}
+  .unit-toggle{display:flex;gap:4px;flex:none}
+  .ut{all:unset;cursor:pointer;font-family:'Space Mono';font-size:13px;padding:7px 13px;border-radius:8px;border:1px solid var(--line);color:var(--muted)}
+  .ut.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+  .finishpop{position:fixed;inset:0;z-index:65;display:none;align-items:center;justify-content:center;pointer-events:none}
+  .finishpop.show{display:flex;animation:fpin .25s ease}
+  @keyframes fpin{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+  .fp-card{background:var(--ink);color:var(--surface);border-radius:18px;padding:22px 30px;text-align:center;box-shadow:0 16px 50px rgba(0,0,0,.28)}
+  .fp-card .ic-peak{color:var(--gold-2);width:26px;height:26px}
+  .fp-main{font-family:'Space Grotesk';font-weight:700;font-size:30px;letter-spacing:-.01em;margin-top:4px}
+  .fp-sub{font-family:'Space Grotesk';font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#b9b7ae;margin-top:5px}
+
+  /* ---- reward setup + quest edit + locked ---- */
+  .rsetup{position:fixed;inset:0;z-index:72;background:linear-gradient(180deg,#eef2f5,#dfe6ea);display:none;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .rsetup.show{display:block}
+  .rsetup-inner{max-width:var(--maxw);margin:0 auto;padding:calc(22px + env(safe-area-inset-top)) 18px calc(30px + env(safe-area-inset-bottom))}
+  .rs-head h2{font-family:'Space Grotesk';font-weight:600;font-size:24px;letter-spacing:.01em;margin:4px 0 3px}
+  .rs-head .tagline{font-size:14px;color:var(--ink-soft);line-height:1.5;margin:0}
+  .rs-int{margin:20px 0 4px}
+  .rs-step{font-family:'Space Mono';font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+  .rs-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:8px}
+  .rs-tile{all:unset;cursor:pointer;display:flex;flex-direction:column;gap:3px;padding:13px;border:1px solid var(--line);border-radius:13px;background:var(--surface);touch-action:manipulation;transition:border-color .12s,box-shadow .12s}
+  .rs-tile.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+  .rs-tile-l{font-family:'Space Grotesk';font-weight:600;font-size:15px;letter-spacing:.01em}
+  .rs-tile-s{font-size:11px;color:var(--muted);line-height:1.35}
+  .rs-tile.on .rs-tile-s{color:var(--ink-soft)}
+  .rs-sec{margin-top:16px}
+  .rs-sec-h{font-family:'Space Grotesk';font-weight:600;font-size:14px;letter-spacing:.02em;margin-bottom:9px}
+  .rs-chip.on{border-color:var(--ink);background:var(--ink);color:var(--surface)}
+  .rs-lbl{font-family:'Space Grotesk';font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .rs-chips{display:flex;flex-wrap:wrap;gap:7px}
+  .rs-chip{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;color:var(--ink-soft);touch-action:manipulation}
+  .rs-chip:hover{border-color:var(--ink);color:var(--ink)}
+  .rs-chip .ic{width:12px;height:12px}
+  .rs-tier{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:14px}
+  .rs-tier-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:11px}
+  .rs-budget{width:80px;font-family:'Space Mono';font-size:14px;text-align:center;background:var(--valley);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:7px}
+  .rs-items{display:flex;flex-wrap:wrap;gap:7px;min-height:6px;margin-bottom:11px}
+  .rs-item{display:inline-flex;align-items:center;gap:4px;font-size:13px;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:6px 6px 6px 12px}
+  .rs-del{all:unset;cursor:pointer;color:var(--muted);width:22px;height:22px;display:grid;place-items:center}
+  .rs-del:hover{color:#b03b22}
+  .rs-del .ic{width:13px;height:13px}
+  .rs-empty{font-size:12px;color:var(--muted);font-style:italic}
+  .rs-add{display:flex;gap:8px}
+  .rs-input{flex:1;min-width:0;font-size:15px;background:var(--valley);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+  .rs-addbtn{all:unset;cursor:pointer;font-family:'Space Grotesk';font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:0 16px;display:grid;place-items:center;border:1px solid var(--ink);border-radius:10px;color:var(--ink);touch-action:manipulation}
+  .rs-addbtn:hover{background:var(--ink);color:var(--surface)}
+  .qedit{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+  .qedit-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .q-readout{display:flex;align-items:center;justify-content:space-between;margin:13px 0 11px;font-family:'Space Mono';font-size:14px;color:var(--ink)}
+  .q-lock{display:inline-flex;align-items:center;gap:5px;font-family:'Space Grotesk';font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .q-lock .ic{width:13px;height:13px}
+  .lock-note{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin:-6px 2px 12px}
+  .lock-note .ic{width:13px;height:13px;flex:none}
+
+  .wo-delete{all:unset;cursor:pointer;display:block;text-align:center;margin:4px auto 8px;font-family:'Space Grotesk';font-size:12px;letter-spacing:.04em;color:var(--muted);padding:11px}
+  .wo-delete:hover{color:#b03b22}
+  .wo-delete.arm{color:#fff;background:#b03b22;border-radius:10px}
+  button:focus-visible,select:focus-visible,input:focus-visible,.check:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">
+      <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true">
+        <path d="M2 24 L11 8 L16 16 L20 10 L28 24" fill="none" stroke="#1e2c35" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/>
+        <circle cx="11" cy="8" r="2" fill="#a85638"/>
+      </svg>
+      <div>
+        <div class="word">Ridge</div>
+        <div class="sub">Climb the week</div>
+      </div>
+    </div>
+    <div class="hdr-right">
+    <div class="weekpick">
+      <button id="prevWk" aria-label="Previous week"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="wk" id="wkBtn"><span id="wkLabel"></span><small id="wkTag"></small></div>
+      <button id="nextWk" aria-label="Next week"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+    <button class="gear" id="gearBtn" aria-label="Settings"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9M19 7h1M4 12h1M10 12h10M4 17h6M16 17h4"/><circle cx="16" cy="7" r="2.2"/><circle cx="7" cy="12" r="2.2"/><circle cx="13" cy="17" r="2.2"/></svg></button>
+    </div>
+  </header>
+
+  <main id="view" class="view"></main>
+</div>
+
+<nav>
+  <div class="bar2">
+    <button id="tabWorkouts" class="active" data-tab="workouts">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5h11M6.5 17.5h11M4 9v6M20 9v6M2 10.5v3M22 10.5v3"/></svg>
+      Workouts
+    </button>
+    <button id="tabQuests" data-tab="quests">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4M5 4l9 2-2 4 2 4-9-2"/></svg>
+      Quests
+    </button>
+  </div>
+</nav>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet"><div class="grab"></div><div id="sheetBody"></div></div>
+<div class="scrim" id="scrim2" style="z-index:49"></div>
+<div class="sheet" id="sheet2" style="z-index:50"><div class="grab"></div><div id="sheet2Body"></div></div>
+<div class="workout" id="workout"><div id="workoutBody"></div></div>
+<div class="welcome" id="welcome"><div class="welcome-inner">  <svg width="46" height="46" viewBox="0 0 30 30" aria-hidden="true"><path d="M2 24 L11 8 L16 16 L20 10 L28 24" fill="none" stroke="#1e2c35" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/><circle cx="11" cy="8" r="2" fill="#a85638"/></svg>
+  <h2>RIDGE</h2>
+  <p class="tagline">Plan your week. Climb it.</p>
+  <div class="wsteps">
+    <div class="wstep"><span class="wn">1</span><div><b>Plan</b><span>Set each day — run, lift, rest.</span></div></div>
+    <div class="wstep"><span class="wn">2</span><div><b>Log</b><span>Track every set, run, and sprint.</span></div></div>
+    <div class="wstep"><span class="wn">3</span><div><b>Earn</b><span>Clear camps to unlock real rewards.</span></div></div>
+  </div>
+  <button class="btn primary" id="welcomeStart">Set your first week</button>
+  <button class="link-btn" id="welcomeSkip">Skip for now</button>
+</div></div>
+
+<div class="rsetup" id="rsetup"><div class="rsetup-inner" id="rsetupBody"></div></div>
+
+<script>
+"use strict";
+
+/* ---------- resilient storage (localStorage w/ in-memory fallback) ---------- */
+const store = (() => {
+  let mem = {}; let ls = null;
+  try { ls = window.localStorage; ls.setItem('__r','1'); ls.removeItem('__r'); } catch(e){ ls = null; }
+  return {
+    get: k => { try { return ls ? ls.getItem(k) : (k in mem ? mem[k] : null); } catch(e){ return k in mem ? mem[k] : null; } },
+    set: (k,v) => { try { ls ? ls.setItem(k,v) : (mem[k]=v); } catch(e){ mem[k]=v; } }
+  };
+})();
+
+/* ---------- model ---------- */
+const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const TYPES = {
+  run:    {label:'Run',    color:'#3a3b36'},
+  sprint: {label:'Sprint', color:'#3a3b36'},
+  lift:   {label:'Lift',   color:'#3a3b36'},
+  other:  {label:'Other',  color:'#3a3b36'}
+};
+const IC={
+  plus:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
+  cl:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>',
+  cr:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>',
+  x:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  sun:'<svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>',
+  peak:'<svg class="ic-peak" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 20 L9 8 L13 14 L16 6 L21 20 Z"/></svg>',
+  lock:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>'
+};
+function unit(){ return (DB&&DB.unit)?DB.unit:'lb'; }
+const TIERS = [
+  {key:'basecamp',  name:'Basecamp',  budget:'~$20',  band:'t20'},
+  {key:'ridgeline', name:'Ridgeline', budget:'~$50',  band:'t50'},
+  {key:'summit',    name:'Summit',    budget:'~$100', band:'t100'}
+];
+const CATS = ['mtg','whiskey','wine','clothes'];
+const CAT_LABEL = {mtg:'MTG', whiskey:'Whiskey', wine:'Wine', clothes:'Clothes'};
+
+const REWARDS = {
+  mtg:{
+    t20:[{n:"Commander precon deck",p:"$20–25",d:"Ready-to-play 100-card deck"},{n:"Secret Lair drop",p:"~$20",d:"Limited alt-art set"},{n:"Draft Booster 3-pack",p:"~$18",d:"Crack 'em at the table"},{n:"Two Play Boosters",p:"~$20",d:"Latest set, fresh pulls"},{n:"Foil playmat",p:"~$20",d:"Protect the battlefield"}],
+    t50:[{n:"Collector Booster",p:"~$50",d:"Foils & alt-arts only"},{n:"Set Bundle (gift)",p:"~$50",d:"9 boosters + promos"},{n:"Two Commander decks",p:"~$48",d:"Build a pod night"},{n:"Premium Secret Lair",p:"~$50",d:"Foil-etched edition"},{n:"Singles splurge",p:"~$50",d:"Chase cards for a deck you're tuning"}],
+    t100:[{n:"Half a Collector box",p:"~$100",d:"Stack of collector packs"},{n:"Commander Masters set",p:"~$100",d:"High-power reprints"},{n:"That chase single",p:"~$100",d:"The card the deck's been missing"},{n:"Bundle + targeted singles",p:"~$100",d:"Sealed fun plus pickups"},{n:"Two CBs + playmat",p:"~$100",d:"Treat the whole table"}]
+  },
+  whiskey:{
+    t20:[{n:"Wild Turkey 101",p:"~$25",d:"High-proof, dependable"},{n:"Evan Williams BiB",p:"~$18",d:"Sleeper value"},{n:"Old Grand-Dad 114",p:"~$25",d:"Big proof for the price"},{n:"Buffalo Trace",p:"~$25",d:"If it's on the shelf"},{n:"Rittenhouse Rye BiB",p:"~$25",d:"Backbone of a great cocktail"}],
+    t50:[{n:"Russell's Reserve 10yr",p:"~$45",d:"Polished older brother to the 101"},{n:"Four Roses Small Batch Select",p:"~$55",d:"Higher proof, complex"},{n:"Knob Creek Single Barrel 120",p:"~$50",d:"Big, oaky pour"},{n:"Redbreast 12",p:"~$58",d:"Benchmark Irish pot still"},{n:"Old Forester 1920",p:"~$55",d:"115 proof, rich"}],
+    t100:[{n:"Booker's (current batch)",p:"~$90",d:"Barrel-proof small batch"},{n:"Redbreast 15",p:"~$110",d:"A step up from the 12"},{n:"Aberlour A'bunadh",p:"~$95",d:"Cask-strength sherried Scotch"},{n:"Stagg",p:"~$100",d:"Hazmat-proof hunter's prize"},{n:"Michter's Toasted Barrel",p:"~$100",d:"If you spot it"}]
+  },
+  wine:{
+    t20:[{n:"Côtes du Rhône (Guigal)",p:"~$18",d:"Reliable weeknight red"},{n:"Willamette Pinot (value)",p:"~$22",d:"Bright and food-friendly"},{n:"Rioja Reserva",p:"~$20",d:"Aged, savory"},{n:"Chianti Classico",p:"~$20",d:"Built for the dinner table"},{n:"Grower Cava",p:"~$20",d:"Bubbles without the Champagne tab"}],
+    t50:[{n:"Single-vineyard Pinot Noir",p:"~$45",d:"Willamette step-up"},{n:"Barolo (entry producer)",p:"~$55",d:"Nebbiolo to lay down"},{n:"Brunello di Montalcino",p:"~$55",d:"Big Tuscan"},{n:"Grower Champagne NV",p:"~$55",d:"Real-deal bubbles"},{n:"Mid-tier Napa Cab",p:"~$50",d:"Steak-night red"}],
+    t100:[{n:"Vintage grower Champagne",p:"~$90",d:"Special-occasion fizz"},{n:"Named-cru Barolo",p:"~$100",d:"Cellar it or splurge"},{n:"Reserve Napa Cabernet",p:"~$100",d:"Big and age-worthy"},{n:"Village+ Burgundy",p:"~$100",d:"Pinot at its finest"},{n:"Brunello Riserva",p:"~$100",d:"Top Tuscan tier"}]
+  },
+  clothes:{
+    t20:[{n:"Darn Tough socks (2-pk)",p:"~$20",d:"Lifetime-guarantee wool"},{n:"Heavyweight tee",p:"~$20",d:"The good blank"},{n:"Knit beanie",p:"~$20",d:"Trail to town"},{n:"Waxed cap",p:"~$22",d:"Field staple"},{n:"Full-grain belt",p:"~$25",d:"Buy-once basic"}],
+    t50:[{n:"Merino tee",p:"~$45",d:"Travel-ready, odor-resistant"},{n:"Heavyweight flannel",p:"~$50",d:"Blue Ridge weather"},{n:"Selvedge denim shirt",p:"~$55",d:"Breaks in nicely"},{n:"Chinos",p:"~$50",d:"Versatile workhorse"},{n:"Wool cap + gloves",p:"~$45",d:"Cold-morning kit"}],
+    t100:[{n:"Raw selvedge denim",p:"~$100+",d:"Break in your own fades"},{n:"Flannel-lined jacket",p:"~$100",d:"Shoulder-season shell"},{n:"Heavy knit sweater",p:"~$100",d:"Cabin-grade wool"},{n:"Resoleable leather boots",p:"~$110",d:"Trail to town, for years"},{n:"Type III denim jacket",p:"~$100+",d:"Ages beautifully"}]
+  }
+};
+
+function defaultQuests(){
+  return [
+    {tier:'basecamp',  type:'lift', target:3, reward:null},
+    {tier:'ridgeline', type:'run',  target:3, reward:null},
+    {tier:'summit',    type:'any',  target:6, reward:null}
+  ];
+}
+
+/* ---------- dates ---------- */
+function mondayOf(d){ const x=new Date(d); const day=(x.getDay()+6)%7; x.setHours(0,0,0,0); x.setDate(x.getDate()-day); return x; }
+function iso(d){ return d.toISOString().slice(0,10); }
+function addDays(d,n){ const x=new Date(d); x.setDate(x.getDate()+n); return x; }
+function fmtRange(mon){
+  const sun=addDays(mon,6);
+  const m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const a=`${m[mon.getMonth()]} ${mon.getDate()}`;
+  const b=(mon.getMonth()===sun.getMonth())?`${sun.getDate()}`:`${m[sun.getMonth()]} ${sun.getDate()}`;
+  return `${a}–${b}`;
+}
+
+/* ---------- state ---------- */
+let DB = load();
+if(!DB.rewards) DB.rewards=defaultRewards();
+if(!DB.budgets) DB.budgets={basecamp:'~$20',ridgeline:'~$50',summit:'~$100'};
+let curMon = mondayOf(new Date());
+let tab = 'workouts';
+let openDays = {};   // dayKey -> bool
+let editCat = {};    // questIndex -> category currently shown
+
+function load(){ try{ const r=store.get('ridge.v1'); return r?JSON.parse(r):{weeks:{}}; }catch(e){ return {weeks:{}}; } }
+function save(){ store.set('ridge.v1', JSON.stringify(DB)); }
+function week(){
+  const k=iso(curMon);
+  if(!DB.weeks[k]){ const acts={},plan={}; DAYS.forEach(d=>{acts[d]=[];plan[d]=[];}); DB.weeks[k]={acts,plan,quests:defaultQuests()}; save(); }
+  if(!DB.weeks[k].plan){ const plan={}; DAYS.forEach(d=>plan[d]=[]); DB.weeks[k].plan=plan; save(); }
+  return DB.weeks[k];
+}
+function uid(){ return Math.random().toString(36).slice(2,9); }
+
+/* ---------- quest math ---------- */
+function progress(q){
+  const w=week(); let c=0;
+  DAYS.forEach(d=> w.acts[d].forEach(a=>{ if(a.done && (q.type==='any'||a.type===q.type)) c++; }));
+  return c;
+}
+function tierOf(key){ return TIERS.find(t=>t.key===key); }
+
+/* ---------- summary text ---------- */
+function summary(a){
+  const d=a.data||{};
+  if(a.type==='run')    return `${d.distance||'—'} mi${d.time?` · ${d.time}`:''}`;
+  if(a.type==='sprint') return `${d.reps||'—'} reps · ${d.time||'—'}`;
+  if(a.type==='lift'){
+    if(Array.isArray(d.exercises)){
+      const nm=(d.name&&d.name!=='Lift')?d.name:'Lift';
+      if(!d.exercises.length) return `${nm} · empty`;
+      const vol=workoutVolume(a);
+      const pr=workoutHasPR(a)?' <span class="pr-mark">★</span>':'';
+      if(vol>0) return `${nm} · ${vol.toLocaleString()} ${unit()}${pr}`;
+      return `${nm} · ${d.exercises.length} exercise${d.exercises.length>1?'s':''}`;
+    }
+    const ex=d.exercise||'Lift';
+    if(Array.isArray(d.sets)){
+      const parts=d.sets.filter(s=>s.reps||s.weight).map(s=>`${s.reps||'?'}×${s.weight||'?'}`);
+      return parts.length?`${ex} · ${parts.join(', ')}`:ex;
+    }
+    return `${ex} · ${d.sets||'—'}×${d.reps||'—'}`;
+  }
+  return d.name||'Activity';
+}
+
+/* ---------- render ---------- */
+const view=document.getElementById('view');
+function render(){
+  document.getElementById('wkLabel').textContent=fmtRange(curMon);
+  const isThis = iso(curMon)===iso(mondayOf(new Date()));
+  document.getElementById('wkTag').textContent = isThis?'This week':'Tap for today';
+  document.getElementById('tabWorkouts').classList.toggle('active',tab==='workouts');
+  document.getElementById('tabQuests').classList.toggle('active',tab==='quests');
+  view.innerHTML = tab==='workouts'?workoutsHTML():questsHTML();
+}
+
+function weeklyVolume(){ const w=week(); let v=0; DAYS.forEach(d=>w.acts[d].forEach(a=>{ if(a.type==='lift') v+=workoutVolume(a); })); return v; }
+function lifetimeVolume(){ let v=0; Object.values(DB.weeks||{}).forEach(wk=>DAYS.forEach(d=>(wk.acts&&wk.acts[d]||[]).forEach(a=>{ if(a.type==='lift') v+=workoutVolume(a); }))); return v; }
+function weeklyDone(){ const w=week(); let n=0; DAYS.forEach(d=>w.acts[d].forEach(a=>{ if(a.done) n++; })); return n; }
+function weeklyPRs(){ const w=week(); let n=0; DAYS.forEach(d=>w.acts[d].forEach(a=>{ if(a.type==='lift'&&workoutHasPR(a)) n++; })); return n; }
+function heroHTML(){
+  const wv=weeklyVolume(), life=lifetimeVolume();
+  if(wv<=0){
+    return `<div class="hero hero-empty">
+      <svg width="42" height="21" viewBox="0 0 42 21" fill="none" stroke="#93a6b2" stroke-width="1.6" stroke-linejoin="round"><path d="M2 19 L14 5 L20 12 L26 4 L40 19"/></svg>
+      <div class="hero-prompt">Plan your week, then log your first lift.</div>
+      ${life>0?`<div class="hero-stats"><span><b>${life.toLocaleString()}</b> ${unit()} lifetime</span></div>`:''}
+    </div>`;
+  }
+  const done=weeklyDone(), prs=weeklyPRs(), streak=currentStreak();
+  return `<div class="hero">
+    <div class="hero-num">${wv.toLocaleString()}<span class="hero-unit">${unit()}</span></div>
+    <div class="hero-sub">lifted this week</div>
+    <div class="hero-stats">
+      <span><b>${done}</b> logged</span>
+      <span><b>${prs}</b> PR${prs!==1?'s':''}</span>
+      ${streak>0?`<span><b>${streak}</b> wk streak</span>`:''}
+      <span><b>${life.toLocaleString()}</b> ${unit()} lifetime</span>
+    </div>
+  </div>`;
+}
+function workoutsHTML(){
+  const w=week();
+  const todayKey = iso(curMon)===iso(mondayOf(new Date())) ? DAYS[(new Date().getDay()+6)%7] : null;
+  let h=`${heroHTML()}<div class="weekset"><span class="eyebrow-t">The week · plan &amp; log</span><button class="set-week-btn" data-openplanner>Set the week</button></div>`;
+  DAYS.forEach((d,i)=>{
+    const date=addDays(curMon,i);
+    const acts=w.acts[d];
+    const plan=(w.plan&&w.plan[d])||[];
+    const isToday=d===todayKey;
+    h+=`<div class="day2 ${isToday?'today':''}">
+      <div class="plan-col" data-openplanner>
+        <div class="plan-head"><span class="d-name">${d}<span class="d-date">${date.getMonth()+1}/${date.getDate()}</span></span>${isToday?`<span class="today-tag">Today</span>`:''}</div>
+        ${planChipsHTML(plan)}
+      </div>
+      <div class="log-col">`;
+    if(!acts.length){
+      const planRest = plan.length===1 && plan[0]==='rest';
+      h+= planRest
+        ? `<div class="empty2"><svg width="22" height="8" viewBox="0 0 22 8" fill="none" stroke="#93a6b2" stroke-width="1.4" stroke-linecap="round"><path d="M2 4 H20"/></svg>Rest day</div>`
+        : `<div class="empty2"><svg width="22" height="11" viewBox="0 0 22 11" fill="none" stroke="#93a6b2" stroke-width="1.4" stroke-linejoin="round"><path d="M2 10 L8 3 L12 7 L16 2 L20 10"/></svg>Nothing logged</div>`;
+    } else {
+      acts.forEach(a=>{
+        const c=TYPES[a.type];
+        h+=`<div class="act ${a.done?'is-done':''}">
+          <button class="check ${a.done?'done':''}" data-toggle="${d}:${a.id}" aria-label="Mark complete">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg>
+          </button>
+          <div class="act-main" data-edit="${d}:${a.id}">
+            <span class="act-type" style="color:${c.color}"><span class="dot" style="background:${c.color}"></span>${c.label}</span>
+            <div class="act-detail">${summary(a)}</div>
+          </div>
+          <button class="act-del" data-del="${d}:${a.id}" aria-label="Delete">×</button>
+        </div>`;
+      });
+    }
+    h+=`<button class="add-btn" data-add="${d}">${IC.plus} Log activity</button></div></div>`;
+  });
+  return h;
+}
+function planChipsHTML(plan){
+  if(!plan.length) return `<div class="plan-empty"><svg width="20" height="11" viewBox="0 0 20 11" fill="none" stroke="#93a6b2" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="2 2"><path d="M1 10 L7 3 L11 7 L15 2 L19 10"/></svg>Plan</div>`;
+  if(plan.length===1 && plan[0]==='rest') return `<div class="plan-chips"><span class="pchip rest">Rest</span></div>`;
+  return `<div class="plan-chips">${plan.filter(t=>t!=='rest').map(t=>`<span class="pchip">${TYPES[t]?TYPES[t].label:t}</span>`).join('')}</div>`;
+}
+
+function questsHTML(){
+  const w=week();
+  const states = w.quests.map(q=>({q,prog:progress(q),done:progress(q)>=q.target && q.target>0}));
+  const doneCount = states.filter(s=>s.done).length;
+  const alt=ascentAlt(states);
+  const streak=currentStreak();
+  let h = streak>0 ? `<div class="streak-top">${streakGlyph()}<span><b>${streak}</b> week${streak!==1?'s':''} climbed in a row</span></div>` : '';
+  h+=`<div class="ascent">${ascentSVG(states)}
+    <div class="ascent-cap"><span class="t">${ascentPhase(alt)}</span><span class="n">${doneCount}/3 camps</span></div>
+  </div>`;
+  h+=`<div class="eyebrow">This week's quests</div>`;
+  if(w.locked) h+=`<div class="lock-note">${IC.lock} Locked for the week — re-run “Set the week” to change.</div>`;
+  states.forEach((s,i)=>{
+    const t=tierOf(s.q.tier);
+    const pct=Math.min(100, s.q.target>0 ? Math.round(s.prog/s.q.target*100):0);
+    h+=`<div class="quest ${s.done?'done':''}">
+      <div class="q-top">
+        <span class="q-icon">${campIcon(s.q.tier)}</span>
+        <div><div class="q-tier">${t.name}</div><div class="q-budget">Reward ${budgetLabel(t.key)}</div></div>
+        <span class="q-prog-num">${s.prog}/${s.q.target}</span>
+      </div>`;
+    if(w.locked){
+      h+=`<div class="q-readout"><span>${s.q.target} × ${typeLabel(s.q.type)}</span><span class="q-lock">${IC.lock} locked</span></div>`;
+    } else {
+      h+=`<div class="q-config2">
+        <div class="stepper">
+          <button class="step" data-qstep="${i}:-1" aria-label="Fewer">−</button>
+          <span class="step-val">${s.q.target}</span>
+          <button class="step" data-qstep="${i}:1" aria-label="More">+</button>
+          <span class="step-lbl">sessions</span>
+        </div>
+        <div class="qseg">
+          ${[['lift','Lift'],['run','Run'],['sprint','Sprint'],['other','Other'],['any','Any']].map(([v,l])=>`<button class="qsegb ${s.q.type===v?'on':''}" data-qtypeset="${i}:${v}">${l}</button>`).join('')}
+        </div>
+      </div>`;
+    }
+    h+=`<div class="bar"><i style="width:${pct}%"></i></div>`;
+    if(s.done){
+      if(!s.q.reward){ s.q.reward=rollReward(t.key); save(); }
+      const r=s.q.reward; const rn=r.name||r.n||'Treat yourself';
+      h+=`<div class="reward">
+        <div class="reward-lead">${IC.sun} Summit reached — claim your reward</div>
+        <div class="prize">
+          <div class="info"><div class="name">${esc(rn)}</div><div class="note">${budgetLabel(t.key)} range</div></div>
+          <button class="reroll" data-qroll="${i}" aria-label="Reroll reward">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4M21 3v6h-6"/></svg>
+          </button>
+        </div>
+      </div>`;
+    } else {
+      const left=Math.max(0,s.q.target-s.prog);
+      h+=`<div class="locked">${IC.peak} ${left} more to unlock your ${t.budget} reward</div>`;
+    }
+    h+=`</div>`;
+  });
+  h+=summitLogHTML();
+  return h;
+}
+
+function campIcon(tier){
+  if(tier==='basecamp') return `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 4 20h16zM12 4v16"/></svg>`;
+  if(tier==='ridgeline') return `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18l5-9 4 6 3-5 6 8z"/></svg>`;
+  return `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4l9 2-2 4 2 4-9-2"/></svg>`;
+}
+
+/* ascent signature: climber rises through the 3 camps */
+function ascentAlt(states){
+  let alt=0;
+  for(let i=0;i<3;i++){
+    if(states[i].done) alt+=1;
+    else { alt += states[i].q.target>0 ? Math.min(1,states[i].prog/states[i].q.target):0; break; }
+  }
+  return alt;
+}
+function ascentPhase(alt){
+  if(alt>=3) return 'Summit · golden hour';
+  if(alt>=2) return 'High on the ridge';
+  if(alt>=1) return 'On the trail';
+  if(alt>0)  return 'Leaving the valley';
+  return 'Dawn in the valley';
+}
+function lerpHex(a,b,t){
+  const p=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+  const A=p(a),B=p(b);
+  return '#'+A.map((v,i)=>Math.round(v+(B[i]-v)*t).toString(16).padStart(2,'0')).join('');
+}
+function ascentSVG(states){
+  const W=520,H=190;
+  const start={x:26,y:166}, camps=[{x:152,y:124},{x:290,y:86},{x:452,y:40}];
+  const pts=[start,...camps];
+  const alt=ascentAlt(states), prog=alt/3;
+  const seg=Math.min(3,Math.floor(alt)), frac=alt-seg;
+  const A=pts[Math.min(seg,3)], B=pts[Math.min(seg+1,3)];
+  const cx=A.x+(B.x-A.x)*frac, cy=A.y+(B.y-A.y)*frac;
+  const ridge=`M0,182 L${start.x},${start.y} L${camps[0].x},${camps[0].y} L214,110 L${camps[1].x},${camps[1].y} L372,66 L${camps[2].x},${camps[2].y} L520,26`;
+  const trail=`M${start.x},${start.y} L${camps[0].x},${camps[0].y} L${camps[1].x},${camps[1].y} L${camps[2].x},${camps[2].y}`;
+  const trailDone=`M${start.x},${start.y} L${cx},${cy}`;
+  const sunX=466, sunY=58-prog*26, sunR=(10+prog*2).toFixed(1);
+  const sunFill=states[2].done?'#e2974f':lerpHex('#aebfc9','#e2974f',prog);
+  const glowA=(0.05+prog*0.5).toFixed(2), washA=(prog*0.14).toFixed(2);
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Ascent progress">
+    <defs>
+      <radialGradient id="ag-glow"><stop offset="0" stop-color="#e2974f" stop-opacity="${glowA}"/><stop offset="100%" stop-color="#e2974f" stop-opacity="0"/></radialGradient>
+      <linearGradient id="ag-wash" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e2974f" stop-opacity="${washA}"/><stop offset="62%" stop-color="#e2974f" stop-opacity="0"/></linearGradient>
+    </defs>
+    <rect width="${W}" height="${H}" fill="url(#ag-wash)"/>
+    <circle cx="${sunX}" cy="${sunY}" r="${40+prog*46}" fill="url(#ag-glow)"/>
+    <path d="M0,150 L100,120 L170,140 L260,104 L340,126 L440,92 L520,118" fill="none" stroke="#b9c6d0" stroke-width="1.2"/>
+    <path d="M0,168 L80,150 L170,166 L270,132 L360,158 L460,124 L520,148" fill="none" stroke="#9fb1bd" stroke-width="1.2"/>
+    <path d="${ridge} L520,190 L0,190 Z" fill="#e5ebef"/>
+    <g stroke="#cfd9e0" stroke-width="1" fill="none">
+      <path d="M30,176 C120,168 210,176 300,166 C390,158 460,166 520,158"/>
+      <path d="M70,185 C150,180 250,184 340,176 C420,170 480,176 520,170"/>
+    </g>
+    <path d="${ridge}" fill="none" stroke="#1e2c35" stroke-width="1.8" stroke-linejoin="round"/>
+    <circle cx="${sunX}" cy="${sunY}" r="${sunR}" fill="${sunFill}" ${states[2].done?'':'stroke="#9fb1bd" stroke-width="1"'}/>
+    <path d="${trail}" fill="none" stroke="#8ea0ac" stroke-width="1.4" stroke-dasharray="2 6" stroke-linecap="round"/>
+    <path d="${trailDone}" fill="none" stroke="#1e2c35" stroke-width="2" stroke-linecap="round"/>
+    ${camps.map((c,i)=>{
+      const done=states[i].done;
+      return `<g>
+        <circle cx="${c.x}" cy="${c.y}" r="5" fill="${done?'#a85638':'#ffffff'}" stroke="${done?'#a85638':'#9fb1bd'}" stroke-width="1.6"/>
+        <text x="${c.x}" y="${c.y-12}" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-size="10" letter-spacing="1" fill="${done?'#a85638':'#677781'}">${tierOf(states[i].q.tier).name.toUpperCase()}</text>
+      </g>`;
+    }).join('')}
+    <circle cx="${cx}" cy="${cy}" r="5.5" fill="#ffffff" stroke="#1e2c35" stroke-width="1.6"/>
+    <circle cx="${cx}" cy="${cy}" r="2.2" fill="#1e2c35"/>
+  </svg>`;
+}
+
+function budgetLabel(tierKey){ return (DB.budgets&&DB.budgets[tierKey])||(tierOf(tierKey)?tierOf(tierKey).budget:''); }
+function typeLabel(tp){ return tp==='any'?'any session':(TYPES[tp]?TYPES[tp].label:tp); }
+function rollReward(tierKey){
+  const pool=(DB.rewards&&DB.rewards[tierKey])||[];
+  if(!pool.length) return {name:'Treat yourself', price:budgetLabel(tierKey)};
+  return {name:pool[Math.floor(Math.random()*pool.length)], price:budgetLabel(tierKey)};
+}
+function defaultRewards(){
+  const out={basecamp:[],ridgeline:[],summit:[]}, map={basecamp:'t20',ridgeline:'t50',summit:'t100'};
+  Object.keys(map).forEach(tk=>CATS.forEach(c=>REWARDS[c][map[tk]].forEach(it=>out[tk].push(it.n))));
+  return out;
+}
+const REWARD_SEEDS={
+  'Coffee & tea':{basecamp:['Specialty beans','A new mug'],ridgeline:['Pour-over kit','Tea sampler'],summit:['Burr grinder','Espresso gear']},
+  'Books':{basecamp:['A paperback','Used-book haul'],ridgeline:['Hardcover set','Audiobook credits'],summit:['Signed edition','An e-reader']},
+  'Gaming':{basecamp:['An indie game','In-game pass'],ridgeline:['A new release','Extra controller'],summit:['Game + accessory','A headset']},
+  'Drinks':{basecamp:['A nice bottle','Craft six-pack'],ridgeline:['Mid-shelf spirit','A good wine'],summit:['Top-shelf bottle','Tasting flight']},
+  'Food & dining':{basecamp:['Takeout night','Bakery treat'],ridgeline:['Dinner out','Specialty groceries'],summit:['Tasting menu','Chef night']},
+  'Gear & clothes':{basecamp:['Good socks','A tee'],ridgeline:['A flannel','Cap or belt'],summit:['Boots or denim','A jacket']},
+  'Music':{basecamp:['An album','Cables'],ridgeline:['A vinyl record','A pedal'],summit:['A plugin','Concert ticket']},
+  'Self-care':{basecamp:['A candle','Bath set'],ridgeline:['Skincare','Massage add-on'],summit:['Spa session','Wellness day']},
+  'Tech':{basecamp:['An accessory','A subscription'],ridgeline:['A peripheral','Smart gadget'],summit:['Device upgrade','Premium gadget']},
+  'Outdoors':{basecamp:['Trail snacks','Water bottle'],ridgeline:['A daypack','A layer'],summit:['Tent or boots','Gear upgrade']}
+};
+
+/* ---------- sheet (add/edit activity) ---------- */
+const scrim=document.getElementById('scrim'), sheet=document.getElementById('sheet'), sheetBody=document.getElementById('sheetBody');
+let editing=null; // {day, id|null, type}
+
+function openSheet(day,id){
+  const w=week();
+  let act = id ? w.acts[day].find(a=>a.id===id) : null;
+  if(act && act.type==='lift'){ openWorkout(day,id); return; }
+  let data = act?Object.assign({},act.data):{};
+  editing = {day, id, type: act?act.type:'run', data};
+  renderSheet();
+  scrim.classList.add('show'); sheet.classList.add('show');
+}
+function closeSheet(){ scrim.classList.remove('show'); sheet.classList.remove('show'); editing=null; }
+
+function fieldsFor(type,d){
+  if(type==='run') return `<div class="row2">
+      <div class="field"><label>Distance (miles)</label><input id="f_distance" type="number" inputmode="decimal" step="0.1" value="${d.distance??''}" placeholder="5.0"></div>
+      <div class="field"><label>Time</label><input id="f_time" value="${d.time??''}" placeholder="42:30"></div></div>`;
+  if(type==='sprint') return `<div class="row2">
+      <div class="field"><label>Reps</label><input id="f_reps" type="number" inputmode="numeric" value="${d.reps??''}" placeholder="8"></div>
+      <div class="field"><label>Time</label><input id="f_time" value="${d.time??''}" placeholder="14s / 100m"></div></div>`;
+  if(type==='lift'){
+    const sets=(Array.isArray(d.sets)&&d.sets.length)?d.sets:[{reps:'',weight:''}];
+    return `<div class="field"><label>Exercise</label><input id="f_exercise" value="${d.exercise??''}" placeholder="Back squat"></div>
+      <div class="setlist"><label class="setlbl">Sets · reps × weight (lb)</label>
+      ${sets.map((s,idx)=>`<div class="setrow">
+        <span class="setnum">${idx+1}</span>
+        <input class="s_reps" type="number" inputmode="numeric" value="${s.reps??''}" placeholder="reps" aria-label="Set ${idx+1} reps">
+        <span class="x">×</span>
+        <input class="s_weight" type="number" inputmode="decimal" value="${s.weight??''}" placeholder="lb" aria-label="Set ${idx+1} weight">
+        <button class="setdel" data-setdel="${idx}" aria-label="Remove set">×</button>
+      </div>`).join('')}
+      </div><button class="add-set" id="addSet">＋ Add set</button>`;
+  }
+  return `<div class="field"><label>What was it?</label><input id="f_name" value="${d.name??''}" placeholder="Soccer, yoga, hike…"></div>`;
+}
+function renderSheet(){
+  const e=editing;
+  if(e.type==='lift' && !e.id){
+    sheetBody.innerHTML=`<h3>Add · ${e.day}</h3>
+      <div class="seg">${Object.keys(TYPES).map(t=>`<button class="${e.type===t?'active':''}" data-type="${t}" style="${e.type===t?`background:${TYPES[t].color}22;color:${TYPES[t].color};border-color:${TYPES[t].color}`:''}">${TYPES[t].label}</button>`).join('')}</div>
+      ${liftLauncherHTML()}`;
+    return;
+  }
+  sheetBody.innerHTML=`<h3>${e.id?'Edit':'Add'} · ${e.day}</h3>
+    <div class="seg">${Object.keys(TYPES).map(t=>`<button class="${e.type===t?'active':''}" data-type="${t}" style="${e.type===t?`background:${TYPES[t].color}22;color:${TYPES[t].color};border-color:${TYPES[t].color}`:''}">${TYPES[t].label}</button>`).join('')}</div>
+    <div id="fields">${fieldsFor(e.type,e.data)}</div>
+    <div class="sheet-actions">
+      ${e.id?`<button class="btn danger" id="delAct" aria-label="Delete">🗑</button>`:''}
+      <button class="btn ghost" id="cancelAct">Cancel</button>
+      <button class="btn primary" id="saveAct">${e.id?'Save':'Add'}</button>
+    </div>`;
+}
+function readFields(){
+  const t=editing.type, g=id=>{const el=document.getElementById(id);return el?el.value.trim():'';};
+  if(t==='run') return {distance:g('f_distance'),time:g('f_time')};
+  if(t==='sprint') return {reps:g('f_reps'),time:g('f_time')};
+  if(t==='lift'){
+    const rows=[...document.querySelectorAll('#fields .setrow')];
+    const sets=rows.map(r=>({reps:r.querySelector('.s_reps').value.trim(),weight:r.querySelector('.s_weight').value.trim()}));
+    return {exercise:g('f_exercise'),sets};
+  }
+  return {name:g('f_name')};
+}
+
+/* ---------- events ---------- */
+document.getElementById('prevWk').onclick=()=>{curMon=addDays(curMon,-7);openDays={};render();};
+document.getElementById('nextWk').onclick=()=>{curMon=addDays(curMon,7);openDays={};render();};
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;render();});
+
+view.addEventListener('click',e=>{
+  const t=e.target.closest('[data-openplanner],[data-toggle],[data-edit],[data-del],[data-add],[data-qroll],[data-qstep],[data-qtypeset],[data-loadweek]');
+  if(!t) return;
+  if(t.dataset.openplanner!==undefined){ openPlanner(); return; }
+  if(t.dataset.toggle){ const [d,id]=t.dataset.toggle.split(':'); const a=week().acts[d].find(x=>x.id===id); a.done=!a.done; save(); render(); return; }
+  if(t.dataset.del){ armDelete('del:'+t.dataset.del, t, ()=>{ const [d,id]=t.dataset.del.split(':'); const arr=week().acts[d]; const idx=arr.findIndex(x=>x.id===id); if(idx>-1){ arr.splice(idx,1); save(); render(); } }); return; }
+  if(t.dataset.edit){ const [d,id]=t.dataset.edit.split(':'); openSheet(d,id); return; }
+  if(t.dataset.add!==undefined){ openSheet(t.dataset.add,null); return; }
+  if(t.dataset.qstep){ const [i,d]=t.dataset.qstep.split(':'); const q=week().quests[+i]; q.target=Math.max(1,Math.min(60,(q.target||1)+(+d))); q.reward=null; save(); render(); return; }
+  if(t.dataset.qtypeset){ const [i,v]=t.dataset.qtypeset.split(':'); const q=week().quests[+i]; q.type=v; q.reward=null; save(); render(); return; }
+  if(t.dataset.loadweek){ curMon=mondayOf(new Date(t.dataset.loadweek+'T00:00:00')); render(); return; }
+  if(t.dataset.qroll){ const i=+t.dataset.qroll; const q=week().quests[i]; q.reward=rollReward(q.tier); save(); render(); return; }
+});
+view.addEventListener('change',e=>{ /* quest config now uses click steppers */ });
+
+scrim.onclick=closeSheet;
+sheet.addEventListener('click',e=>{
+  const tBtn=e.target.closest('[data-type]');
+  if(tBtn){ editing.data=readFields(); editing.type=tBtn.dataset.type; renderSheet(); return; }
+  const sl=e.target.closest('[data-startlift]');
+  if(sl){ startLift(editing.day, sl.dataset.startlift||null); return; }
+  if(e.target.closest('[data-manageroutines]')){ openRoutineManager(); return; }
+  const sd=e.target.closest('[data-setdel]');
+  if(sd){ editing.data=readFields(); editing.data.sets.splice(+sd.dataset.setdel,1); if(!editing.data.sets.length) editing.data.sets.push({reps:'',weight:''}); renderSheet(); return; }
+  if(e.target.id==='addSet'){ editing.data=readFields(); editing.data.sets=editing.data.sets||[]; editing.data.sets.push({reps:'',weight:''}); renderSheet(); return; }
+  if(e.target.id==='cancelAct') return closeSheet();
+  if(e.target.id==='delAct'){ const w=week(); w.acts[editing.day]=w.acts[editing.day].filter(a=>a.id!==editing.id); save(); closeSheet(); render(); return; }
+  if(e.target.id==='saveAct'){
+    const data=readFields(); const w=week();
+    if(editing.id){ const a=w.acts[editing.day].find(x=>x.id===editing.id); a.type=editing.type; a.data=data; }
+    else { w.acts[editing.day].push({id:uid(),type:editing.type,done:false,data}); }
+    save(); closeSheet(); render(); return;
+  }
+});
+
+/* ================= LIFT: full workout screen ================= */
+const woEl=document.getElementById('workout'), woBody=document.getElementById('workoutBody');
+const scrim2El=document.getElementById('scrim2'), sheet2El=document.getElementById('sheet2'), sheet2Body=document.getElementById('sheet2Body');
+let WO=null, pickerQuery='';
+
+const LIB={
+  'Chest':[{id:'bench_bb',name:'Bench Press (Barbell)'},{id:'incline_bb',name:'Incline Bench Press (Barbell)'},{id:'bench_db',name:'Bench Press (Dumbbell)'},{id:'incline_db',name:'Incline Press (Dumbbell)'},{id:'fly_m',name:'Chest Fly (Machine)'},{id:'cable_cross',name:'Cable Crossover'},{id:'pushup',name:'Push-Up'},{id:'dip',name:'Dip'}],
+  'Back':[{id:'deadlift',name:'Deadlift (Barbell)'},{id:'row_bb',name:'Bent-Over Row (Barbell)'},{id:'pullup',name:'Pull-Up'},{id:'chinup',name:'Chin-Up'},{id:'latpull',name:'Lat Pulldown (Cable)'},{id:'seatedrow',name:'Seated Row (Cable)'},{id:'tbar',name:'T-Bar Row'},{id:'facepull',name:'Face Pull'}],
+  'Shoulders':[{id:'ohp',name:'Overhead Press (Barbell)'},{id:'shoulder_db',name:'Shoulder Press (Dumbbell)'},{id:'latraise',name:'Lateral Raise (Dumbbell)'},{id:'frontraise',name:'Front Raise'},{id:'reardelt',name:'Rear Delt Fly'},{id:'arnold',name:'Arnold Press'},{id:'uprightrow',name:'Upright Row'}],
+  'Legs':[{id:'squat_bb',name:'Back Squat (Barbell)'},{id:'frontsquat',name:'Front Squat (Barbell)'},{id:'rdl',name:'Romanian Deadlift (Barbell)'},{id:'legpress',name:'Leg Press (Machine)'},{id:'lunge',name:'Lunge (Dumbbell)'},{id:'bss',name:'Bulgarian Split Squat'},{id:'legcurl',name:'Leg Curl (Machine)'},{id:'legext',name:'Leg Extension (Machine)'},{id:'calfraise',name:'Calf Raise'},{id:'hipthrust',name:'Hip Thrust (Barbell)'}],
+  'Arms':[{id:'curl_bb',name:'Bicep Curl (Barbell)'},{id:'curl_db',name:'Bicep Curl (Dumbbell)'},{id:'hammer',name:'Hammer Curl'},{id:'preacher',name:'Preacher Curl'},{id:'pushdown',name:'Tricep Pushdown (Cable)'},{id:'skull',name:'Skullcrusher'},{id:'cgbench',name:'Close-Grip Bench'},{id:'ohtri',name:'Overhead Tricep Extension'}],
+  'Core':[{id:'plank',name:'Plank'},{id:'hlr',name:'Hanging Leg Raise'},{id:'cablecrunch',name:'Cable Crunch'},{id:'rtwist',name:'Russian Twist'},{id:'abwheel',name:'Ab Wheel'}],
+  'Olympic':[{id:'powerclean',name:'Power Clean'},{id:'cj',name:'Clean & Jerk'},{id:'snatch',name:'Snatch'},{id:'pushpress',name:'Push Press'}]
+};
+
+const slug=s=>String(s).toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'')||'x';
+const num=v=>{const n=parseFloat(v);return isNaN(n)?0:n;};
+const e1rm=s=>{const w=num(s.weight),r=num(s.reps);return (w>0&&r>0)?w*(1+r/30):0;};
+const esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const escAttr=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+function flash(msg,undoFn){
+  let t=document.getElementById('toast');
+  if(!t){t=document.createElement('div');t.id='toast';t.className='toast';document.body.appendChild(t);}
+  t.innerHTML=`<span>${esc(msg)}</span>`+(undoFn?`<button class="toast-undo">Undo</button>`:'');
+  t.classList.add('show');
+  clearTimeout(flash._t);
+  flash._t=setTimeout(()=>t.classList.remove('show'),undoFn?5000:1700);
+  if(undoFn){ t.querySelector('.toast-undo').onclick=()=>{ undoFn(); t.classList.remove('show'); clearTimeout(flash._t); }; }
+}
+let armed={key:null,el:null,t:null};
+function armDelete(key,el,onConfirm){
+  if(armed.key===key){ clearTimeout(armed.t); if(armed.el)armed.el.classList.remove('arm'); armed={key:null,el:null,t:null}; onConfirm(); return; }
+  if(armed.el)armed.el.classList.remove('arm');
+  clearTimeout(armed.t);
+  if(el)el.classList.add('arm');
+  armed={key,el,t:setTimeout(()=>{ if(armed.el)armed.el.classList.remove('arm'); armed={key:null,el:null,t:null}; },2200)};
+  flash('Tap again to delete');
+}
+
+function bestE1RM(exId,excl){const h=DB.exHistory&&DB.exHistory[exId];if(!h||!h.sessions)return 0;let best=0;Object.entries(h.sessions).forEach(([aid,s])=>{if(aid===excl)return;s.sets.forEach(x=>best=Math.max(best,e1rm(x)));});return best;}
+function prevSession(exId,excl){const h=DB.exHistory&&DB.exHistory[exId];if(!h||!h.sessions)return [];let pick=null;Object.entries(h.sessions).forEach(([aid,s])=>{if(aid===excl)return;if(!pick||s.date>pick.date)pick=s;});return pick?pick.sets:[];}
+function commitHistory(act,dateISO){
+  DB.exHistory=DB.exHistory||{};
+  Object.values(DB.exHistory).forEach(h=>{if(h.sessions)delete h.sessions[act.id];});
+  (act.data.exercises||[]).forEach(ex=>{
+    const sets=ex.sets.filter(s=>!s.warmup&&num(s.weight)>0&&num(s.reps)>0).map(s=>({weight:num(s.weight),reps:num(s.reps)}));
+    if(!sets.length)return;
+    DB.exHistory[ex.exId]=DB.exHistory[ex.exId]||{sessions:{}};
+    DB.exHistory[ex.exId].sessions[act.id]={date:dateISO,sets};
+  });
+}
+
+function workoutVolume(act){
+  let v=0;
+  (act.data.exercises||[]).forEach(ex=>ex.sets.forEach(s=>{ if(!s.warmup){ const w=num(s.weight),r=num(s.reps); if(w>0&&r>0) v+=w*r; } }));
+  return Math.round(v);
+}
+function workoutHasPR(act){
+  return (act.data.exercises||[]).some(ex=>{ const best=bestE1RM(ex.exId,act.id); return ex.sets.some(s=>!s.warmup && e1rm(s)>0 && e1rm(s)>best+0.01); });
+}
+
+function liftLauncherHTML(){
+  const r=DB.routines||[];
+  return `<div class="launch">
+    <button class="btn primary" data-startlift="">${IC.plus} Empty workout</button>
+    ${r.length?`<div class="launch-lbl">Your routines</div>`:''}
+    ${r.map(rt=>`<button class="routine-pick" data-startlift="${rt.id}"><span><b>${esc(rt.name)}</b><i>${rt.exercises.length} exercise${rt.exercises.length!==1?'s':''}</i></span><span class="go">Start ›</span></button>`).join('')}
+    <button class="link-btn" data-manageroutines>Manage routines</button>
+  </div>`;
+}
+function startLift(day,routineId){
+  const w=week(), id=uid(); let name='Lift', exercises=[];
+  if(routineId){ const rt=(DB.routines||[]).find(r=>r.id===routineId); if(rt){ name=rt.name; exercises=rt.exercises.map(x=>({exId:x.exId,name:x.name,note:x.note||'',sets:x.sets.map(s=>({reps:s.reps||'',weight:s.weight||'',warmup:!!s.warmup,done:false}))})); } }
+  w.acts[day].push({id,type:'lift',done:false,data:{name,routineId:routineId||null,exercises}});
+  save(); closeSheet(); openWorkout(day,id);
+}
+
+function woAct(){return WO?week().acts[WO.day].find(a=>a.id===WO.id):null;}
+function woDateISO(){return iso(addDays(curMon,DAYS.indexOf(WO.day)));}
+function openWorkout(day,id){
+  const act=week().acts[day].find(a=>a.id===id); if(!act)return;
+  if(!Array.isArray(act.data.exercises)){
+    const legacy=act.data.exercise||'Lift'; let sets=[];
+    if(Array.isArray(act.data.sets)) sets=act.data.sets.map(s=>({reps:s.reps||'',weight:s.weight||'',warmup:false,done:false}));
+    else if(act.data.sets){const n=parseInt(act.data.sets)||0;sets=Array.from({length:n},()=>({reps:act.data.reps||'',weight:'',warmup:false,done:false}));}
+    if(!sets.length) sets=[{reps:'',weight:'',warmup:false,done:false}];
+    act.data={name:'Lift',routineId:null,exercises:[{exId:'cx_'+slug(legacy),name:legacy,note:'',sets}]}; save();
+  }
+  WO={day,id}; woEl.classList.add('show'); document.body.style.overflow='hidden'; renderWorkout();
+}
+function closeWorkout(){
+  if(WO){const act=woAct(); if(act&&(!act.data.exercises||!act.data.exercises.length)){const w=week();w.acts[WO.day]=w.acts[WO.day].filter(a=>a.id!==WO.id);save();}}
+  woEl.classList.remove('show'); document.body.style.overflow=''; WO=null; render();
+}
+function finishWorkout(){
+  const act=woAct(); if(!act.data.exercises.length){flash('Add an exercise first');return;}
+  let prs=0; act.data.exercises.forEach(ex=>{const best=bestE1RM(ex.exId,act.id);ex.sets.forEach(s=>{if(!s.warmup&&e1rm(s)>0&&e1rm(s)>best+0.01)prs++;});});
+  const vol=workoutVolume(act);
+  act.done=true; commitHistory(act,woDateISO()); save(); closeWorkout(); celebrate(vol,prs);
+}
+function discardWorkout(){
+  if(!WO)return; const id=WO.id, day=WO.day;
+  if(DB.exHistory){ Object.keys(DB.exHistory).forEach(exId=>{ const sess=DB.exHistory[exId]&&DB.exHistory[exId].sessions; if(sess&&sess[id]) delete sess[id]; }); }
+  const w=week(); w.acts[day]=(w.acts[day]||[]).filter(a=>a.id!==id); save();
+  woEl.classList.remove('show'); document.body.style.overflow=''; WO=null; render(); flash('Workout deleted');
+}
+function celebrate(vol,prs){
+  let el=document.getElementById('finishpop');
+  if(!el){el=document.createElement('div');el.id='finishpop';el.className='finishpop';document.body.appendChild(el);}
+  el.innerHTML=`<div class="fp-card">${IC.peak}<div class="fp-main">${(vol||0).toLocaleString()} ${unit()}</div><div class="fp-sub">workout logged${prs?` · ${prs} new PR${prs>1?'s':''}`:''}</div></div>`;
+  el.classList.add('show');
+  clearTimeout(celebrate._t); celebrate._t=setTimeout(()=>el.classList.remove('show'),2000);
+}
+
+function renderWorkout(){
+  const act=woAct(); if(!act)return;
+  const sc0=woBody.querySelector('.wo-scroll'); const keepTop=sc0?sc0.scrollTop:0;
+  let h=`<div class="wo-head">
+    <button class="wo-back" data-woback aria-label="Back"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <input class="wo-name" data-woname value="${escAttr(act.data.name||'Lift')}" aria-label="Workout name">
+    <button class="wo-finish" data-wofinish>${act.done?'Update':'Finish'}</button>
+  </div><div class="wo-scroll">`;
+  if(!act.data.exercises.length) h+=`<div class="wo-empty">No exercises yet.<br>Add your first movement below.</div>`;
+  act.data.exercises.forEach((ex,ei)=>h+=exerciseCardHTML(ex,ei));
+  h+=`<button class="wo-add" data-woaddex>${IC.plus} Add exercise</button>
+    <button class="wo-saveroutine" data-wosaveroutine>Save as routine</button>
+    <button class="wo-delete" data-wodelete>Delete workout</button></div>`;
+  woBody.innerHTML=h;
+  const sc=woBody.querySelector('.wo-scroll'); if(sc) sc.scrollTop=keepTop;
+}
+function exerciseCardHTML(ex,ei){
+  const prev=prevSession(ex.exId,WO.id), best=bestE1RM(ex.exId,WO.id); let work=0;
+  const rows=ex.sets.map((s,si)=>{
+    let numCell,prevCell='—',wPh=unit(),rPh='reps',pr=false;
+    if(s.warmup){ numCell=`<button class="set-num warm" data-warm="${ei}:${si}">W</button>`; }
+    else{
+      work++; numCell=`<button class="set-num" data-warm="${ei}:${si}">${work}</button>`;
+      const p=prev[work-1]; if(p){prevCell=`${p.weight}×${p.reps}`;wPh=String(p.weight);rPh=String(p.reps);}
+      const e=e1rm(s); pr=e>0&&e>best+0.01; if(pr) prevCell=`<span class="pr-tag">★ PR</span>`;
+    }
+    return `<div class="set-row ${s.done?'done':''} ${pr?'pr-row':''}">
+      ${numCell}
+      <span class="set-prev">${prevCell}</span>
+      <input class="set-w" inputmode="decimal" value="${escAttr(s.weight)}" placeholder="${escAttr(wPh)}" data-w="${ei}:${si}" aria-label="weight">
+      <input class="set-r" inputmode="numeric" value="${escAttr(s.reps)}" placeholder="${escAttr(rPh)}" data-r="${ei}:${si}" aria-label="reps">
+      <button class="set-check ${s.done?'on':''}" data-check="${ei}:${si}" aria-label="Complete set">✓</button>
+      <button class="set-del" data-setdelx="${ei}:${si}" aria-label="Delete set">×</button>
+    </div>`;
+  }).join('');
+  return `<div class="ex-card">
+    <div class="ex-head"><span class="ex-name">${esc(ex.name)}</span><button class="ex-del" data-exdel="${ei}" aria-label="Remove exercise">${IC.x}</button></div>
+    <input class="ex-note" value="${escAttr(ex.note||'')}" placeholder="Add a note…" data-exnoteinput="${ei}" aria-label="Exercise note">
+    <div class="set-head"><span>Set</span><span>Prev</span><span>${unit()}</span><span>Reps</span><span></span><span></span></div>
+    ${rows}
+    <button class="ex-addset" data-addsetx="${ei}">${IC.plus} Add set</button>
+  </div>`;
+}
+
+woBody.addEventListener('click',e=>{
+  if(e.target.closest('[data-woback]'))return closeWorkout();
+  if(e.target.closest('[data-wofinish]'))return finishWorkout();
+  const wdl=e.target.closest('[data-wodelete]'); if(wdl){ armDelete('wodelete',wdl,()=>discardWorkout()); return; }
+  if(e.target.closest('[data-woaddex]'))return openPicker();
+  if(e.target.closest('[data-wosaveroutine]'))return saveAsRoutine();
+  const wm=e.target.closest('[data-warm]'); if(wm){const[ei,si]=wm.dataset.warm.split(':').map(Number);const s=woAct().data.exercises[ei].sets[si];s.warmup=!s.warmup;save();renderWorkout();return;}
+  const ck=e.target.closest('[data-check]'); if(ck){const[ei,si]=ck.dataset.check.split(':').map(Number);const s=woAct().data.exercises[ei].sets[si];s.done=!s.done;save();renderWorkout();return;}
+  const sd=e.target.closest('[data-setdelx]'); if(sd){armDelete('setdel:'+sd.dataset.setdelx, sd, ()=>{const[ei,si]=sd.dataset.setdelx.split(':').map(Number);const ex=woAct().data.exercises[ei];ex.sets.splice(si,1);if(!ex.sets.length)ex.sets.push({reps:'',weight:'',warmup:false,done:false});save();renderWorkout();});return;}
+  const as=e.target.closest('[data-addsetx]'); if(as){const ei=+as.dataset.addsetx;const ex=woAct().data.exercises[ei];const last=ex.sets[ex.sets.length-1];ex.sets.push({reps:last?last.reps:'',weight:last?last.weight:'',warmup:false,done:false});save();renderWorkout();const si=ex.sets.length-1;const inp=woBody.querySelector('[data-w="'+ei+':'+si+'"]');if(inp){try{inp.scrollIntoView({block:'center',behavior:'smooth'});}catch(_){}inp.focus({preventScroll:true});}return;}
+  const xd=e.target.closest('[data-exdel]'); if(xd){armDelete('exdel:'+xd.dataset.exdel, xd, ()=>{woAct().data.exercises.splice(+xd.dataset.exdel,1);save();renderWorkout();});return;}
+});
+woBody.addEventListener('input',e=>{
+  const w=e.target.closest('[data-w]'); if(w){const[ei,si]=w.dataset.w.split(':').map(Number);woAct().data.exercises[ei].sets[si].weight=e.target.value;save();return;}
+  const r=e.target.closest('[data-r]'); if(r){const[ei,si]=r.dataset.r.split(':').map(Number);woAct().data.exercises[ei].sets[si].reps=e.target.value;save();return;}
+  if(e.target.dataset.woname!==undefined){woAct().data.name=e.target.value;save();return;}
+  const en=e.target.closest('[data-exnoteinput]'); if(en){woAct().data.exercises[+en.dataset.exnoteinput].note=e.target.value;save();return;}
+});
+/* set values persist on input; Prev/PR refresh on check, add, delete, or reopen */
+
+function closeSheet2(){scrim2El.classList.remove('show');sheet2El.classList.remove('show');sheet2El.__cb=null;}
+function openPicker(){pickerQuery='';renderPicker();scrim2El.classList.add('show');sheet2El.classList.add('show');}
+function renderPicker(){
+  const q=pickerQuery.trim().toLowerCase();
+  let h=`<h3>Add exercise</h3><input class="search" id="exSearch" value="${escAttr(pickerQuery)}" placeholder="Search, or type a custom name…">`;
+  if(q) h+=`<button class="custom-add" data-customex="${escAttr(pickerQuery.trim())}">${IC.plus} Add “${esc(pickerQuery.trim())}” as custom</button>`;
+  Object.keys(LIB).forEach(g=>{
+    const items=LIB[g].filter(x=>x.name.toLowerCase().includes(q));
+    if(!items.length)return;
+    h+=`<div class="grp">${g}</div>`+items.map(x=>`<button class="ex-pick" data-pickexid="${x.id}" data-pickexname="${escAttr(x.name)}">${esc(x.name)}</button>`).join('');
+  });
+  h+=`<button class="btn primary" id="pickerDone" style="margin-top:14px">Done</button>`;
+  sheet2Body.innerHTML=h;
+}
+function addExerciseToWO(exId,name){woAct().data.exercises.push({exId,name,note:'',sets:[{reps:'',weight:'',warmup:false,done:false}]});save();renderWorkout();const sc=woBody.querySelector('.wo-scroll');if(sc)sc.scrollTop=sc.scrollHeight;}
+function saveAsRoutine(){
+  const act=woAct(); if(!act.data.exercises.length){flash('Add exercises first');return;}
+  openNamePrompt(act.data.name||'New routine',name=>{
+    DB.routines=DB.routines||[];
+    DB.routines.push({id:uid(),name:name||'Routine',exercises:act.data.exercises.map(x=>({exId:x.exId,name:x.name,note:x.note||'',sets:x.sets.map(s=>({reps:s.reps||'',weight:s.weight||'',warmup:!!s.warmup}))}))});
+    save(); flash('Routine saved');
+  });
+}
+function openNamePrompt(def,cb){
+  sheet2El.__cb=cb;
+  sheet2Body.innerHTML=`<h3>Save as routine</h3><div class="field"><label>Routine name</label><input id="nameInput" value="${escAttr(def)}"></div>
+    <div class="sheet-actions"><button class="btn ghost" id="sheet2Cancel">Cancel</button><button class="btn primary" id="nameSave">Save</button></div>`;
+  scrim2El.classList.add('show'); sheet2El.classList.add('show');
+}
+function openRoutineManager(){
+  const r=DB.routines||[];
+  let h=`<h3>Routines</h3>`;
+  h+= r.length? r.map(rt=>`<div class="rt-row"><span><b>${esc(rt.name)}</b><i>${rt.exercises.length} exercise${rt.exercises.length!==1?'s':''}</i></span><button class="set-del" data-routinedel="${rt.id}" aria-label="Delete">×</button></div>`).join('')
+    : `<div class="wo-empty" style="padding:20px 0">No routines yet.<br>Build a workout, then “Save as routine”.</div>`;
+  h+=`<button class="btn primary" id="sheet2Cancel" style="margin-top:14px">Close</button>`;
+  sheet2Body.innerHTML=h; scrim2El.classList.add('show'); sheet2El.classList.add('show');
+}
+scrim2El.onclick=closeSheet2;
+sheet2El.addEventListener('click',e=>{
+  if(e.target.id==='pickerDone'||e.target.id==='sheet2Cancel')return closeSheet2();
+  if(e.target.closest('#rewardsBtn')){ closeSheet2(); openRewards(false); return; }
+  if(e.target.closest('#exportBtn'))return exportData();
+  if(e.target.closest('#importBtn'))return document.getElementById('importFile').click();
+  if(e.target.closest('#introBtn')){closeSheet2();DB.onboarded=false;save();showWelcome();return;}
+  const ub=e.target.closest('[data-unit]'); if(ub){DB.unit=ub.dataset.unit;save();render();openSettings();return;}
+  const rb=e.target.closest('#resetBtn'); if(rb){armDelete('reset',rb,()=>resetAll());return;}
+  const pt=e.target.closest('[data-plantoggle]'); if(pt){const[d,v]=pt.dataset.plantoggle.split(':');togglePlan(d,v);return;}
+  if(e.target.id==='planNext'){ questDraft=computeQuestDefaults(planDraft); planStep=2; renderPlanner(); return; }
+  if(e.target.id==='planBack'){ planStep=1; renderPlanner(); return; }
+  if(e.target.id==='planLock')return lockWeek();
+  const qds=e.target.closest('[data-qdstep]'); if(qds){const[i,d]=qds.dataset.qdstep.split(':');questDraft[+i].target=Math.max(1,Math.min(60,questDraft[+i].target+(+d)));renderPlanner();return;}
+  const qdt=e.target.closest('[data-qdtype]'); if(qdt){const[i,v]=qdt.dataset.qdtype.split(':');questDraft[+i].type=v;renderPlanner();return;}
+  const pe=e.target.closest('[data-pickexid]'); if(pe){addExerciseToWO(pe.dataset.pickexid,pe.dataset.pickexname);pe.classList.add('added');pe.textContent=pe.dataset.pickexname+'  ✓ added';return;}
+  const ce=e.target.closest('[data-customex]'); if(ce){const nm=ce.dataset.customex;addExerciseToWO('cx_'+slug(nm),nm);closeSheet2();return;}
+  const rd=e.target.closest('[data-routinedel]'); if(rd){armDelete('routinedel:'+rd.dataset.routinedel, rd, ()=>{const idx=(DB.routines||[]).findIndex(r=>r.id===rd.dataset.routinedel);if(idx>-1){DB.routines.splice(idx,1);save();openRoutineManager();}});return;}
+  if(e.target.id==='nameSave'){const v=(document.getElementById('nameInput').value||'').trim();const cb=sheet2El.__cb;closeSheet2();if(cb)cb(v);return;}
+});
+sheet2El.addEventListener('change',e=>{
+  if(e.target.id==='importFile'&&e.target.files&&e.target.files[0]) handleImport(e.target.files[0]);
+});
+sheet2El.addEventListener('input',e=>{
+  if(e.target.id==='exSearch'){pickerQuery=e.target.value;renderPicker();const s=document.getElementById('exSearch');if(s){s.focus();s.setSelectionRange(s.value.length,s.value.length);}}
+});
+
+/* ================= SET THE WEEK (2-step wizard) ================= */
+let planDraft=null, questDraft=null, planStep=1;
+function openPlanner(){
+  const w=week(); planDraft={}; DAYS.forEach(d=>planDraft[d]=(w.plan&&w.plan[d])?w.plan[d].slice():[]);
+  questDraft=w.quests.map(q=>({tier:q.tier,type:q.type,target:q.target}));
+  planStep=1; renderPlanner(); scrim2El.classList.add('show'); sheet2El.classList.add('show');
+}
+function renderPlanner(){ planStep===1?renderPlanStep():renderQuestStep(); }
+function renderPlanStep(){
+  const opts=[['run','Run'],['sprint','Sprint'],['lift','Lift'],['other','Other'],['rest','Rest']];
+  let h=`<h3>Set the week · plan</h3><div class="plan-note">Step 1 of 2 — a rough plan for each day.</div>`;
+  DAYS.forEach(d=>{
+    const sel=planDraft[d]||[];
+    h+=`<div class="plan-prow"><span class="pday">${d}</span><div class="plan-toggles">`;
+    opts.forEach(([v,lab])=>{ const on=sel.includes(v); h+=`<button class="ptog ${v==='rest'?'rest':''} ${on?'on':''}" data-plantoggle="${d}:${v}">${lab}</button>`; });
+    h+=`</div></div>`;
+  });
+  h+=`<div class="sheet-actions"><button class="btn ghost" id="sheet2Cancel">Cancel</button><button class="btn primary" id="planNext">Next →</button></div>`;
+  sheet2Body.innerHTML=h;
+}
+function renderQuestStep(){
+  let h=`<h3>Set the week · quests</h3><div class="plan-note">Step 2 of 2 — lock your three goals for the week. Rewards come from your list.</div>`;
+  questDraft.forEach((q,i)=>{
+    const t=tierOf(q.tier);
+    h+=`<div class="qedit">
+      <div class="qedit-top"><span class="q-tier">${t.name}</span><span class="q-budget">Reward ${budgetLabel(t.key)}</span></div>
+      <div class="stepper">
+        <button class="step" data-qdstep="${i}:-1" aria-label="Fewer">−</button>
+        <span class="step-val">${q.target}</span>
+        <button class="step" data-qdstep="${i}:1" aria-label="More">+</button>
+        <span class="step-lbl">sessions</span>
+      </div>
+      <div class="qseg">${[['lift','Lift'],['run','Run'],['sprint','Sprint'],['other','Other'],['any','Any']].map(([v,l])=>`<button class="qsegb ${q.type===v?'on':''}" data-qdtype="${i}:${v}">${l}</button>`).join('')}</div>
+    </div>`;
+  });
+  h+=`<div class="sheet-actions"><button class="btn ghost" id="planBack">← Back</button><button class="btn primary" id="planLock">Lock in the week</button></div>`;
+  sheet2Body.innerHTML=h;
+}
+function togglePlan(day,v){
+  let sel=planDraft[day]||[];
+  if(v==='rest'){ sel = sel.includes('rest')?[]:['rest']; }
+  else { sel=sel.filter(x=>x!=='rest'); sel = sel.includes(v)?sel.filter(x=>x!==v):sel.concat(v); }
+  planDraft[day]=sel; renderPlanner();
+}
+function computeQuestDefaults(plan){
+  const counts={run:0,sprint:0,lift:0,other:0}; let total=0;
+  DAYS.forEach(d=>(plan[d]||[]).forEach(t=>{ if(t!=='rest'&&counts[t]!=null){counts[t]++;total++;} }));
+  const order=['lift','run','sprint','other'];
+  const sorted=Object.keys(counts).filter(t=>counts[t]>0).sort((a,b)=>counts[b]-counts[a]||order.indexOf(a)-order.indexOf(b));
+  const dom=sorted[0];
+  const base=dom?{type:dom,target:counts[dom]}:{type:'any',target:Math.max(1,Math.floor(total/2)||3)};
+  const ridge={type:'any',target: total?Math.min(total,Math.max(base.target,Math.ceil(total*0.75))):Math.max(base.target+1,4)};
+  const summit={type:'any',target: total||6};
+  return [{tier:'basecamp',...base},{tier:'ridgeline',...ridge},{tier:'summit',...summit}];
+}
+function lockWeek(){
+  const w=week(); w.plan={}; DAYS.forEach(d=>w.plan[d]=planDraft[d]||[]);
+  questDraft.forEach((qd,i)=>{ const q=w.quests[i]; if(q.type!==qd.type||q.target!==qd.target) q.reward=null; q.tier=qd.tier; q.type=qd.type; q.target=Math.max(1,qd.target); });
+  w.locked=true; save(); closeSheet2(); render(); flash('Week locked in');
+}
+
+/* ================= STREAK + SUMMIT LOG ================= */
+function weekCamps(wk){
+  if(!wk||!wk.quests) return 0; let n=0;
+  wk.quests.forEach(q=>{ if(q.target>0){ let c=0; DAYS.forEach(d=>(wk.acts[d]||[]).forEach(a=>{ if(a.done&&(q.type==='any'||a.type===q.type))c++; })); if(c>=q.target)n++; } });
+  return n;
+}
+function currentStreak(){
+  let streak=0, m=mondayOf(new Date());
+  if(weekCamps(DB.weeks[iso(m)])<1) m=addDays(m,-7);
+  while(DB.weeks[iso(m)] && weekCamps(DB.weeks[iso(m)])>=1){ streak++; m=addDays(m,-7); }
+  return streak;
+}
+function hasData(wk){ if(!wk)return false; const a=DAYS.some(d=>(wk.acts[d]||[]).length); const p=wk.plan&&DAYS.some(d=>(wk.plan[d]||[]).length); return a||p; }
+function streakGlyph(){ return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#a85638" stroke-width="2" stroke-linejoin="round"><path d="M3 20 L9 8 L13 14 L16 6 L21 20 Z"/></svg>`; }
+function summitLogHTML(){
+  const entries=Object.keys(DB.weeks||{}).map(k=>({k,mon:new Date(k+'T00:00:00'),wk:DB.weeks[k]}))
+    .filter(e=>hasData(e.wk)).sort((a,b)=>b.mon-a.mon).slice(0,8);
+  let h=`<div class="eyebrow">Summit log</div>`;
+  if(!entries.length){ h+=`<div class="empty2" style="padding:6px 2px">Climb a week to start your log.</div>`; return h; }
+  h+=`<div class="peaks">`;
+  entries.forEach(e=>{
+    const camps=weekCamps(e.wk), isCur=iso(e.mon)===iso(curMon);
+    h+=`<button class="peak ${isCur?'cur':''}" data-loadweek="${e.k}">
+      <span class="peak-range">${fmtRange(e.mon)}</span>
+      <span class="peak-dots">${[0,1,2].map(i=>`<i class="${i<camps?'on':''}"></i>`).join('')}</span>
+      <span class="peak-label">${camps===3?'Summit':camps+'/3'}</span>
+    </button>`;
+  });
+  return h+`</div>`;
+}
+
+/* ================= SETTINGS / DATA ================= */
+function openSettings(){
+  sheet2Body.innerHTML=`<h3>Settings</h3>
+    <div class="set-list">
+      <button class="set-row2" id="rewardsBtn"><div><b>Edit rewards</b><span>Your three reward tiers</span></div>${IC.cr}</button>
+      <button class="set-row2" id="exportBtn"><div><b>Export data</b><span>Download a backup (.json)</span></div>${IC.cr}</button>
+      <button class="set-row2" id="importBtn"><div><b>Import data</b><span>Restore from a backup file</span></div>${IC.cr}</button>
+      <div class="set-row2"><div><b>Units</b><span>Weight label</span></div><div class="unit-toggle"><button class="ut ${unit()==='lb'?'on':''}" data-unit="lb">lb</button><button class="ut ${unit()==='kg'?'on':''}" data-unit="kg">kg</button></div></div>
+      <button class="set-row2" id="introBtn"><div><b>Replay intro</b><span>Show the welcome screen again</span></div>${IC.cr}</button>
+      <button class="set-row2 danger-row" id="resetBtn"><div><b>Reset all data</b><span>Erase everything — double-tap</span></div></button>
+    </div>
+    <input type="file" id="importFile" accept="application/json,.json" style="display:none">
+    <button class="btn primary" id="sheet2Cancel" style="margin-top:14px">Close</button>`;
+  scrim2El.classList.add('show'); sheet2El.classList.add('show');
+}
+function exportData(){
+  try{
+    const blob=new Blob([JSON.stringify(DB,null,2)],{type:'application/json'});
+    const url=URL.createObjectURL(blob); const a=document.createElement('a');
+    a.href=url; a.download='ridge-backup-'+iso(new Date())+'.json'; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000); flash('Backup downloaded');
+  }catch(e){ flash('Export failed'); }
+}
+function handleImport(file){
+  const r=new FileReader();
+  r.onload=()=>{ try{ const data=JSON.parse(r.result); if(data&&typeof data==='object'&&data.weeks){ DB=data; save(); curMon=mondayOf(new Date()); closeSheet2(); render(); flash('Data imported'); } else flash('Not a Ridge backup'); }catch(e){ flash('Could not read file'); } };
+  r.readAsText(file);
+}
+function resetAll(){ DB={weeks:{},onboarded:true,unit:unit(),rewards:defaultRewards(),budgets:{basecamp:'~$20',ridgeline:'~$50',summit:'~$100'}}; save(); curMon=mondayOf(new Date()); closeSheet2(); render(); flash('All data reset'); }
+
+/* ---- reward setup: areas -> specifics -> tiers ---- */
+const AREAS=[
+ {key:'gaming',label:'Gaming',subs:[
+   {key:'video',label:'Video games',items:{b:['An indie game','In-game pass'],r:['A new release','Extra controller'],s:['AAA game + add-on','A gaming headset']}},
+   {key:'cards',label:'Trading cards',items:{b:['A booster pack','Card sleeves'],r:['A few packs','A new deck'],s:['A booster box','A graded card']}},
+   {key:'board',label:'Board & tabletop',items:{b:['A small board game','A dice set'],r:['A mid board game','Miniatures'],s:['A big-box game','A premium set']}},
+   {key:'ttrpg',label:'Tabletop RPG',items:{b:['A module / PDF','A dice set'],r:['A rulebook','A map pack'],s:['A collector rulebook','A terrain set']}}
+ ]},
+ {key:'food',label:'Food',subs:[
+   {key:'dining',label:'Dining out',items:{b:['Takeout night','A bakery treat'],r:['Dinner out','Brunch out'],s:['A tasting menu','A steak dinner']}},
+   {key:'cooking',label:'Cooking',items:{b:['A sauce or spice','A new ingredient'],r:['A kitchen tool','Specialty groceries'],s:['A good knife','A cookware piece']}},
+   {key:'sweets',label:'Sweets & snacks',items:{b:['Fancy chocolate','A snack haul'],r:['A dessert box','Artisan treats'],s:['A premium hamper']}}
+ ]},
+ {key:'drinks',label:'Drinks',subs:[
+   {key:'wine',label:'Wine',items:{b:['A bottle of wine'],r:['A nicer bottle','A wine pairing'],s:['A premium bottle','A tasting flight']}},
+   {key:'whiskey',label:'Whiskey & spirits',items:{b:['A single pour'],r:['A mid-shelf bottle'],s:['A top-shelf bottle']}},
+   {key:'beer',label:'Beer',items:{b:['A craft six-pack'],r:['A mixed case'],s:['A brewery haul']}},
+   {key:'coffee',label:'Coffee & tea',items:{b:['Specialty beans','A new mug'],r:['A pour-over kit','Tea sampler'],s:['A burr grinder','Espresso gear']}}
+ ]},
+ {key:'style',label:'Style & apparel',subs:[
+   {key:'clothes',label:'Clothes',items:{b:['A tee','Good socks'],r:['A flannel','A cap'],s:['Denim or boots','A jacket']}},
+   {key:'access',label:'Accessories',items:{b:['A belt'],r:['A wallet','A watch strap'],s:['A watch','Sunglasses']}},
+   {key:'groom',label:'Grooming',items:{b:['A grooming item'],r:['A barber visit'],s:['A fragrance','A grooming set']}}
+ ]},
+ {key:'music',label:'Music',subs:[
+   {key:'listen',label:'Listening',items:{b:['An album'],r:['A vinyl record','Earbuds'],s:['A vinyl haul','Nice headphones']}},
+   {key:'instr',label:'Gear & instruments',items:{b:['Picks / strings','Cables'],r:['A pedal','A mic accessory'],s:['A pedal or interface','An instrument upgrade']}},
+   {key:'prod',label:'Production',items:{b:['A sample pack'],r:['A plugin','A MIDI controller'],s:['A studio plugin','Studio gear']}},
+   {key:'live',label:'Live shows',items:{b:['A local show'],r:['A concert ticket'],s:['Premium seats']}}
+ ]},
+ {key:'books',label:'Books & learning',subs:[
+   {key:'reading',label:'Books',items:{b:['A paperback','Used-book haul'],r:['A hardcover set','Audiobook credits'],s:['A signed edition','An e-reader']}},
+   {key:'courses',label:'Courses & skills',items:{b:['A short course'],r:['A workshop','A subscription'],s:['A masterclass']}}
+ ]},
+ {key:'wellness',label:'Wellness',subs:[
+   {key:'relax',label:'Relax & self-care',items:{b:['A candle','A bath set'],r:['Skincare','A massage add-on'],s:['A spa session','A wellness day']}},
+   {key:'fitness',label:'Fitness gear',items:{b:['Resistance bands','A water bottle'],r:['Lifting straps','A foam roller'],s:['Training shoes','A wearable']}}
+ ]},
+ {key:'home',label:'Home & space',subs:[
+   {key:'decor',label:'Decor',items:{b:['A plant','A print'],r:['A lamp','Cozy textiles'],s:['A chair','A rug']}},
+   {key:'kitchenbar',label:'Kitchen & bar',items:{b:['A bar tool','A mug'],r:['Glassware set','A gadget'],s:['An appliance','A cookware set']}}
+ ]},
+ {key:'experiences',label:'Experiences',subs:[
+   {key:'dayout',label:'Day out',items:{b:['A movie night','A coffee date'],r:['A class together','A day trip'],s:['Event tickets','A night out']}},
+   {key:'getaway',label:'Getaways',items:{b:['A picnic'],r:['A day-trip fund'],s:['An overnight stay','Weekend fund']}}
+ ]},
+ {key:'tech',label:'Tech & gadgets',subs:[
+   {key:'access',label:'Accessories',items:{b:['An accessory','A subscription'],r:['A peripheral','A smart gadget'],s:['A device upgrade','A premium gadget']}},
+   {key:'photo',label:'Photo & creative',items:{b:['An SD card'],r:['A tripod','A filter'],s:['A lens','A creative device']}}
+ ]},
+ {key:'outdoors',label:'Outdoors & active',subs:[
+   {key:'trail',label:'Trail & camp',items:{b:['Trail snacks','A water bottle'],r:['A daypack','A layer'],s:['Tent or boots','Gear upgrade']}},
+   {key:'sports',label:'Sports',items:{b:['New grip / laces'],r:['Gloves / accessory','A kit'],s:['A racket / club','Premium kit']}}
+ ]},
+ {key:'hobbies',label:'Hobbies & craft',subs:[
+   {key:'making',label:'Making',items:{b:['Supplies refill'],r:['A tool','A kit'],s:['A machine','A premium kit']}},
+   {key:'collect',label:'Collecting',items:{b:['A small piece'],r:['A mid piece'],s:['A showpiece']}}
+ ]}
+];
+const TIER_KEY={b:'basecamp',r:'ridgeline',s:'summit'};
+let rwDraft=null, rwBudget=null, rsOnboard=false, rsStep=1, rsAreas=[], rsSubs=[];
+const rsetupEl=document.getElementById('rsetup'), rsetupBody=document.getElementById('rsetupBody');
+function openRewards(onboard){
+  rsOnboard=!!onboard; rsStep=1;
+  if(onboard){ rwDraft={basecamp:[],ridgeline:[],summit:[]}; rsAreas=[]; rsSubs=[]; }
+  else { rwDraft={basecamp:((DB.rewards&&DB.rewards.basecamp)||[]).slice(),ridgeline:((DB.rewards&&DB.rewards.ridgeline)||[]).slice(),summit:((DB.rewards&&DB.rewards.summit)||[]).slice()}; rsAreas=[]; rsSubs=[]; }
+  rwBudget=Object.assign({basecamp:'~$20',ridgeline:'~$50',summit:'~$100'}, DB.budgets||{});
+  renderRewards(); rsetupEl.classList.add('show'); document.body.style.overflow='hidden';
+}
+function closeRewards(){ rsetupEl.classList.remove('show'); document.body.style.overflow=''; }
+function captureBudgets(){ rsetupEl.querySelectorAll('[data-budget]').forEach(b=>{ rwBudget[b.dataset.budget]=b.value.trim()||rwBudget[b.dataset.budget]; }); }
+function mergeSubsIntoDraft(){
+  rsSubs.forEach(id=>{ const [ak,sk]=id.split('.'); const a=AREAS.find(x=>x.key===ak); const s=a&&a.subs.find(x=>x.key===sk); if(!s)return;
+    Object.keys(TIER_KEY).forEach(bk=>{ const tk=TIER_KEY[bk]; (s.items[bk]||[]).forEach(it=>{ if(!rwDraft[tk].includes(it)) rwDraft[tk].push(it); }); });
+  });
+}
+function renderRewards(){ rsStep===1?rsAreaStep():rsStep===2?rsSubStep():rsItemStep(); }
+function rsAreaStep(){
+  let h=`<div class="rs-step">Step 1 of 3</div><div class="rs-head"><h2>What motivates you?</h2><p class="tagline">Pick a handful of areas worth working for — yours, your partner's, anyone who climbs with you. We get specific next.</p></div>`;
+  h+=`<div class="rs-grid">`;
+  AREAS.forEach(a=>{ const on=rsAreas.includes(a.key); h+=`<button class="rs-tile ${on?'on':''}" data-area="${a.key}"><span class="rs-tile-l">${esc(a.label)}</span><span class="rs-tile-s">${a.subs.map(s=>s.label).slice(0,3).join(' · ')}</span></button>`; });
+  h+=`</div>`;
+  h+=`<div class="sheet-actions"><button class="btn ghost" id="rsBack">${rsOnboard?'Skip':'Cancel'}</button><button class="btn primary" id="rsNext">Continue →</button></div>`;
+  rsetupBody.innerHTML=h;
+}
+function rsSubStep(){
+  const sel=AREAS.filter(a=>rsAreas.includes(a.key));
+  let h=`<div class="rs-step">Step 2 of 3</div><div class="rs-head"><h2>Get specific</h2><p class="tagline">Tap everything that actually appeals. This is where it gets tailored.</p></div>`;
+  if(!sel.length) h+=`<div class="rs-empty" style="display:block;padding:10px 2px">No areas picked — go back to choose some, or skip ahead and add your own.</div>`;
+  sel.forEach(a=>{ h+=`<div class="rs-sec"><div class="rs-sec-h">${esc(a.label)}</div><div class="rs-chips">`;
+    a.subs.forEach(s=>{ const id=a.key+'.'+s.key; const on=rsSubs.includes(id); h+=`<button class="rs-chip ${on?'on':''}" data-sub="${id}">${esc(s.label)}</button>`; });
+    h+=`</div></div>`; });
+  h+=`<div class="sheet-actions"><button class="btn ghost" id="rsBack2">← Back</button><button class="btn primary" id="rsNext2">Continue →</button></div>`;
+  rsetupBody.innerHTML=h;
+}
+function rsItemStep(){
+  let h=`<div class="rs-step">Step 3 of 3</div><div class="rs-head"><h2>Your reward tiers</h2><p class="tagline">Pulled from your picks and sorted by rough cost. Trim what doesn't fit, add your own, set the budgets.</p></div>`;
+  [['basecamp','Basecamp'],['ridgeline','Ridgeline'],['summit','Summit']].forEach(([tk,nm])=>{
+    const items=rwDraft[tk]||[];
+    h+=`<div class="rs-tier">
+      <div class="rs-tier-top"><span class="q-tier">${nm}</span><input class="rs-budget" data-budget="${tk}" value="${escAttr(rwBudget[tk]||'')}" placeholder="~$20" aria-label="${nm} budget"></div>
+      <div class="rs-items">${items.length?items.map((it,idx)=>`<span class="rs-item">${esc(it)}<button class="rs-del" data-rdel="${tk}:${idx}" aria-label="Remove">${IC.x}</button></span>`).join(''):'<span class="rs-empty">Nothing here yet — add a few below</span>'}</div>
+      <div class="rs-add"><input class="rs-input" data-radd="${tk}" placeholder="Add your own…" aria-label="Add ${nm} reward"><button class="rs-addbtn" data-raddbtn="${tk}">Add</button></div>
+    </div>`;
+  });
+  h+=`<div class="sheet-actions"><button class="btn ghost" id="rsBack3">← Back</button><button class="btn primary" id="rsSave">${rsOnboard?'Save & continue →':'Save'}</button></div>`;
+  rsetupBody.innerHTML=h;
+}
+function addReward(tk){ const inp=rsetupEl.querySelector('[data-radd="'+tk+'"]'); const v=(inp&&inp.value||'').trim(); if(v && !rwDraft[tk].includes(v)) rwDraft[tk].push(v); captureBudgets(); renderRewards(); }
+rsetupEl.addEventListener('click',e=>{
+  const ar=e.target.closest('[data-area]'); if(ar){ const k=ar.dataset.area; const i=rsAreas.indexOf(k); i<0?rsAreas.push(k):rsAreas.splice(i,1); renderRewards(); return; }
+  const sb=e.target.closest('[data-sub]'); if(sb){ const id=sb.dataset.sub; const i=rsSubs.indexOf(id); i<0?rsSubs.push(id):rsSubs.splice(i,1); renderRewards(); return; }
+  if(e.target.id==='rsNext'){ rsStep=2; renderRewards(); return; }
+  if(e.target.id==='rsBack2'){ rsStep=1; renderRewards(); return; }
+  if(e.target.id==='rsNext2'){ mergeSubsIntoDraft(); rsStep=3; renderRewards(); return; }
+  if(e.target.id==='rsBack3'){ captureBudgets(); rsStep=2; renderRewards(); return; }
+  const rd=e.target.closest('[data-rdel]'); if(rd){ const [tk,idx]=rd.dataset.rdel.split(':'); rwDraft[tk].splice(+idx,1); captureBudgets(); renderRewards(); return; }
+  const ab=e.target.closest('[data-raddbtn]'); if(ab){ addReward(ab.dataset.raddbtn); return; }
+  if(e.target.id==='rsSave'){ captureBudgets();
+    ['basecamp','ridgeline','summit'].forEach(tk=>rwDraft[tk]=rwDraft[tk].filter(Boolean));
+    DB.rewards={basecamp:rwDraft.basecamp,ridgeline:rwDraft.ridgeline,summit:rwDraft.summit}; DB.budgets=rwBudget; DB.rewardsSet=true; save();
+    closeRewards(); if(rsOnboard){ openPlanner(); } else { render(); flash('Rewards saved'); } return; }
+  if(e.target.id==='rsBack'){ closeRewards(); if(rsOnboard) openPlanner(); return; }
+});
+rsetupEl.addEventListener('keydown',e=>{ if(e.key==='Enter'&&e.target.classList&&e.target.classList.contains('rs-input')){ e.preventDefault(); addReward(e.target.dataset.radd); } });
+
+document.getElementById('gearBtn').onclick=openSettings;
+document.getElementById('wkBtn').onclick=()=>{ curMon=mondayOf(new Date()); render(); };
+
+/* ================= FIRST RUN ================= */
+function showWelcome(){ document.getElementById('welcome').classList.add('show'); }
+function closeWelcome(start){ DB.onboarded=true; save(); document.getElementById('welcome').classList.remove('show'); if(start) openRewards(true); }
+document.getElementById('welcomeStart').onclick=()=>closeWelcome(true);
+document.getElementById('welcomeSkip').onclick=()=>closeWelcome(false);
+
+render();
+if(!DB.onboarded) showWelcome();
+</script>
+</body>
+</html>
