@@ -247,6 +247,11 @@
   .ex-pick{all:unset;cursor:pointer;display:block;padding:11px 12px;border-radius:10px;font-size:14px;color:var(--mist)}
   .ex-pick:hover{background:var(--surface-2)}
   .ex-pick.added{color:var(--gold-2)}
+  .picker-head{position:sticky;top:0;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface);padding:6px 0 10px}
+  .picker-head h3{margin:0}
+  .picker-done{all:unset;cursor:pointer;font-family:'Space Grotesk';font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--valley);background:var(--ink);padding:9px 17px;border-radius:999px;touch-action:manipulation}
+  .picker-done:hover{background:var(--ink-soft)}
+  .ex-check{color:var(--gold);font-weight:700;font-size:12px;letter-spacing:.04em}
   .custom-add{all:unset;cursor:pointer;display:block;text-align:center;padding:11px;border:1px dashed var(--gold);border-radius:11px;color:var(--gold-2);font-size:13px;margin:6px 0}
   .rt-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)}
   .rt-row b{font-family:'Space Grotesk';font-size:14px}
@@ -1145,17 +1150,23 @@ function closeSheet2(){scrim2El.classList.remove('show');sheet2El.classList.remo
 function openPicker(){pickerQuery='';renderPicker();scrim2El.classList.add('show');sheet2El.classList.add('show');}
 function renderPicker(){
   const q=pickerQuery.trim().toLowerCase();
-  let h=`<h3>Add exercise</h3><input class="search" id="exSearch" value="${escAttr(pickerQuery)}" placeholder="Search, or type a custom name…">`;
+  const inWO=new Set(woAct().data.exercises.map(e=>e.exId));
+  let h=`<div class="picker-head"><h3>Add exercise</h3><button class="picker-done" id="pickerDone">Done</button></div>`;
+  h+=`<input class="search" id="exSearch" value="${escAttr(pickerQuery)}" placeholder="Search, or type a custom name…">`;
   if(q) h+=`<button class="custom-add" data-customex="${escAttr(pickerQuery.trim())}">${IC.plus} Add “${esc(pickerQuery.trim())}” as custom</button>`;
   Object.keys(LIB).forEach(g=>{
     const items=LIB[g].filter(x=>x.name.toLowerCase().includes(q));
     if(!items.length)return;
-    h+=`<div class="grp">${g}</div>`+items.map(x=>`<button class="ex-pick" data-pickexid="${x.id}" data-pickexname="${escAttr(x.name)}">${esc(x.name)}</button>`).join('');
+    h+=`<div class="grp">${g}</div>`+items.map(x=>{const added=inWO.has(x.id);return `<button class="ex-pick ${added?'added':''}" data-pickexid="${x.id}" data-pickexname="${escAttr(x.name)}">${esc(x.name)}${added?' <span class="ex-check">✓ added</span>':''}</button>`;}).join('');
   });
-  h+=`<button class="btn primary" id="pickerDone" style="margin-top:14px">Done</button>`;
   sheet2Body.innerHTML=h;
 }
 function addExerciseToWO(exId,name){woAct().data.exercises.push({exId,name,note:'',sets:[{reps:'',weight:'',warmup:false,done:false}]});save();renderWorkout();const sc=woBody.querySelector('.wo-scroll');if(sc)sc.scrollTop=sc.scrollHeight;}
+function toggleExerciseInWO(exId,name){
+  const exs=woAct().data.exercises; const i=exs.findIndex(e=>e.exId===exId);
+  if(i>=0) exs.splice(i,1); else exs.push({exId,name,note:'',sets:[{reps:'',weight:'',warmup:false,done:false}]});
+  save(); renderWorkout(); renderPicker();
+}
 function saveAsRoutine(){
   const act=woAct(); if(!act.data.exercises.length){flash('Add exercises first');return;}
   openNamePrompt(act.data.name||'New routine',name=>{
@@ -1193,7 +1204,7 @@ sheet2El.addEventListener('click',e=>{
   if(e.target.id==='planLock')return lockWeek();
   const qds=e.target.closest('[data-qdstep]'); if(qds){const[i,d]=qds.dataset.qdstep.split(':');questDraft[+i].target=Math.max(1,Math.min(60,questDraft[+i].target+(+d)));renderPlanner();return;}
   const qdt=e.target.closest('[data-qdtype]'); if(qdt){const[i,v]=qdt.dataset.qdtype.split(':');questDraft[+i].type=v;renderPlanner();return;}
-  const pe=e.target.closest('[data-pickexid]'); if(pe){addExerciseToWO(pe.dataset.pickexid,pe.dataset.pickexname);pe.classList.add('added');pe.textContent=pe.dataset.pickexname+'  ✓ added';return;}
+  const pe=e.target.closest('[data-pickexid]'); if(pe){toggleExerciseInWO(pe.dataset.pickexid,pe.dataset.pickexname);return;}
   const ce=e.target.closest('[data-customex]'); if(ce){const nm=ce.dataset.customex;addExerciseToWO('cx_'+slug(nm),nm);closeSheet2();return;}
   const rd=e.target.closest('[data-routinedel]'); if(rd){armDelete('routinedel:'+rd.dataset.routinedel, rd, ()=>{const idx=(DB.routines||[]).findIndex(r=>r.id===rd.dataset.routinedel);if(idx>-1){DB.routines.splice(idx,1);save();openRoutineManager();}});return;}
   if(e.target.id==='nameSave'){const v=(document.getElementById('nameInput').value||'').trim();const cb=sheet2El.__cb;closeSheet2();if(cb)cb(v);return;}
