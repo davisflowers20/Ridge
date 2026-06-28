@@ -431,6 +431,15 @@
   .wo-delete{all:unset;cursor:pointer;display:block;text-align:center;margin:4px auto 8px;font-family:'Space Grotesk';font-size:12px;letter-spacing:.04em;color:var(--muted);padding:11px}
   .wo-delete:hover{color:#b03b22}
   .wo-delete.arm{color:#fff;background:#b03b22;border-radius:10px}
+  .rs-mic{all:unset;cursor:pointer;width:46px;display:grid;place-items:center;border:1px solid var(--line);border-radius:10px;color:var(--ink);touch-action:manipulation}
+  .rs-mic .ic{width:18px;height:18px}
+  .rs-mic[disabled]{opacity:.4}
+  .rs-mic.listening{background:#b03b22;border-color:#b03b22;color:#fff;animation:micpulse 1s ease-in-out infinite}
+  @keyframes micpulse{0%,100%{opacity:1}50%{opacity:.5}}
+  .rs-foot{display:flex;justify-content:space-between;align-items:center;margin-top:9px}
+  .rs-clear{all:unset;cursor:pointer;font-family:'Space Grotesk';font-size:11px;letter-spacing:.04em;color:var(--muted)}
+  .rs-clear:hover{color:#b03b22}
+  .rs-count{font-family:'Space Mono';font-size:11px;color:var(--muted);text-align:right}
   button:focus-visible,select:focus-visible,input:focus-visible,.check:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
   @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -521,7 +530,8 @@ const IC={
   x:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
   sun:'<svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>',
   peak:'<svg class="ic-peak" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 20 L9 8 L13 14 L16 6 L21 20 Z"/></svg>',
-  lock:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>'
+  lock:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
+  mic:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>'
 };
 function unit(){ return (DB&&DB.unit)?DB.unit:'lb'; }
 const TIERS = [
@@ -844,11 +854,7 @@ function rollReward(tierKey){
   if(!pool.length) return {name:'Treat yourself', price:budgetLabel(tierKey)};
   return {name:pool[Math.floor(Math.random()*pool.length)], price:budgetLabel(tierKey)};
 }
-function defaultRewards(){
-  const out={basecamp:[],ridgeline:[],summit:[]}, map={basecamp:'t20',ridgeline:'t50',summit:'t100'};
-  Object.keys(map).forEach(tk=>CATS.forEach(c=>REWARDS[c][map[tk]].forEach(it=>out[tk].push(it.n))));
-  return out;
-}
+function defaultRewards(){ return {basecamp:[],ridgeline:[],summit:[]}; }
 const REWARD_SEEDS={
   'Coffee & tea':{basecamp:['Specialty beans','A new mug'],ridgeline:['Pour-over kit','Tea sampler'],summit:['Burr grinder','Espresso gear']},
   'Books':{basecamp:['A paperback','Used-book haul'],ridgeline:['Hardcover set','Audiobook credits'],summit:['Signed edition','An e-reader']},
@@ -1398,66 +1404,64 @@ const AREAS=[
  ]}
 ];
 const TIER_KEY={b:'basecamp',r:'ridgeline',s:'summit'};
-let rwDraft=null, rwBudget=null, rsOnboard=false, rsStep=1, rsAreas=[], rsSubs=[];
+const RS_CAP=6;
+let rwDraft=null, rwBudget=null, rsOnboard=false, recog=null;
 const rsetupEl=document.getElementById('rsetup'), rsetupBody=document.getElementById('rsetupBody');
+function voiceSupported(){ return !!(window.SpeechRecognition||window.webkitSpeechRecognition); }
 function openRewards(onboard){
-  rsOnboard=!!onboard; rsStep=1;
-  if(onboard){ rwDraft={basecamp:[],ridgeline:[],summit:[]}; rsAreas=[]; rsSubs=[]; }
-  else { rwDraft={basecamp:((DB.rewards&&DB.rewards.basecamp)||[]).slice(),ridgeline:((DB.rewards&&DB.rewards.ridgeline)||[]).slice(),summit:((DB.rewards&&DB.rewards.summit)||[]).slice()}; rsAreas=[]; rsSubs=[]; }
+  rsOnboard=!!onboard;
+  if(onboard){ rwDraft={basecamp:[],ridgeline:[],summit:[]}; }
+  else { rwDraft={basecamp:((DB.rewards&&DB.rewards.basecamp)||[]).slice(),ridgeline:((DB.rewards&&DB.rewards.ridgeline)||[]).slice(),summit:((DB.rewards&&DB.rewards.summit)||[]).slice()}; }
   rwBudget=Object.assign({basecamp:'~$20',ridgeline:'~$50',summit:'~$100'}, DB.budgets||{});
   renderRewards(); rsetupEl.classList.add('show'); document.body.style.overflow='hidden';
 }
-function closeRewards(){ rsetupEl.classList.remove('show'); document.body.style.overflow=''; }
+function closeRewards(){ if(recog){try{recog.stop();}catch(e){}recog=null;} rsetupEl.classList.remove('show'); document.body.style.overflow=''; }
 function captureBudgets(){ rsetupEl.querySelectorAll('[data-budget]').forEach(b=>{ rwBudget[b.dataset.budget]=b.value.trim()||rwBudget[b.dataset.budget]; }); }
-function mergeSubsIntoDraft(){
-  rsSubs.forEach(id=>{ const [ak,sk]=id.split('.'); const a=AREAS.find(x=>x.key===ak); const s=a&&a.subs.find(x=>x.key===sk); if(!s)return;
-    Object.keys(TIER_KEY).forEach(bk=>{ const tk=TIER_KEY[bk]; (s.items[bk]||[]).forEach(it=>{ if(!rwDraft[tk].includes(it)) rwDraft[tk].push(it); }); });
-  });
-}
-function renderRewards(){ rsStep===1?rsAreaStep():rsStep===2?rsSubStep():rsItemStep(); }
-function rsAreaStep(){
-  let h=`<div class="rs-step">Step 1 of 3</div><div class="rs-head"><h2>What motivates you?</h2><p class="tagline">Pick a handful of areas worth working for — yours, your partner's, anyone who climbs with you. We get specific next.</p></div>`;
-  h+=`<div class="rs-grid">`;
-  AREAS.forEach(a=>{ const on=rsAreas.includes(a.key); h+=`<button class="rs-tile ${on?'on':''}" data-area="${a.key}"><span class="rs-tile-l">${esc(a.label)}</span><span class="rs-tile-s">${a.subs.map(s=>s.label).slice(0,3).join(' · ')}</span></button>`; });
-  h+=`</div>`;
-  h+=`<div class="sheet-actions"><button class="btn ghost" id="rsBack">${rsOnboard?'Skip':'Cancel'}</button><button class="btn primary" id="rsNext">Continue →</button></div>`;
-  rsetupBody.innerHTML=h;
-}
-function rsSubStep(){
-  const sel=AREAS.filter(a=>rsAreas.includes(a.key));
-  let h=`<div class="rs-step">Step 2 of 3</div><div class="rs-head"><h2>Get specific</h2><p class="tagline">Tap everything that actually appeals. This is where it gets tailored.</p></div>`;
-  if(!sel.length) h+=`<div class="rs-empty" style="display:block;padding:10px 2px">No areas picked — go back to choose some, or skip ahead and add your own.</div>`;
-  sel.forEach(a=>{ h+=`<div class="rs-sec"><div class="rs-sec-h">${esc(a.label)}</div><div class="rs-chips">`;
-    a.subs.forEach(s=>{ const id=a.key+'.'+s.key; const on=rsSubs.includes(id); h+=`<button class="rs-chip ${on?'on':''}" data-sub="${id}">${esc(s.label)}</button>`; });
-    h+=`</div></div>`; });
-  h+=`<div class="sheet-actions"><button class="btn ghost" id="rsBack2">← Back</button><button class="btn primary" id="rsNext2">Continue →</button></div>`;
-  rsetupBody.innerHTML=h;
-}
-function rsItemStep(){
-  let h=`<div class="rs-step">Step 3 of 3</div><div class="rs-head"><h2>Your reward tiers</h2><p class="tagline">Pulled from your picks and sorted by rough cost. Trim what doesn't fit, add your own, set the budgets.</p></div>`;
+function renderRewards(){
+  const vOK=voiceSupported();
+  let h=`<div class="rs-head"><h2>Your rewards</h2><p class="tagline">Keep each tier to a few things you'll be genuinely pumped to claim — up to ${RS_CAP} each, so every win lands.${vOK?' Tap the mic and just say them.':''}</p></div>`;
   [['basecamp','Basecamp'],['ridgeline','Ridgeline'],['summit','Summit']].forEach(([tk,nm])=>{
-    const items=rwDraft[tk]||[];
+    const items=rwDraft[tk]||[], full=items.length>=RS_CAP;
     h+=`<div class="rs-tier">
       <div class="rs-tier-top"><span class="q-tier">${nm}</span><input class="rs-budget" data-budget="${tk}" value="${escAttr(rwBudget[tk]||'')}" placeholder="~$20" aria-label="${nm} budget"></div>
-      <div class="rs-items">${items.length?items.map((it,idx)=>`<span class="rs-item">${esc(it)}<button class="rs-del" data-rdel="${tk}:${idx}" aria-label="Remove">${IC.x}</button></span>`).join(''):'<span class="rs-empty">Nothing here yet — add a few below</span>'}</div>
-      <div class="rs-add"><input class="rs-input" data-radd="${tk}" placeholder="Add your own…" aria-label="Add ${nm} reward"><button class="rs-addbtn" data-raddbtn="${tk}">Add</button></div>
+      <div class="rs-items">${items.length?items.map((it,idx)=>`<span class="rs-item">${esc(it)}<button class="rs-del" data-rdel="${tk}:${idx}" aria-label="Remove">${IC.x}</button></span>`).join(''):'<span class="rs-empty">Nothing yet — add a few good ones</span>'}</div>
+      <div class="rs-add">
+        <input class="rs-input" data-radd="${tk}" placeholder="${full?'Full — remove one to add':'Add a reward…'}" ${full?'disabled':''} aria-label="Add ${nm} reward">
+        ${vOK?`<button class="rs-mic" data-mic="${tk}" ${full?'disabled':''} aria-label="Speak rewards">${IC.mic}</button>`:''}
+        <button class="rs-addbtn" data-raddbtn="${tk}" ${full?'disabled':''}>Add</button>
+      </div>
+      <div class="rs-foot"><button class="rs-clear" data-rclear="${tk}" ${items.length?'':'style="visibility:hidden"'}>Clear all</button><span class="rs-count">${items.length}/${RS_CAP}</span></div>
     </div>`;
   });
-  h+=`<div class="sheet-actions"><button class="btn ghost" id="rsBack3">← Back</button><button class="btn primary" id="rsSave">${rsOnboard?'Save & continue →':'Save'}</button></div>`;
+  h+=`<div class="sheet-actions"><button class="btn ghost" id="rsBack">${rsOnboard?'Skip':'Cancel'}</button><button class="btn primary" id="rsSave">${rsOnboard?'Save & continue →':'Save'}</button></div>`;
   rsetupBody.innerHTML=h;
 }
-function addReward(tk){ const inp=rsetupEl.querySelector('[data-radd="'+tk+'"]'); const v=(inp&&inp.value||'').trim(); if(v && !rwDraft[tk].includes(v)) rwDraft[tk].push(v); captureBudgets(); renderRewards(); }
+function addOne(tk,v){ v=(v||'').trim(); if(!v)return false; if(rwDraft[tk].length>=RS_CAP)return false; if(rwDraft[tk].some(x=>x.toLowerCase()===v.toLowerCase()))return false; rwDraft[tk].push(v); return true; }
+function addReward(tk){ const inp=rsetupEl.querySelector('[data-radd="'+tk+'"]'); const v=inp?inp.value:''; if(!v.trim())return; if(rwDraft[tk].length>=RS_CAP){flash('Up to '+RS_CAP+' per tier — remove one first');return;} addOne(tk,v); captureBudgets(); renderRewards(); }
+function addRewardsFromText(tk,text){
+  const parts=text.split(/,|;|\n|·|\bthen\b|\band\b/i).map(s=>s.replace(/^(a|an|some|the)\s+/i,'').trim()).filter(Boolean);
+  let added=0; parts.forEach(p=>{ p=p.charAt(0).toUpperCase()+p.slice(1); if(addOne(tk,p)) added++; });
+  captureBudgets(); renderRewards(); if(added) flash(added+' added to '+tk); else flash('Nothing new caught — try again');
+}
+function toggleVoice(tk,btn){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){ flash('Voice not supported here'); return; }
+  if(recog){ try{recog.stop();}catch(e){} return; }
+  const inp=rsetupEl.querySelector('[data-radd="'+tk+'"]'); let finalText='';
+  recog=new SR(); recog.lang='en-US'; recog.interimResults=true; recog.continuous=true;
+  btn.classList.add('listening');
+  recog.onresult=(e)=>{ let interim=''; for(let i=e.resultIndex;i<e.results.length;i++){ const r=e.results[i]; if(r.isFinal) finalText+=r[0].transcript+', '; else interim+=r[0].transcript; } if(inp) inp.value=(finalText+interim).trim(); };
+  recog.onerror=(e)=>{ btn.classList.remove('listening'); recog=null; if(e&&e.error==='not-allowed') flash('Mic permission blocked'); };
+  recog.onend=()=>{ btn.classList.remove('listening'); recog=null; const txt=inp?inp.value.trim():''; if(txt){ if(inp) inp.value=''; addRewardsFromText(tk,txt); } };
+  try{ recog.start(); flash('Listening… tap mic to stop'); }catch(err){ btn.classList.remove('listening'); recog=null; }
+}
 rsetupEl.addEventListener('click',e=>{
-  const ar=e.target.closest('[data-area]'); if(ar){ const k=ar.dataset.area; const i=rsAreas.indexOf(k); i<0?rsAreas.push(k):rsAreas.splice(i,1); renderRewards(); return; }
-  const sb=e.target.closest('[data-sub]'); if(sb){ const id=sb.dataset.sub; const i=rsSubs.indexOf(id); i<0?rsSubs.push(id):rsSubs.splice(i,1); renderRewards(); return; }
-  if(e.target.id==='rsNext'){ rsStep=2; renderRewards(); return; }
-  if(e.target.id==='rsBack2'){ rsStep=1; renderRewards(); return; }
-  if(e.target.id==='rsNext2'){ mergeSubsIntoDraft(); rsStep=3; renderRewards(); return; }
-  if(e.target.id==='rsBack3'){ captureBudgets(); rsStep=2; renderRewards(); return; }
+  const rc=e.target.closest('[data-rclear]'); if(rc){ rwDraft[rc.dataset.rclear]=[]; captureBudgets(); renderRewards(); return; }
   const rd=e.target.closest('[data-rdel]'); if(rd){ const [tk,idx]=rd.dataset.rdel.split(':'); rwDraft[tk].splice(+idx,1); captureBudgets(); renderRewards(); return; }
+  const mc=e.target.closest('[data-mic]'); if(mc){ toggleVoice(mc.dataset.mic, mc); return; }
   const ab=e.target.closest('[data-raddbtn]'); if(ab){ addReward(ab.dataset.raddbtn); return; }
   if(e.target.id==='rsSave'){ captureBudgets();
-    ['basecamp','ridgeline','summit'].forEach(tk=>rwDraft[tk]=rwDraft[tk].filter(Boolean));
+    ['basecamp','ridgeline','summit'].forEach(tk=>rwDraft[tk]=(rwDraft[tk]||[]).filter(Boolean));
     DB.rewards={basecamp:rwDraft.basecamp,ridgeline:rwDraft.ridgeline,summit:rwDraft.summit}; DB.budgets=rwBudget; DB.rewardsSet=true; save();
     closeRewards(); if(rsOnboard){ openPlanner(); } else { render(); flash('Rewards saved'); } return; }
   if(e.target.id==='rsBack'){ closeRewards(); if(rsOnboard) openPlanner(); return; }
