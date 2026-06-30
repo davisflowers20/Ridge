@@ -501,9 +501,24 @@
   .bp-seg-b{all:unset;cursor:pointer;font-family:'Space Grotesk';font-size:11px;letter-spacing:.03em;padding:6px 13px;border-radius:999px;color:var(--muted);touch-action:manipulation}
   .bp-seg-b.on{background:var(--ink);color:var(--surface)}
   .mmap{margin:6px 0 16px}
-  .mmap-svg{width:100%;max-width:300px;height:auto;display:block;margin:2px auto 0}
+  .mmap-svg{width:100%;max-width:320px;height:auto;display:block;margin:2px auto 0}
   .mm-cap{font-family:'Space Grotesk';font-size:9px;letter-spacing:.14em;text-transform:uppercase;fill:var(--muted);text-anchor:middle}
   .mm-note{text-align:center;font-family:'Space Mono';font-size:10px;color:var(--muted);margin-top:7px}
+  .restbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom));z-index:60;display:none;align-items:center;gap:8px;background:var(--ink);color:#fff;border-radius:999px;padding:8px 10px;box-shadow:0 10px 30px rgba(28,44,59,.35);max-width:calc(100% - 28px)}
+  .restbar.show{display:flex}
+  .restbar.done{background:var(--gold)}
+  .rb-mid{display:flex;flex-direction:column;align-items:center;line-height:1;min-width:64px}
+  .rb-lbl{font-family:'Space Grotesk';font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+  .restbar.done .rb-lbl{color:rgba(255,255,255,.8)}
+  .rb-time{font-family:'Space Mono';font-weight:700;font-size:19px;margin-top:2px}
+  .rb-adj{all:unset;cursor:pointer;font-family:'Space Mono';font-size:12px;color:#fff;padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.12)}
+  .rb-skip{all:unset;cursor:pointer;font-family:'Space Grotesk';font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#fff;padding:9px 13px;border-radius:999px;background:rgba(255,255,255,.18)}
+  .bknudge{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface);border:1px solid var(--gold);border-left:3px solid var(--gold);border-radius:12px;padding:13px 14px;margin-bottom:16px}
+  .bk-txt b{display:block;font-family:'Space Grotesk';font-size:14px;letter-spacing:.01em}
+  .bk-txt span{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+  .bk-act{display:flex;align-items:center;gap:6px;flex:none}
+  .bk-go{all:unset;cursor:pointer;font-family:'Space Grotesk';font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--valley);background:var(--ink);padding:9px 13px;border-radius:999px}
+  .bk-x{all:unset;cursor:pointer;font-family:'Space Grotesk';font-size:11px;letter-spacing:.04em;color:var(--muted);padding:9px 8px}
   button:focus-visible,select:focus-visible,input:focus-visible,.check:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
   @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -909,10 +924,19 @@ function historyHTML(){
   h+=bodyPartHTML();
   return h;
 }
+function hasAnyData(){ return Object.values(DB.weeks||{}).some(w=>w&&w.acts&&DAYS.some(d=>(w.acts[d]||[]).length)) || Object.keys(DB.exHistory||{}).length>0; }
+function backupNudgeHTML(){
+  if(!hasAnyData()) return '';
+  const now=Date.now(), le=DB.lastExport||0, dm=DB.bkDismiss||0, DAY=86400000;
+  if(now-le < 14*DAY) return '';
+  if(now-dm < 4*DAY) return '';
+  const msg = le ? `It's been a while since your last backup.` : `Back up your data so you don't lose it.`;
+  return `<div class="bknudge"><div class="bk-txt"><b>Protect your progress</b><span>${msg}</span></div><div class="bk-act"><button class="bk-go" data-bkup>Back up</button><button class="bk-x" data-bkx aria-label="Dismiss">Later</button></div></div>`;
+}
 function workoutsHTML(){
   const w=week();
   const todayKey = iso(curMon)===iso(mondayOf(new Date())) ? DAYS[(new Date().getDay()+6)%7] : null;
-  let h=`${heroHTML()}<div class="weekset"><span class="eyebrow-t">The week · plan &amp; log</span><button class="set-week-btn" data-openplanner>Set the week</button></div>`;
+  let h=`${backupNudgeHTML()}${heroHTML()}<div class="weekset"><span class="eyebrow-t">The week · plan &amp; log</span><button class="set-week-btn" data-openplanner>Set the week</button></div>`;
   DAYS.forEach((d,i)=>{
     const date=addDays(curMon,i);
     const acts=w.acts[d];
@@ -1177,8 +1201,10 @@ document.getElementById('nextWk').onclick=()=>{curMon=addDays(curMon,7);openDays
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;render();});
 
 view.addEventListener('click',e=>{
-  const t=e.target.closest('[data-openplanner],[data-toggle],[data-edit],[data-del],[data-add],[data-qroll],[data-qstep],[data-qtypeset],[data-loadweek],[data-histex],[data-bpwin]');
+  const t=e.target.closest('[data-openplanner],[data-toggle],[data-edit],[data-del],[data-add],[data-qroll],[data-qstep],[data-qtypeset],[data-loadweek],[data-histex],[data-bpwin],[data-bkup],[data-bkx]');
   if(!t) return;
+  if(t.dataset.bkup!==undefined){ exportData(); return; }
+  if(t.dataset.bkx!==undefined){ DB.bkDismiss=Date.now(); save(); render(); return; }
   if(t.dataset.histex){ histEx=t.dataset.histex; render(); return; }
   if(t.dataset.bpwin){ bpWin=t.dataset.bpwin; render(); return; }
   if(t.dataset.openplanner!==undefined){ openPlanner(); return; }
@@ -1250,22 +1276,38 @@ function bodyPartStats(winDays){
 function daysAgo(dISO){ if(!dISO)return''; const d=new Date(dISO+'T00:00:00'),n=new Date(); n.setHours(0,0,0,0); const x=Math.round((n-d)/86400000); return x<=0?'today':x===1?'1d ago':x+'d ago'; }
 function mmFill(t,max){ if(!t) return 'var(--surface-2)'; const r=max?t/max:0; return r>=0.8?'#1e2c35':r>=0.55?'#3f5666':r>=0.32?'#6f8a98':'#a8bcc6'; }
 function muscleMapHTML(by,max){
-  const f=g=>mmFill(by[g]||0,max), L='var(--line)';
-  return `<div class="mmap"><svg viewBox="0 0 320 232" class="mmap-svg" aria-label="Muscle map">
-    <g stroke="${L}" stroke-width="1">
-      <circle cx="80" cy="20" r="12" fill="var(--surface-2)"/>
-      <ellipse cx="60" cy="48" rx="14" ry="10" fill="${f('Shoulders')}"/><ellipse cx="100" cy="48" rx="14" ry="10" fill="${f('Shoulders')}"/>
-      <rect x="44" y="52" width="13" height="46" rx="6" fill="${f('Arms')}"/><rect x="103" y="52" width="13" height="46" rx="6" fill="${f('Arms')}"/>
-      <rect x="61" y="44" width="38" height="28" rx="9" fill="${f('Chest')}"/>
-      <rect x="64" y="74" width="32" height="42" rx="8" fill="${f('Core')}"/>
-      <rect x="63" y="118" width="16" height="80" rx="8" fill="${f('Legs')}"/><rect x="81" y="118" width="16" height="80" rx="8" fill="${f('Legs')}"/>
-      <circle cx="240" cy="20" r="12" fill="var(--surface-2)"/>
-      <ellipse cx="220" cy="48" rx="14" ry="10" fill="${f('Shoulders')}"/><ellipse cx="260" cy="48" rx="14" ry="10" fill="${f('Shoulders')}"/>
-      <rect x="204" y="52" width="13" height="46" rx="6" fill="${f('Arms')}"/><rect x="263" y="52" width="13" height="46" rx="6" fill="${f('Arms')}"/>
-      <rect x="221" y="44" width="38" height="72" rx="9" fill="${f('Back')}"/>
-      <rect x="223" y="118" width="16" height="80" rx="8" fill="${f('Legs')}"/><rect x="241" y="118" width="16" height="80" rx="8" fill="${f('Legs')}"/>
-    </g>
-    <text x="80" y="226" class="mm-cap">Front</text><text x="240" y="226" class="mm-cap">Back</text>
+  const f=g=>mmFill(by[g]||0,max), NEU='var(--surface-2)';
+  const mir=(p,cx)=>p.map(([x,y])=>[2*cx-x,y]);
+  const ptsStr=p=>p.map(q=>q.join(',')).join(' ');
+  const P=(p,g)=>`<polygon points="${ptsStr(p)}" fill="${f(g)}"/>`;
+  const MP=(p,cx,g)=>P(p,g)+P(mir(p,cx),g);
+  const E=(cx,cy,rx,ry,g)=>`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="${f(g)}"/>`;
+  const ME=(cx,cy,rx,ry,c,g)=>E(cx,cy,rx,ry,g)+E(2*c-cx,cy,rx,ry,g);
+  const cf=75, cb=225;
+  let front=''
+    +`<circle cx="75" cy="22" r="12" fill="${NEU}"/><polygon points="69,33 81,33 80,42 70,42" fill="${NEU}"/>`
+    +MP([[60,40],[74,38],[74,45],[58,47]],cf,'Shoulders')
+    +MP([[48,46],[63,45],[65,60],[50,63]],cf,'Shoulders')
+    +MP([[62,50],[74,52],[74,71],[60,69],[59,57]],cf,'Chest')
+    +ME(48,74,7,15,cf,'Arms')+ME(45,101,6,15,cf,'Arms')
+    +P([[67,72],[83,72],[82,112],[68,112]],'Core')
+    +MP([[60,75],[67,73],[68,108],[60,104]],cf,'Core')
+    +MP([[63,114],[75,114],[73,173],[65,173]],cf,'Legs')
+    +MP([[66,177],[74,177],[73,230],[67,230]],cf,'Legs')
+    +`<g stroke="var(--line)" stroke-width="0.8" opacity=".5"><line x1="75" y1="72" x2="75" y2="112"/><line x1="67" y1="84" x2="83" y2="84"/><line x1="67" y1="94" x2="83" y2="94"/><line x1="67" y1="104" x2="83" y2="104"/></g>`;
+  let back=''
+    +`<circle cx="225" cy="22" r="12" fill="${NEU}"/><polygon points="219,33 231,33 230,42 220,42" fill="${NEU}"/>`
+    +MP([[212,40],[225,39],[225,66],[216,60]],cb,'Back')
+    +MP([[198,46],[213,45],[215,60],[200,63]],cb,'Shoulders')
+    +MP([[210,60],[224,64],[221,95],[207,84]],cb,'Back')
+    +P([[219,86],[231,86],[229,112],[221,112]],'Back')
+    +ME(198,74,7,15,cb,'Arms')+ME(195,101,6,15,cb,'Arms')
+    +ME(217,122,9,11,cb,'Legs')
+    +MP([[212,130],[224,130],[222,174],[214,174]],cb,'Legs')
+    +ME(217,200,6,16,cb,'Legs');
+  return `<div class="mmap"><svg viewBox="0 0 300 250" class="mmap-svg" aria-label="Muscle map">
+    <g stroke="var(--line)" stroke-width="0.8" stroke-linejoin="round">${front}${back}</g>
+    <text x="75" y="246" class="mm-cap">Front</text><text x="225" y="246" class="mm-cap">Back</text>
   </svg><div class="mm-note">Darker = trained more this window</div></div>`;
 }
 function bodyPartHTML(){
@@ -1273,10 +1315,8 @@ function bodyPartHTML(){
   const winDays=bpWin==='7'?7:bpWin==='14'?14:bpWin==='28'?28:0;
   const stats=bodyPartStats(winDays);
   const max=Math.max.apply(null,stats.map(s=>s.times).concat(1));
-  const by={}; stats.forEach(s=>by[s.group]=s.times);
   const seg=[['all','All'],['7','7d'],['14','14d'],['28','28d']].map(([v,l])=>`<button class="bp-seg-b ${bpWin===v?'on':''}" data-bpwin="${v}">${l}</button>`).join('');
   let h=`<div class="bp-sec"><div class="bp-h">Body parts · times trained</div><div class="bp-seg">${seg}</div>`;
-  h+=muscleMapHTML(by,max);
   if(!stats.length) return h+`<div class="hsec-meta" style="padding:4px 0">Nothing logged in this window.</div></div>`;
   stats.forEach(s=>{
     h+=`<div class="bp-row">
@@ -1374,8 +1414,33 @@ function startWoTimer(){
   upd(); woTick=setInterval(upd,1000);
 }
 function stopWoTimer(){ clearInterval(woTick); woTick=null; }
+/* ---- rest timer ---- */
+let restInt=null, restEnd=0;
+function startRest(){ const dur=DB.restDefault||120; restEnd=Date.now()+dur*1000; showRestBar(); }
+function skipRest(){ restEnd=0; clearInterval(restInt); restInt=null; const b=document.getElementById('restbar'); if(b){ b.classList.remove('show'); b.classList.remove('done'); } }
+function adjustRest(delta){ if(!restEnd) return; restEnd=Math.max(Date.now(), restEnd+delta*1000); DB.restDefault=Math.max(15,(DB.restDefault||120)+delta); save(); updateRestBar(); }
+function showRestBar(){
+  let b=document.getElementById('restbar');
+  if(!b){ b=document.createElement('div'); b.id='restbar'; b.className='restbar';
+    b.innerHTML=`<button class="rb-adj" data-rest="-15">−15</button><div class="rb-mid"><span class="rb-lbl">Rest</span><span class="rb-time" id="rbTime">0:00</span></div><button class="rb-adj" data-rest="15">+15</button><button class="rb-skip" data-rest="skip">Skip</button>`;
+    (woEl||document.body).appendChild(b);
+    b.addEventListener('click',e=>{ const r=e.target.closest('[data-rest]'); if(!r)return; const v=r.dataset.rest; if(v==='skip')skipRest(); else adjustRest(parseInt(v,10)); });
+  }
+  b.classList.remove('done'); b.classList.add('show'); updateRestBar();
+  clearInterval(restInt); restInt=setInterval(updateRestBar,250);
+}
+function updateRestBar(){
+  const el=document.getElementById('rbTime'); if(!el) return;
+  const left=Math.max(0,Math.round((restEnd-Date.now())/1000));
+  el.textContent=fmtDur(left);
+  if(left<=0){ clearInterval(restInt); restInt=null; restEnd=0;
+    const b=document.getElementById('restbar'); if(b) b.classList.add('done');
+    try{ if(navigator.vibrate) navigator.vibrate(220); }catch(e){}
+    setTimeout(()=>{ const bb=document.getElementById('restbar'); if(bb){ bb.classList.remove('show'); bb.classList.remove('done'); } },2600);
+  }
+}
 function closeWorkout(){
-  stopWoTimer();
+  stopWoTimer(); skipRest();
   if(WO){const act=woAct(); if(act&&(!act.data.exercises||!act.data.exercises.length)){const w=week();w.acts[WO.day]=w.acts[WO.day].filter(a=>a.id!==WO.id);save();}}
   woEl.classList.remove('show'); document.body.style.overflow=''; WO=null; render();
 }
@@ -1388,7 +1453,7 @@ function finishWorkout(){
   act.done=true; commitHistory(act,woDateISO()); save(); closeWorkout(); celebrate(vol,prs,dur);
 }
 function discardWorkout(){
-  stopWoTimer();
+  stopWoTimer(); skipRest();
   if(!WO)return; const id=WO.id, day=WO.day;
   if(DB.exHistory){ Object.keys(DB.exHistory).forEach(exId=>{ const sess=DB.exHistory[exId]&&DB.exHistory[exId].sessions; if(sess&&sess[id]) delete sess[id]; }); }
   const w=week(); w.acts[day]=(w.acts[day]||[]).filter(a=>a.id!==id); save();
@@ -1456,7 +1521,7 @@ woBody.addEventListener('click',e=>{
   if(e.target.closest('[data-woaddex]'))return openPicker();
   if(e.target.closest('[data-wosaveroutine]'))return saveAsRoutine();
   const wm=e.target.closest('[data-warm]'); if(wm){const[ei,si]=wm.dataset.warm.split(':').map(Number);const s=woAct().data.exercises[ei].sets[si];s.warmup=!s.warmup;save();renderWorkout();return;}
-  const ck=e.target.closest('[data-check]'); if(ck){const[ei,si]=ck.dataset.check.split(':').map(Number);const s=woAct().data.exercises[ei].sets[si];s.done=!s.done;save();renderWorkout();return;}
+  const ck=e.target.closest('[data-check]'); if(ck){const[ei,si]=ck.dataset.check.split(':').map(Number);const s=woAct().data.exercises[ei].sets[si];s.done=!s.done; if(s.done&&!s.warmup) startRest(); else if(!s.done) skipRest(); save();renderWorkout();return;}
   const sd=e.target.closest('[data-setdelx]'); if(sd){armDelete('setdel:'+sd.dataset.setdelx, sd, ()=>{const[ei,si]=sd.dataset.setdelx.split(':').map(Number);const ex=woAct().data.exercises[ei];ex.sets.splice(si,1);if(!ex.sets.length)ex.sets.push({reps:'',weight:'',warmup:false,done:false});save();renderWorkout();});return;}
   const as=e.target.closest('[data-addsetx]'); if(as){const ei=+as.dataset.addsetx;const ex=woAct().data.exercises[ei];const last=ex.sets[ex.sets.length-1];ex.sets.push({reps:last?last.reps:'',weight:last?last.weight:'',warmup:false,done:false});save();renderWorkout();const si=ex.sets.length-1;const inp=woBody.querySelector('[data-w="'+ei+':'+si+'"]');if(inp){try{inp.scrollIntoView({block:'center',behavior:'smooth'});}catch(_){}inp.focus({preventScroll:true});}return;}
   const xd=e.target.closest('[data-exdel]'); if(xd){armDelete('exdel:'+xd.dataset.exdel, xd, ()=>{woAct().data.exercises.splice(+xd.dataset.exdel,1);save();renderWorkout();});return;}
@@ -1651,7 +1716,7 @@ function exportData(){
     const blob=new Blob([JSON.stringify(DB,null,2)],{type:'application/json'});
     const url=URL.createObjectURL(blob); const a=document.createElement('a');
     a.href=url; a.download='ridge-backup-'+iso(new Date())+'.json'; document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(()=>URL.revokeObjectURL(url),1000); flash('Backup downloaded');
+    setTimeout(()=>URL.revokeObjectURL(url),1000); DB.lastExport=Date.now(); save(); flash('Backup downloaded');
   }catch(e){ flash('Export failed'); }
 }
 function handleImport(file){
