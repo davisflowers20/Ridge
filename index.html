@@ -495,6 +495,15 @@
   .hsel{-webkit-appearance:none;appearance:none;width:100%;font-family:'Space Grotesk';font-size:14px;font-weight:600;letter-spacing:.01em;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:12px 38px 12px 14px}
   .hsel-ar{position:absolute;right:13px;top:50%;transform:translateY(-50%) rotate(90deg);pointer-events:none;color:var(--muted);display:inline-flex}
   .hsel-ar .ic{width:16px;height:16px}
+  .hbig{font-family:'Space Mono';font-weight:700;font-size:30px;color:var(--ink);line-height:1;margin:2px 0 13px}
+  .hbig small{font-family:'Space Grotesk';font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-left:7px}
+  .bp-seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;margin-bottom:16px;background:var(--surface)}
+  .bp-seg-b{all:unset;cursor:pointer;font-family:'Space Grotesk';font-size:11px;letter-spacing:.03em;padding:6px 13px;border-radius:999px;color:var(--muted);touch-action:manipulation}
+  .bp-seg-b.on{background:var(--ink);color:var(--surface)}
+  .mmap{margin:6px 0 16px}
+  .mmap-svg{width:100%;max-width:300px;height:auto;display:block;margin:2px auto 0}
+  .mm-cap{font-family:'Space Grotesk';font-size:9px;letter-spacing:.14em;text-transform:uppercase;fill:var(--muted);text-anchor:middle}
+  .mm-note{text-align:center;font-family:'Space Mono';font-size:10px;color:var(--muted);margin-top:7px}
   button:focus-visible,select:focus-visible,input:focus-visible,.check:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
   @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -646,9 +655,57 @@ function fmtRange(mon){
 }
 
 /* ---------- state ---------- */
-let DB = load();
-if(!DB.rewards) DB.rewards=defaultRewards();
-if(!DB.budgets) DB.budgets={basecamp:'~$20',ridgeline:'~$50',summit:'~$100'};
+function mSlug(x){ return String(x||'lift').toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'')||'x'; }
+function migrateAct(a){
+  if(!a||typeof a!=='object') return;
+  if(!a.id) a.id='a'+Math.random().toString(36).slice(2,9);
+  a.done=!!a.done;
+  if(!a.data||typeof a.data!=='object') a.data={};
+  if(a.type==='lift'){
+    const d=a.data;
+    if(!Array.isArray(d.exercises)){
+      if(d.exercise||Array.isArray(d.sets)) d.exercises=[{exId:mSlug(d.exercise||'lift'),name:d.exercise||'Lift',note:d.note||'',sets:Array.isArray(d.sets)?d.sets:[]}];
+      else d.exercises=[];
+    }
+    d.exercises.forEach(ex=>{
+      if(!ex.exId) ex.exId=mSlug(ex.name||'lift');
+      if(typeof ex.name!=='string') ex.name='Lift';
+      if(typeof ex.note!=='string') ex.note='';
+      if(!Array.isArray(ex.sets)) ex.sets=[];
+      ex.sets.forEach(s=>{ if(!s||typeof s!=='object')return; s.warmup=!!s.warmup; s.done=!!s.done; if(s.reps==null)s.reps=''; if(s.weight==null)s.weight=''; });
+    });
+  }
+}
+function migrate(db){
+  try{
+    db=(db&&typeof db==='object')?db:{};
+    if(!db.weeks||typeof db.weeks!=='object') db.weeks={};
+    if(typeof db.unit!=='string') db.unit='lb';
+    db.onboarded=!!db.onboarded;
+    const tiers=['basecamp','ridgeline','summit'], defB={basecamp:'~$20',ridgeline:'~$50',summit:'~$100'};
+    if(!db.rewards||typeof db.rewards!=='object') db.rewards={};
+    tiers.forEach(tk=>{ let arr=Array.isArray(db.rewards[tk])?db.rewards[tk]:[]; db.rewards[tk]=arr.map(it=>typeof it==='string'?it:(it&&(it.name||it.n))?String(it.name||it.n):'').filter(Boolean); });
+    if(!db.budgets||typeof db.budgets!=='object') db.budgets={};
+    tiers.forEach(tk=>{ if(typeof db.budgets[tk]!=='string'||!db.budgets[tk]) db.budgets[tk]=defB[tk]; });
+    if(!db.exHistory||typeof db.exHistory!=='object') db.exHistory={};
+    Object.keys(db.weeks).forEach(wk=>{
+      const W=db.weeks[wk]; if(!W||typeof W!=='object'){ delete db.weeks[wk]; return; }
+      if(!W.acts||typeof W.acts!=='object') W.acts={};
+      if(!W.plan||typeof W.plan!=='object') W.plan={};
+      DAYS.forEach(d=>{
+        if(!Array.isArray(W.acts[d])) W.acts[d]=[];
+        if(!Array.isArray(W.plan[d])) W.plan[d]=[];
+        W.acts[d].forEach(migrateAct);
+      });
+      W.locked=!!W.locked;
+      if(Array.isArray(W.quests)) W.quests.forEach(q=>{ if(q&&q.reward&&typeof q.reward==='object'&&!q.reward.name&&q.reward.n) q.reward.name=q.reward.n; });
+    });
+    db.version=2;
+    return db;
+  }catch(e){ return (db&&typeof db==='object')?db:{weeks:{}}; }
+}
+let DB = migrate(load());
+save();
 let curMon = mondayOf(new Date());
 let tab = 'workouts';
 let openDays = {};   // dayKey -> bool
@@ -734,7 +791,7 @@ function heroHTML(){
     </div>
   </div>`;
 }
-let histEx=null;
+let histEx=null, bpWin='all';
 function exNameMap(){
   const m={}; Object.keys(LIB).forEach(g=>LIB[g].forEach(x=>m[x.id]=x.name));
   Object.values(DB.weeks||{}).forEach(wk=>wk&&wk.acts&&DAYS.forEach(d=>(wk.acts[d]||[]).forEach(a=>{ if(a.type==='lift'&&Array.isArray(a.data.exercises))a.data.exercises.forEach(ex=>{ if(ex.exId&&ex.name)m[ex.exId]=ex.name; }); })));
@@ -777,10 +834,11 @@ function volChartHTML(){
   const W=320,H=104,pad=4,bw=(W-pad*2)/series.length; let bars='';
   series.forEach((s,i)=>{ const bh=s.vol>0?Math.max(2,(s.vol/max)*(H-22)):0,x=pad+i*bw+bw*0.16,w=bw*0.68,y=H-14-bh;
     bars+=`<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="${bh.toFixed(1)}" rx="2" fill="var(--ink)" opacity="${i===series.length-1?1:0.78}"/>`; });
-  const cur=series[series.length-1].vol;
+  const cur=series[series.length-1].vol, total=series.reduce((a,s)=>a+s.vol,0);
   return `<div class="hsec"><div class="hsec-h">Weekly volume · last 12 weeks</div>
+    <div class="hbig">${cur.toLocaleString()}<small>${unit()} this week</small></div>
     <svg class="vchart" viewBox="0 0 ${W} ${H}"><line x1="${pad}" y1="${H-14}" x2="${W-pad}" y2="${H-14}" stroke="var(--line-2)" stroke-width="1"/>${bars}</svg>
-    <div class="hsec-meta">This week <b>${cur.toLocaleString()}</b> ${unit()} · peak <b>${max.toLocaleString()}</b></div></div>`;
+    <div class="hsec-meta">peak <b>${max.toLocaleString()}</b> · 12-wk total <b>${total.toLocaleString()}</b></div></div>`;
 }
 function strengthHTML(){
   const exs=exWithHistory(); if(!exs.length) return '';
@@ -788,15 +846,16 @@ function strengthHTML(){
   const sel=(histEx&&exs.find(e=>e.id===histEx))?histEx:exs[0].id;
   const opts=exs.slice(0,60).map(e=>`<option value="${e.id}" ${e.id===sel?'selected':''}>${esc(names[e.id]||e.id)} · ${e.n}</option>`).join('');
   const series=exE1RMSeries(sel); let chart;
+  const bestVal=series.length?Math.max.apply(null,series.map(p=>p.e1rm)):0;
   if(series.length>=2){
     const W=320,H=120,pl=8,pr=8,pt=14,pb=12,vals=series.map(p=>p.e1rm),mn=Math.min(...vals),mx=Math.max(...vals),span=(mx-mn)||1,n=series.length;
     const xs=i=>pl+(i/(n-1))*(W-pl-pr), ys=v=>pt+(1-(v-mn)/span)*(H-pt-pb);
     let path='',dots='',run=0;
     series.forEach((p,i)=>{ const x=xs(i),y=ys(p.e1rm); path+=(i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)+' '; const pr2=p.e1rm>run+0.01; if(pr2)run=p.e1rm; dots+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${pr2?3.4:2.3}" fill="${pr2?'var(--gold)':'var(--ink)'}"/>`; });
     chart=`<svg class="lchart" viewBox="0 0 ${W} ${H}"><path d="${path}" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>${dots}</svg>
-      <div class="hsec-meta">Best est. 1RM <b>${Math.round(mx).toLocaleString()}</b> ${unit()} · ${n} sessions · <span class="pr-mark">★</span> = PR</div>`;
+      <div class="hsec-meta">${n} sessions · <span class="pr-mark">★</span> = PR</div>`;
   } else chart=`<div class="hsec-meta" style="padding:10px 0">Log this lift once more to draw a trend.</div>`;
-  return `<div class="hsec"><div class="hsec-h">Strength over time</div><div class="hsel-wrap"><select class="hsel" data-histsel aria-label="Choose exercise">${opts}</select><span class="hsel-ar">${IC.cr}</span></div>${chart}</div>`;
+  return `<div class="hsec"><div class="hsec-h">Strength over time</div><div class="hsel-wrap"><select class="hsel" data-histsel aria-label="Choose exercise">${opts}</select><span class="hsel-ar">${IC.cr}</span></div><div class="hbig">${Math.round(bestVal).toLocaleString()}<small>${unit()} best e1RM</small></div>${chart}</div>`;
 }
 function heatmapHTML(){
   const m=doneDayMap(); if(!Object.keys(m).length) return '';
@@ -847,9 +906,6 @@ function historyHTML(){
     <div class="hstat"><b>${totalLifts}</b><span>lifts logged</span></div>
     <div class="hstat"><b>${life.toLocaleString()}</b><span>${unit()} lifetime</span></div>
     <div class="hstat"><b>${streak}</b><span>wk streak</span></div></div>`;
-  h+=volChartHTML();
-  h+=strengthHTML();
-  h+=milestonesHTML();
   h+=bodyPartHTML();
   return h;
 }
@@ -1121,9 +1177,10 @@ document.getElementById('nextWk').onclick=()=>{curMon=addDays(curMon,7);openDays
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;render();});
 
 view.addEventListener('click',e=>{
-  const t=e.target.closest('[data-openplanner],[data-toggle],[data-edit],[data-del],[data-add],[data-qroll],[data-qstep],[data-qtypeset],[data-loadweek],[data-histex]');
+  const t=e.target.closest('[data-openplanner],[data-toggle],[data-edit],[data-del],[data-add],[data-qroll],[data-qstep],[data-qtypeset],[data-loadweek],[data-histex],[data-bpwin]');
   if(!t) return;
   if(t.dataset.histex){ histEx=t.dataset.histex; render(); return; }
+  if(t.dataset.bpwin){ bpWin=t.dataset.bpwin; render(); return; }
   if(t.dataset.openplanner!==undefined){ openPlanner(); return; }
   if(t.dataset.toggle){ const [d,id]=t.dataset.toggle.split(':'); const a=week().acts[d].find(x=>x.id===id); a.done=!a.done; save(); render(); return; }
   if(t.dataset.del){ armDelete('del:'+t.dataset.del, t, ()=>{ const [d,id]=t.dataset.del.split(':'); const arr=week().acts[d]; const idx=arr.findIndex(x=>x.id===id); if(idx>-1){ arr.splice(idx,1); save(); render(); } }); return; }
@@ -1172,31 +1229,60 @@ const LIB={
 };
 const EX_GROUP={}; Object.keys(LIB).forEach(g=>LIB[g].forEach(x=>EX_GROUP[x.id]=g));
 function exGroupOf(id){ return EX_GROUP[id]||'Other'; }
-function bodyPartStats(){
-  const H=DB.exHistory||{}, G={}, wkStart=iso(curMon), wkEnd=iso(addDays(curMon,7));
+function bodyPartStats(winDays){
+  const H=DB.exHistory||{}, G={};
+  let cutoff=null;
+  if(winDays){ const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()-(winDays-1)); cutoff=iso(d); }
   Object.keys(H).forEach(exId=>{
     const grp=exGroupOf(exId), sess=(H[exId]&&H[exId].sessions)||{};
     Object.keys(sess).forEach(aid=>{
-      const s=sess[aid], o=G[grp]||(G[grp]={ses:new Set(),wk:new Set(),sets:0,last:''});
+      const s=sess[aid];
+      if(cutoff && (!s.date || s.date<cutoff)) return;
+      const o=G[grp]||(G[grp]={ses:new Set(),sets:0,last:''});
       o.ses.add(aid); o.sets+=(s.sets?s.sets.length:0);
-      if(s.date&&s.date>=wkStart&&s.date<wkEnd) o.wk.add(aid);
       if(s.date&&s.date>o.last) o.last=s.date;
     });
   });
   const order=['Chest','Back','Shoulders','Legs','Arms','Core','Olympic','Other'];
-  return Object.keys(G).map(g=>({group:g,times:G[g].ses.size,week:G[g].wk.size,sets:G[g].sets,last:G[g].last}))
+  return Object.keys(G).map(g=>({group:g,times:G[g].ses.size,sets:G[g].sets,last:G[g].last}))
     .sort((a,b)=>b.times-a.times||order.indexOf(a.group)-order.indexOf(b.group));
 }
 function daysAgo(dISO){ if(!dISO)return''; const d=new Date(dISO+'T00:00:00'),n=new Date(); n.setHours(0,0,0,0); const x=Math.round((n-d)/86400000); return x<=0?'today':x===1?'1d ago':x+'d ago'; }
+function mmFill(t,max){ if(!t) return 'var(--surface-2)'; const r=max?t/max:0; return r>=0.8?'#1e2c35':r>=0.55?'#3f5666':r>=0.32?'#6f8a98':'#a8bcc6'; }
+function muscleMapHTML(by,max){
+  const f=g=>mmFill(by[g]||0,max), L='var(--line)';
+  return `<div class="mmap"><svg viewBox="0 0 320 232" class="mmap-svg" aria-label="Muscle map">
+    <g stroke="${L}" stroke-width="1">
+      <circle cx="80" cy="20" r="12" fill="var(--surface-2)"/>
+      <ellipse cx="60" cy="48" rx="14" ry="10" fill="${f('Shoulders')}"/><ellipse cx="100" cy="48" rx="14" ry="10" fill="${f('Shoulders')}"/>
+      <rect x="44" y="52" width="13" height="46" rx="6" fill="${f('Arms')}"/><rect x="103" y="52" width="13" height="46" rx="6" fill="${f('Arms')}"/>
+      <rect x="61" y="44" width="38" height="28" rx="9" fill="${f('Chest')}"/>
+      <rect x="64" y="74" width="32" height="42" rx="8" fill="${f('Core')}"/>
+      <rect x="63" y="118" width="16" height="80" rx="8" fill="${f('Legs')}"/><rect x="81" y="118" width="16" height="80" rx="8" fill="${f('Legs')}"/>
+      <circle cx="240" cy="20" r="12" fill="var(--surface-2)"/>
+      <ellipse cx="220" cy="48" rx="14" ry="10" fill="${f('Shoulders')}"/><ellipse cx="260" cy="48" rx="14" ry="10" fill="${f('Shoulders')}"/>
+      <rect x="204" y="52" width="13" height="46" rx="6" fill="${f('Arms')}"/><rect x="263" y="52" width="13" height="46" rx="6" fill="${f('Arms')}"/>
+      <rect x="221" y="44" width="38" height="72" rx="9" fill="${f('Back')}"/>
+      <rect x="223" y="118" width="16" height="80" rx="8" fill="${f('Legs')}"/><rect x="241" y="118" width="16" height="80" rx="8" fill="${f('Legs')}"/>
+    </g>
+    <text x="80" y="226" class="mm-cap">Front</text><text x="240" y="226" class="mm-cap">Back</text>
+  </svg><div class="mm-note">Darker = trained more this window</div></div>`;
+}
 function bodyPartHTML(){
-  const stats=bodyPartStats(); if(!stats.length) return '';
+  if(!bodyPartStats(0).length) return '';
+  const winDays=bpWin==='7'?7:bpWin==='14'?14:bpWin==='28'?28:0;
+  const stats=bodyPartStats(winDays);
   const max=Math.max.apply(null,stats.map(s=>s.times).concat(1));
-  let h=`<div class="bp-sec"><div class="bp-h">Body parts · times trained</div>`;
+  const by={}; stats.forEach(s=>by[s.group]=s.times);
+  const seg=[['all','All'],['7','7d'],['14','14d'],['28','28d']].map(([v,l])=>`<button class="bp-seg-b ${bpWin===v?'on':''}" data-bpwin="${v}">${l}</button>`).join('');
+  let h=`<div class="bp-sec"><div class="bp-h">Body parts · times trained</div><div class="bp-seg">${seg}</div>`;
+  h+=muscleMapHTML(by,max);
+  if(!stats.length) return h+`<div class="hsec-meta" style="padding:4px 0">Nothing logged in this window.</div></div>`;
   stats.forEach(s=>{
     h+=`<div class="bp-row">
       <div class="bp-top"><span class="bp-name">${s.group}</span><span class="bp-times">${s.times}<small>×</small></span></div>
       <div class="bp-bar"><i style="width:${Math.round(s.times/max*100)}%"></i></div>
-      <div class="bp-meta">${s.week?`${s.week} this wk · `:''}${s.sets} working sets${s.last?` · last ${daysAgo(s.last)}`:''}</div>
+      <div class="bp-meta">${s.sets} working sets${s.last?` · last ${daysAgo(s.last)}`:''}</div>
     </div>`;
   });
   return h+`</div>`;
