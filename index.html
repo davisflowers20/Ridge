@@ -519,6 +519,50 @@
   .bk-act{display:flex;align-items:center;gap:6px;flex:none}
   .bk-go{all:unset;cursor:pointer;font-family:'Space Grotesk';font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--valley);background:var(--ink);padding:9px 13px;border-radius:999px}
   .bk-x{all:unset;cursor:pointer;font-family:'Space Grotesk';font-size:11px;letter-spacing:.04em;color:var(--muted);padding:9px 8px}
+  .today-card{display:flex;align-items:center;justify-content:space-between;gap:14px;background:var(--ink);color:#fff;border-radius:var(--radius);padding:16px;margin-bottom:16px}
+  .td-l{min-width:0}
+  .td-eyebrow{display:block;font-family:'Space Grotesk';font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:5px}
+  .td-body{font-size:14px;line-height:1.45;color:rgba(255,255,255,.92)}
+  .td-body b{color:#fff}
+  .td-go{all:unset;cursor:pointer;flex:none;font-family:'Space Grotesk';font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:#fff;color:var(--ink);padding:11px 16px;border-radius:999px;touch-action:manipulation}
+  .td-go.ghost{background:rgba(255,255,255,.14);color:#fff}
+  .claim-btn{all:unset;cursor:pointer;font-family:'Space Grotesk';font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:var(--gold);color:#fff;padding:10px 15px;border-radius:999px;margin-left:8px;flex:none;touch-action:manipulation}
+  .claimed-r .reward-lead{color:var(--gold)}
+  .claimed-name{text-decoration:line-through;text-decoration-thickness:1.5px;text-decoration-color:var(--gold)}
+  .claim-row{display:flex;align-items:center;gap:9px;padding:9px 2px;border-bottom:1px solid var(--line);font-size:13px}
+  .claim-star{color:var(--gold);font-weight:700}
+  .claim-name{flex:1;min-width:0}
+  .claim-meta{font-family:'Space Mono';font-size:11px;color:var(--muted)}
+  .peak-dots i.hollow{background:transparent;border:1.5px solid var(--gold)}
+  .peak.graced .peak-label{color:var(--gold)}
+  /* ---- design pass: hierarchy, grammar, identity, motion ---- */
+  .today-card{display:block;padding:16px;margin-bottom:16px}
+  .td-top{display:flex;align-items:center;justify-content:space-between;gap:14px}
+  .td-stats{display:flex;flex-wrap:wrap;gap:14px;margin-top:13px;padding-top:12px;border-top:1px solid rgba(255,255,255,.14);font-family:'Space Mono';font-size:11px;color:rgba(255,255,255,.62)}
+  .td-stats b{color:#fff;font-size:13px}
+  .set-week-btn{border:none;padding:7px 2px;display:inline-flex;align-items:center;gap:6px;color:var(--ink-soft)}
+  .set-week-btn:hover{color:var(--ink)}
+  .set-week-btn .ic{width:13px;height:13px}
+  .d-badge{display:inline-grid;place-items:center;min-width:23px;height:23px;padding:0 4px;border-radius:7px;background:var(--ink);color:var(--surface);font-family:'Space Mono';font-size:12px;font-weight:700;margin-right:7px;vertical-align:-5px}
+  .pchip{border-color:var(--line-2);color:var(--muted);background:transparent}
+  .day2.today .pchip{border-color:var(--haze);color:var(--haze)}
+  .act-detail{color:var(--ink)}
+  .add-btn{border:none;background:transparent;padding:8px 2px 2px;justify-content:flex-start;font-size:10px;letter-spacing:.16em;color:var(--muted)}
+  .add-btn:hover{color:var(--ink);background:transparent}
+  .bknudge{border:1px solid var(--line);border-left:1px solid var(--line)}
+  .bknudge .bk-txt b::before{content:"◦ ";color:var(--gold)}
+  .eyebrow::after{background:repeat-x center / auto 14px url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='14' viewBox='0 0 120 14'><g fill='none' stroke='%231e2c35' stroke-width='1'><path d='M0,7 C20,2 40,12 60,7 C80,2 100,12 120,7'/><path d='M0,11 C24,7 44,14 64,11 C84,8 104,14 120,11'/></g></svg>")}
+  .bp-h{display:flex;align-items:center;gap:8px}
+  .bp-h::after{content:"";flex:1;height:14px;opacity:.35;background:repeat-x center / auto 14px url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='14' viewBox='0 0 120 14'><g fill='none' stroke='%231e2c35' stroke-width='1'><path d='M0,7 C20,2 40,12 60,7 C80,2 100,12 120,7'/><path d='M0,11 C24,7 44,14 64,11 C84,8 104,14 120,11'/></g></svg>")}
+  .plan-col{position:relative}
+  .plan-col::after{content:"";position:absolute;right:8px;bottom:7px;width:26px;height:12px;opacity:.16;background:no-repeat center/contain url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='42' height='21' viewBox='0 0 42 21'><path d='M2 19 L14 5 L20 12 L26 4 L40 19' fill='none' stroke='%231e2c35' stroke-width='1.6' stroke-linejoin='round'/></svg>")}
+  .day2.today .plan-col::after{opacity:.3}
+  @keyframes ckpop{0%{transform:scale(.7)}55%{transform:scale(1.18)}100%{transform:scale(1)}}
+  .set-check.on{animation:ckpop .22s ease}
+  .check.done{animation:ckpop .22s ease}
+  @keyframes ascin{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+  .ascent svg{animation:ascin .45s ease}
+  .quest,.day2,.rs-tier{transition:border-color .15s}
   button:focus-visible,select:focus-visible,input:focus-visible,.check:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
   @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -933,10 +977,34 @@ function backupNudgeHTML(){
   const msg = le ? `It's been a while since your last backup.` : `Back up your data so you don't lose it.`;
   return `<div class="bknudge"><div class="bk-txt"><b>Protect your progress</b><span>${msg}</span></div><div class="bk-act"><button class="bk-go" data-bkup>Back up</button><button class="bk-x" data-bkx aria-label="Dismiss">Later</button></div></div>`;
 }
+function todayCardHTML(){
+  if(iso(curMon)!==iso(mondayOf(new Date()))) return '';
+  const d=DAYS[(new Date().getDay()+6)%7], w=week();
+  const plan=(w.plan&&w.plan[d])||[], acts=w.acts[d]||[];
+  const done=acts.filter(a=>a.done);
+  const openLift=acts.find(a=>a.type==='lift'&&!a.done);
+  let body,cta;
+  if(openLift){ body=`Workout in progress — pick it back up.`; cta=`<button class="td-go" data-edit="${d}:${openLift.id}">Resume lift</button>`; }
+  else if(plan.includes('rest')&&!acts.length){ body=`Rest day. Recovery is training.`; cta=''; }
+  else if(plan.length&&!done.length){
+    const labels=plan.filter(p=>p!=='rest').map(p=>TYPES[p]?TYPES[p].label:p);
+    body=`On the plan: <b>${labels.join(' + ')||'Session'}</b>`;
+    cta=plan.includes('lift')?`<button class="td-go" data-startlifttoday>Start lift</button>`:`<button class="td-go" data-add="${d}">Log it</button>`;
+  }
+  else if(done.length){ body=`${done.length} logged today${done.length&&plan.length?' — plan covered':''}. Nice work.`; cta=`<button class="td-go ghost" data-add="${d}">Add more</button>`; }
+  else { body=`Nothing planned. Log whatever you do.`; cta=`<button class="td-go" data-add="${d}">Log activity</button>`; }
+  return `<div class="today-card"><div class="td-top"><div class="td-l"><span class="td-eyebrow">Today · ${d}</span><span class="td-body">${body}</span></div>${cta}</div>${todayStatsHTML()}</div>`;
+}
+function todayStatsHTML(){
+  const wv=weeklyVolume(); if(wv<=0) return '';
+  const done=weeklyDone(), prs=weeklyPRs(), streak=currentStreak();
+  return `<div class="td-stats"><span><b>${wv.toLocaleString()}</b> ${unit()} this wk</span><span><b>${done}</b> logged</span>${prs?`<span><b>${prs}</b> PR${prs!==1?'s':''}</span>`:''}${streak>0?`<span><b>${streak}</b> wk streak</span>`:''}</div>`;
+}
 function workoutsHTML(){
   const w=week();
   const todayKey = iso(curMon)===iso(mondayOf(new Date())) ? DAYS[(new Date().getDay()+6)%7] : null;
-  let h=`${backupNudgeHTML()}${heroHTML()}<div class="weekset"><span class="eyebrow-t">The week · plan &amp; log</span><button class="set-week-btn" data-openplanner>Set the week</button></div>`;
+  const onThisWeek = iso(curMon)===iso(mondayOf(new Date()));
+  let h=`${todayCardHTML()}${backupNudgeHTML()}${onThisWeek?'':heroHTML()}<div class="weekset"><span class="eyebrow-t">The week · plan &amp; log</span><button class="set-week-btn" data-openplanner><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>Set the week</button></div>`;
   DAYS.forEach((d,i)=>{
     const date=addDays(curMon,i);
     const acts=w.acts[d];
@@ -944,7 +1012,7 @@ function workoutsHTML(){
     const isToday=d===todayKey;
     h+=`<div class="day2 ${isToday?'today':''}">
       <div class="plan-col" data-openplanner>
-        <div class="plan-head"><span class="d-name">${d}<span class="d-date">${date.getMonth()+1}/${date.getDate()}</span></span>${isToday?`<span class="today-tag">Today</span>`:''}</div>
+        <div class="plan-head"><span class="d-name ${isToday?'d-today':''}">${isToday?`<span class="d-badge">${date.getDate()}</span>`:''}${d}${isToday?'':`<span class="d-date">${date.getMonth()+1}/${date.getDate()}</span>`}</span></div>
         ${planChipsHTML(plan)}
       </div>
       <div class="log-col">`;
@@ -1018,15 +1086,23 @@ function questsHTML(){
     if(s.done){
       if(!s.q.reward){ s.q.reward=rollReward(t.key); save(); }
       const r=s.q.reward; const rn=r.name||r.n||'Treat yourself';
-      h+=`<div class="reward">
-        <div class="reward-lead">${IC.sun} Summit reached — claim your reward</div>
-        <div class="prize">
-          <div class="info"><div class="name">${esc(rn)}</div><div class="note">${budgetLabel(t.key)} range</div></div>
-          <button class="reroll" data-qroll="${i}" aria-label="Reroll reward">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4M21 3v6h-6"/></svg>
-          </button>
-        </div>
-      </div>`;
+      if(r.claimed){
+        h+=`<div class="reward claimed-r">
+          <div class="reward-lead">${IC.sun} Claimed · ${r.claimed.slice(5)}</div>
+          <div class="prize"><div class="info"><div class="name claimed-name">${esc(rn)}</div><div class="note">Enjoy it — you earned it.</div></div></div>
+        </div>`;
+      } else {
+        h+=`<div class="reward">
+          <div class="reward-lead">${IC.sun} Summit reached — claim your reward</div>
+          <div class="prize">
+            <div class="info"><div class="name">${esc(rn)}</div><div class="note">${budgetLabel(t.key)} range</div></div>
+            <button class="reroll" data-qroll="${i}" aria-label="Reroll reward">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4M21 3v6h-6"/></svg>
+            </button>
+            <button class="claim-btn" data-claim="${i}">Claim</button>
+          </div>
+        </div>`;
+      }
     } else {
       const left=Math.max(0,s.q.target-s.prog);
       h+=`<div class="locked">${IC.peak} ${left} more to unlock your ${t.budget} reward</div>`;
@@ -1034,6 +1110,7 @@ function questsHTML(){
     h+=`</div>`;
   });
   h+=summitLogHTML();
+  h+=claimsHTML();
   return h;
 }
 
@@ -1113,7 +1190,18 @@ function typeLabel(tp){ return tp==='any'?'any session':(TYPES[tp]?TYPES[tp].lab
 function rollReward(tierKey){
   const pool=(DB.rewards&&DB.rewards[tierKey])||[];
   if(!pool.length) return {name:'Treat yourself', price:budgetLabel(tierKey)};
-  return {name:pool[Math.floor(Math.random()*pool.length)], price:budgetLabel(tierKey)};
+  const claimed=(DB.claims||[]).filter(c=>c.tier===tierKey).map(c=>c.name);
+  const recent=new Set(claimed.slice(-(pool.length-1)));  // rest of pool must cycle before repeat
+  const fresh=pool.filter(p=>!recent.has(p));
+  const pick=(fresh.length?fresh:pool);
+  return {name:pick[Math.floor(Math.random()*pick.length)], price:budgetLabel(tierKey)};
+}
+function claimReward(i){
+  const q=week().quests[i]; if(!q||!q.reward||q.reward.claimed) return;
+  q.reward.claimed=iso(new Date());
+  if(!Array.isArray(DB.claims)) DB.claims=[];
+  DB.claims.push({tier:q.tier,name:q.reward.name||q.reward.n||'Reward',date:q.reward.claimed});
+  save(); render(); flash('Claimed — go get it');
 }
 function defaultRewards(){ return {basecamp:[],ridgeline:[],summit:[]}; }
 const REWARD_SEEDS={
@@ -1201,8 +1289,10 @@ document.getElementById('nextWk').onclick=()=>{curMon=addDays(curMon,7);openDays
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;render();});
 
 view.addEventListener('click',e=>{
-  const t=e.target.closest('[data-openplanner],[data-toggle],[data-edit],[data-del],[data-add],[data-qroll],[data-qstep],[data-qtypeset],[data-loadweek],[data-histex],[data-bpwin],[data-bkup],[data-bkx]');
+  const t=e.target.closest('[data-openplanner],[data-toggle],[data-edit],[data-del],[data-add],[data-qroll],[data-qstep],[data-qtypeset],[data-loadweek],[data-histex],[data-bpwin],[data-bkup],[data-bkx],[data-startlifttoday],[data-claim]');
   if(!t) return;
+  if(t.dataset.startlifttoday!==undefined){ const d=DAYS[(new Date().getDay()+6)%7]; startLift(d,null); return; }
+  if(t.dataset.claim!==undefined){ claimReward(+t.dataset.claim); return; }
   if(t.dataset.bkup!==undefined){ exportData(); return; }
   if(t.dataset.bkx!==undefined){ DB.bkDismiss=Date.now(); save(); render(); return; }
   if(t.dataset.histex){ histEx=t.dataset.histex; render(); return; }
@@ -1215,7 +1305,7 @@ view.addEventListener('click',e=>{
   if(t.dataset.qstep){ const [i,d]=t.dataset.qstep.split(':'); const q=week().quests[+i]; q.target=Math.max(1,Math.min(60,(q.target||1)+(+d))); q.reward=null; save(); render(); return; }
   if(t.dataset.qtypeset){ const [i,v]=t.dataset.qtypeset.split(':'); const q=week().quests[+i]; q.type=v; q.reward=null; save(); render(); return; }
   if(t.dataset.loadweek){ curMon=mondayOf(new Date(t.dataset.loadweek+'T00:00:00')); render(); return; }
-  if(t.dataset.qroll){ const i=+t.dataset.qroll; const q=week().quests[i]; q.reward=rollReward(q.tier); save(); render(); return; }
+  if(t.dataset.qroll){ const i=+t.dataset.qroll; const q=week().quests[i]; if(q.reward&&q.reward.claimed)return; q.reward=rollReward(q.tier); save(); render(); return; }
 });
 view.addEventListener('change',e=>{ if(e.target&&e.target.dataset&&e.target.dataset.histsel!==undefined){ histEx=e.target.value; render(); } });
 
@@ -1521,7 +1611,14 @@ woBody.addEventListener('click',e=>{
   if(e.target.closest('[data-woaddex]'))return openPicker();
   if(e.target.closest('[data-wosaveroutine]'))return saveAsRoutine();
   const wm=e.target.closest('[data-warm]'); if(wm){const[ei,si]=wm.dataset.warm.split(':').map(Number);const s=woAct().data.exercises[ei].sets[si];s.warmup=!s.warmup;save();renderWorkout();return;}
-  const ck=e.target.closest('[data-check]'); if(ck){const[ei,si]=ck.dataset.check.split(':').map(Number);const s=woAct().data.exercises[ei].sets[si];s.done=!s.done; if(s.done&&!s.warmup) startRest(); else if(!s.done) skipRest(); save();renderWorkout();return;}
+  const ck=e.target.closest('[data-check]'); if(ck){const[ei,si]=ck.dataset.check.split(':').map(Number);const ex=woAct().data.exercises[ei];const s=ex.sets[si];
+    if(!s.done && !s.warmup && (s.weight===''||s.reps==='')){
+      let work=0,idx=-1; ex.sets.forEach((x,i)=>{ if(!x.warmup){work++; if(i===si)idx=work-1;} });
+      const p=prevSession(ex.exId,WO.id)[idx];
+      if(p){ if(s.weight==='')s.weight=String(p.weight); if(s.reps==='')s.reps=String(p.reps); }
+    }
+    if(s.weight===''&&s.reps===''&&!s.warmup){ flash('No previous set — enter weight × reps'); return; }
+    s.done=!s.done; if(s.done&&!s.warmup) startRest(); else if(!s.done) skipRest(); save();renderWorkout();return;}
   const sd=e.target.closest('[data-setdelx]'); if(sd){armDelete('setdel:'+sd.dataset.setdelx, sd, ()=>{const[ei,si]=sd.dataset.setdelx.split(':').map(Number);const ex=woAct().data.exercises[ei];ex.sets.splice(si,1);if(!ex.sets.length)ex.sets.push({reps:'',weight:'',warmup:false,done:false});save();renderWorkout();});return;}
   const as=e.target.closest('[data-addsetx]'); if(as){const ei=+as.dataset.addsetx;const ex=woAct().data.exercises[ei];const last=ex.sets[ex.sets.length-1];ex.sets.push({reps:last?last.reps:'',weight:last?last.weight:'',warmup:false,done:false});save();renderWorkout();const si=ex.sets.length-1;const inp=woBody.querySelector('[data-w="'+ei+':'+si+'"]');if(inp){try{inp.scrollIntoView({block:'center',behavior:'smooth'});}catch(_){}inp.focus({preventScroll:true});}return;}
   const xd=e.target.closest('[data-exdel]'); if(xd){armDelete('exdel:'+xd.dataset.exdel, xd, ()=>{woAct().data.exercises.splice(+xd.dataset.exdel,1);save();renderWorkout();});return;}
@@ -1549,10 +1646,11 @@ function renderPicker(){
   });
   sheet2Body.innerHTML=h;
 }
-function addExerciseToWO(exId,name){woAct().data.exercises.push({exId,name,note:'',sets:[{reps:'',weight:'',warmup:false,done:false}]});save();renderWorkout();const sc=woBody.querySelector('.wo-scroll');if(sc)sc.scrollTop=sc.scrollHeight;}
+function mkSets(exId){ const p=prevSession(exId,WO?WO.id:null); const n=Math.max(1,p.length); return Array.from({length:n},()=>({reps:'',weight:'',warmup:false,done:false})); }
+function addExerciseToWO(exId,name){woAct().data.exercises.push({exId,name,note:'',sets:mkSets(exId)});save();renderWorkout();const sc=woBody.querySelector('.wo-scroll');if(sc)sc.scrollTop=sc.scrollHeight;}
 function toggleExerciseInWO(exId,name){
   const exs=woAct().data.exercises; const i=exs.findIndex(e=>e.exId===exId);
-  if(i>=0) exs.splice(i,1); else exs.push({exId,name,note:'',sets:[{reps:'',weight:'',warmup:false,done:false}]});
+  if(i>=0) exs.splice(i,1); else exs.push({exId,name,note:'',sets:mkSets(exId)});
   save(); renderWorkout(); renderPicker();
 }
 function saveAsRoutine(){
@@ -1671,14 +1769,46 @@ function weekCamps(wk){
   wk.quests.forEach(q=>{ if(q.target>0){ let c=0; DAYS.forEach(d=>(wk.acts[d]||[]).forEach(a=>{ if(a.done&&(q.type==='any'||a.type===q.type))c++; })); if(c>=q.target)n++; } });
   return n;
 }
-function currentStreak(){
-  let streak=0, m=mondayOf(new Date());
-  if(weekCamps(DB.weeks[iso(m)])<1) m=addDays(m,-7);
-  while(DB.weeks[iso(m)] && weekCamps(DB.weeks[iso(m)])>=1){ streak++; m=addDays(m,-7); }
+function isRestWeek(wk){
+  if(!wk||!wk.plan) return false;
+  const planned=DAYS.filter(d=>(wk.plan[d]||[]).length);
+  if(!planned.length) return false;
+  return planned.every(d=>wk.plan[d].every(t=>t==='rest')) && !DAYS.some(d=>(wk.acts[d]||[]).some(a=>a.done));
+}
+function weekStreakState(key){
+  const wk=DB.weeks[key];
+  if(wk && weekCamps(wk)>=1) return 'hit';
+  if(isRestWeek(wk)) return 'rest';
+  return 'miss';
+}
+function computeStreak(){
+  let streak=0, graced=null, m=mondayOf(new Date());
+  if(weekStreakState(iso(m))!=='hit') m=addDays(m,-7);   // current week never breaks mid-week
+  const graceUsed=DB.graceUsed||{};                       // {'YYYY-MM': weekKey}
+  while(true){
+    const key=iso(m), st=weekStreakState(key);
+    if(st==='hit'){ streak++; }
+    else if(st==='rest'){ /* pause: doesn't count, doesn't break */ }
+    else {
+      if(!DB.weeks[key]) break;                            // before app history: stop
+      const mo=key.slice(0,7);
+      if(graceUsed[mo]===key || (!graced && graceUsed[mo]==null && streak>0)){ // one grace/month
+        if(graceUsed[mo]==null){ graceUsed[mo]=key; DB.graceUsed=graceUsed; graced=key; save(); }
+      } else break;
+    }
+    m=addDays(m,-7);
+  }
   return streak;
 }
+function currentStreak(){ try{ return computeStreak(); }catch(e){ let s=0,m=mondayOf(new Date()); if(weekCamps(DB.weeks[iso(m)])<1)m=addDays(m,-7); while(DB.weeks[iso(m)]&&weekCamps(DB.weeks[iso(m)])>=1){s++;m=addDays(m,-7);} return s; } }
 function hasData(wk){ if(!wk)return false; const a=DAYS.some(d=>(wk.acts[d]||[]).length); const p=wk.plan&&DAYS.some(d=>(wk.plan[d]||[]).length); return a||p; }
 function streakGlyph(){ return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#a85638" stroke-width="2" stroke-linejoin="round"><path d="M3 20 L9 8 L13 14 L16 6 L21 20 Z"/></svg>`; }
+function claimsHTML(){
+  const cl=(DB.claims||[]).slice(-10).reverse(); if(!cl.length) return '';
+  let h=`<div class="eyebrow" style="margin-top:22px">Rewards claimed</div>`;
+  cl.forEach(c=>{ const t=tierOf(c.tier); h+=`<div class="claim-row"><span class="claim-star">★</span><span class="claim-name">${esc(c.name)}</span><span class="claim-meta">${t?t.name:c.tier} · ${c.date.slice(5)}</span></div>`; });
+  return h;
+}
 function summitLogHTML(){
   const entries=Object.keys(DB.weeks||{}).map(k=>({k,mon:new Date(k+'T00:00:00'),wk:DB.weeks[k]}))
     .filter(e=>hasData(e.wk)).sort((a,b)=>b.mon-a.mon).slice(0,8);
@@ -1687,10 +1817,13 @@ function summitLogHTML(){
   h+=`<div class="peaks">`;
   entries.forEach(e=>{
     const camps=weekCamps(e.wk), isCur=iso(e.mon)===iso(curMon);
-    h+=`<button class="peak ${isCur?'cur':''}" data-loadweek="${e.k}">
+    const graced=(DB.graceUsed||{})[e.k.slice(0,7)]===e.k && camps<1;
+    const rest=isRestWeek(e.wk);
+    const lbl=camps===3?'Summit':rest?'Rest':graced?'Grace':camps+'/3';
+    h+=`<button class="peak ${isCur?'cur':''} ${graced?'graced':''}" data-loadweek="${e.k}">
       <span class="peak-range">${fmtRange(e.mon)}</span>
-      <span class="peak-dots">${[0,1,2].map(i=>`<i class="${i<camps?'on':''}"></i>`).join('')}</span>
-      <span class="peak-label">${camps===3?'Summit':camps+'/3'}</span>
+      <span class="peak-dots">${graced?'<i class="hollow"></i><i></i><i></i>':[0,1,2].map(i=>`<i class="${i<camps?'on':''}"></i>`).join('')}</span>
+      <span class="peak-label">${lbl}</span>
     </button>`;
   });
   return h+`</div>`;
