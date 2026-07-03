@@ -563,6 +563,9 @@
   @keyframes ascin{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
   .ascent svg{animation:ascin .45s ease}
   .quest,.day2,.rs-tier{transition:border-color .15s}
+  .mode-seg{margin-bottom:13px}
+  .mode-seg button.active{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+  .q-unit{font-size:10px;color:var(--muted);font-weight:400}
   button:focus-visible,select:focus-visible,input:focus-visible,.check:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
   @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -572,8 +575,9 @@
   <header>
     <div class="brand">
       <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true">
-        <path d="M2 24 L11 8 L16 16 L20 10 L28 24" fill="none" stroke="#1e2c35" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/>
-        <circle cx="11" cy="8" r="2" fill="#a85638"/>
+        <polygon points="9,23.4 17.4,10.8 25.8,23.4" fill="#93a6b2"/>
+        <polygon points="3,23.4 12.6,9 22.2,23.4" fill="#1e2c35"/>
+        <circle cx="23.4" cy="7.2" r="1.8" fill="#c67a3e"/>
       </svg>
       <div>
         <div class="word">Ridge</div>
@@ -645,11 +649,12 @@ const store = (() => {
 /* ---------- model ---------- */
 const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 const TYPES = {
-  run:    {label:'Run',    color:'#3a3b36'},
-  sprint: {label:'Sprint', color:'#3a3b36'},
+  cardio: {label:'Cardio', color:'#3a3b36'},
   lift:   {label:'Lift',   color:'#3a3b36'},
   other:  {label:'Other',  color:'#3a3b36'}
 };
+const CARDIO_MODES=[['run','Run'],['walk','Walk'],['bike','Bike'],['sprint','Sprint']];
+const CARDIO_LABEL={run:'Run',walk:'Walk',bike:'Bike',sprint:'Sprint'};
 const IC={
   plus:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
   cl:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>',
@@ -695,11 +700,32 @@ const REWARDS = {
 
 function defaultQuests(){
   return [
-    {tier:'basecamp',  type:'lift', target:3, reward:null},
-    {tier:'ridgeline', type:'run',  target:3, reward:null},
-    {tier:'summit',    type:'any',  target:6, reward:null}
+    {tier:'basecamp',  kind:'lifts', target:3,  reward:null},
+    {tier:'ridgeline', kind:'reps',  target:16, reward:null},
+    {tier:'summit',    kind:'miles', target:8,  reward:null}
   ];
 }
+const KIND_LABEL={lifts:'lifts',miles:'miles',reps:'sprint sets',sessions:'sessions'};
+const KIND_OPTS=[['lifts','Lifts'],['miles','Miles'],['reps','Sprint sets'],['sessions','Sessions']];
+function questKind(q){ return q.kind || (q.tier==='basecamp'?'lifts':q.tier==='ridgeline'?'reps':'miles'); }
+function isSprint(a){ return (a.type==='cardio'||a.type==='sprint') && (((a.data&&a.data.mode)||(a.type==='sprint'?'sprint':'run'))==='sprint'); }
+function actMiles(a){
+  if(a.type!=='cardio'&&a.type!=='run') return 0;
+  if(isSprint(a)) return 0;                       // sprints are reps, not miles
+  return num(a.data&&a.data.distance);
+}
+function questProgressIn(wk,q){
+  const kind=questKind(q); let v=0;
+  DAYS.forEach(d=>((wk.acts&&wk.acts[d])||[]).forEach(a=>{
+    if(!a.done) return;
+    if(kind==='lifts'){ if(a.type==='lift') v++; }
+    else if(kind==='miles'){ v+=actMiles(a); }
+    else if(kind==='reps'){ if(isSprint(a)) v+=num(a.data&&a.data.reps); }
+    else { v++; }
+  }));
+  return kind==='miles'?Math.round(v*10)/10:v;
+}
+function fmtProg(v,kind){ return kind==='miles'?(Math.round(v*10)/10).toLocaleString():String(v); }
 
 /* ---------- dates ---------- */
 function mondayOf(d){ const x=new Date(d); const day=(x.getDay()+6)%7; x.setHours(0,0,0,0); x.setDate(x.getDate()-day); return x; }
@@ -720,6 +746,9 @@ function migrateAct(a){
   if(!a.id) a.id='a'+Math.random().toString(36).slice(2,9);
   a.done=!!a.done;
   if(!a.data||typeof a.data!=='object') a.data={};
+  if(a.type==='run'){ a.type='cardio'; if(!a.data.mode)a.data.mode='run'; }
+  else if(a.type==='sprint'){ a.type='cardio'; if(!a.data.mode)a.data.mode='sprint'; }
+  if(a.type==='cardio' && !a.data.mode) a.data.mode='run';
   if(a.type==='lift'){
     const d=a.data;
     if(!Array.isArray(d.exercises)){
@@ -754,10 +783,17 @@ function migrate(db){
       DAYS.forEach(d=>{
         if(!Array.isArray(W.acts[d])) W.acts[d]=[];
         if(!Array.isArray(W.plan[d])) W.plan[d]=[];
+        W.plan[d]=[...new Set(W.plan[d].map(t=>t==='run'||t==='sprint'?'cardio':t))];
         W.acts[d].forEach(migrateAct);
       });
       W.locked=!!W.locked;
-      if(Array.isArray(W.quests)) W.quests.forEach(q=>{ if(q&&q.reward&&typeof q.reward==='object'&&!q.reward.name&&q.reward.n) q.reward.name=q.reward.n; });
+      if(Array.isArray(W.quests)) W.quests.forEach(q=>{ if(!q)return;
+        if(!q.kind){
+          q.kind = q.tier==='basecamp'?'lifts':q.tier==='ridgeline'?'miles':'sessions';
+          if(q.kind==='miles' && q.type) q.target=Math.max(4,(q.target||3)*3);  // old session count -> rough miles
+          delete q.type;
+        }
+        if(q.reward&&typeof q.reward==='object'&&!q.reward.name&&q.reward.n) q.reward.name=q.reward.n; });
     });
     db.version=2;
     return db;
@@ -781,18 +817,17 @@ function week(){
 function uid(){ return Math.random().toString(36).slice(2,9); }
 
 /* ---------- quest math ---------- */
-function progress(q){
-  const w=week(); let c=0;
-  DAYS.forEach(d=> w.acts[d].forEach(a=>{ if(a.done && (q.type==='any'||a.type===q.type)) c++; }));
-  return c;
-}
+function progress(q){ return questProgressIn(week(),q); }
 function tierOf(key){ return TIERS.find(t=>t.key===key); }
 
 /* ---------- summary text ---------- */
 function summary(a){
   const d=a.data||{};
-  if(a.type==='run')    return `${d.distance||'—'} mi${d.time?` · ${d.time}`:''}`;
-  if(a.type==='sprint') return `${d.reps||'—'} reps · ${d.time||'—'}`;
+  if(a.type==='cardio'||a.type==='run'||a.type==='sprint'){
+    const mode=d.mode||(a.type==='sprint'?'sprint':'run'), ml=CARDIO_LABEL[mode]||'Cardio';
+    if(mode==='sprint') return `${ml} · ${d.reps||'—'} reps${d.time?` · ${d.time}`:''}`;
+    return `${ml} · ${d.distance||'—'} mi${d.time?` · ${d.time}`:''}`;
+  }
   if(a.type==='lift'){
     if(Array.isArray(d.exercises)){
       const nm=(d.name&&d.name!=='Lift')?d.name:'Lift';
@@ -1059,27 +1094,25 @@ function questsHTML(){
   h+=`<div class="eyebrow">This week's quests</div>`;
   if(w.locked) h+=`<div class="lock-note">${IC.lock} Locked for the week — re-run “Set the week” to change.</div>`;
   states.forEach((s,i)=>{
-    const t=tierOf(s.q.tier);
+    const t=tierOf(s.q.tier), kind=questKind(s.q), kl=KIND_LABEL[kind];
     const pct=Math.min(100, s.q.target>0 ? Math.round(s.prog/s.q.target*100):0);
     h+=`<div class="quest ${s.done?'done':''}">
       <div class="q-top">
         <span class="q-icon">${campIcon(s.q.tier)}</span>
         <div><div class="q-tier">${t.name}</div><div class="q-budget">Reward ${budgetLabel(t.key)}</div></div>
-        <span class="q-prog-num">${s.prog}/${s.q.target}</span>
+        <span class="q-prog-num">${fmtProg(s.prog,kind)}/${s.q.target}<small class="q-unit">${kind==='miles'?' mi':kind==='reps'?' sets':''}</small></span>
       </div>`;
     if(w.locked){
-      h+=`<div class="q-readout"><span>${s.q.target} × ${typeLabel(s.q.type)}</span><span class="q-lock">${IC.lock} locked</span></div>`;
+      h+=`<div class="q-readout"><span>${s.q.target} ${kl}</span><span class="q-lock">${IC.lock} locked</span></div>`;
     } else {
       h+=`<div class="q-config2">
         <div class="stepper">
           <button class="step" data-qstep="${i}:-1" aria-label="Fewer">−</button>
           <span class="step-val">${s.q.target}</span>
           <button class="step" data-qstep="${i}:1" aria-label="More">+</button>
-          <span class="step-lbl">sessions</span>
+          <span class="step-lbl">${kl}</span>
         </div>
-        <div class="qseg">
-          ${[['lift','Lift'],['run','Run'],['sprint','Sprint'],['other','Other'],['any','Any']].map(([v,l])=>`<button class="qsegb ${s.q.type===v?'on':''}" data-qtypeset="${i}:${v}">${l}</button>`).join('')}
-        </div>
+        <div class="qseg">${KIND_OPTS.map(([v,l])=>`<button class="qsegb ${kind===v?'on':''}" data-qkind="${i}:${v}">${l}</button>`).join('')}</div>
       </div>`;
     }
     h+=`<div class="bar"><i style="width:${pct}%"></i></div>`;
@@ -1226,19 +1259,21 @@ function openSheet(day,id){
   let act = id ? w.acts[day].find(a=>a.id===id) : null;
   if(act && act.type==='lift'){ openWorkout(day,id); return; }
   let data = act?Object.assign({},act.data):{};
-  editing = {day, id, type: act?act.type:'run', data};
+  editing = {day, id, type: act?act.type:'cardio', data};
   renderSheet();
   scrim.classList.add('show'); sheet.classList.add('show');
 }
 function closeSheet(){ scrim.classList.remove('show'); sheet.classList.remove('show'); editing=null; }
 
 function fieldsFor(type,d){
-  if(type==='run') return `<div class="row2">
-      <div class="field"><label>Distance (miles)</label><input id="f_distance" type="number" inputmode="decimal" step="0.1" value="${d.distance??''}" placeholder="5.0"></div>
-      <div class="field"><label>Time</label><input id="f_time" value="${d.time??''}" placeholder="42:30"></div></div>`;
-  if(type==='sprint') return `<div class="row2">
-      <div class="field"><label>Reps</label><input id="f_reps" type="number" inputmode="numeric" value="${d.reps??''}" placeholder="8"></div>
-      <div class="field"><label>Time</label><input id="f_time" value="${d.time??''}" placeholder="14s / 100m"></div></div>`;
+  if(type==='cardio'){
+    const mode=d.mode||'run';
+    const seg=`<div class="seg mode-seg">${CARDIO_MODES.map(([v,l])=>`<button class="${mode===v?'active':''}" data-mode="${v}">${l}</button>`).join('')}</div>`;
+    const flds = mode==='sprint'
+      ? `<div class="row2"><div class="field"><label>Reps (times)</label><input id="f_reps" type="number" inputmode="numeric" value="${d.reps??''}" placeholder="8"></div><div class="field"><label>Time</label><input id="f_time" value="${d.time??''}" placeholder="14s / interval"></div></div>`
+      : `<div class="row2"><div class="field"><label>Distance (miles)</label><input id="f_distance" type="number" inputmode="decimal" step="0.1" value="${d.distance??''}" placeholder="5.0"></div><div class="field"><label>Time</label><input id="f_time" value="${d.time??''}" placeholder="42:30"></div></div>`;
+    return seg+flds;
+  }
   if(type==='lift'){
     const sets=(Array.isArray(d.sets)&&d.sets.length)?d.sets:[{reps:'',weight:''}];
     return `<div class="field"><label>Exercise</label><input id="f_exercise" value="${d.exercise??''}" placeholder="Back squat"></div>
@@ -1273,8 +1308,7 @@ function renderSheet(){
 }
 function readFields(){
   const t=editing.type, g=id=>{const el=document.getElementById(id);return el?el.value.trim():'';};
-  if(t==='run') return {distance:g('f_distance'),time:g('f_time')};
-  if(t==='sprint') return {reps:g('f_reps'),time:g('f_time')};
+  if(t==='cardio'){ const mode=editing.data.mode||'run'; const o={mode,time:g('f_time')}; if(mode==='sprint') o.reps=g('f_reps'); else o.distance=g('f_distance'); return o; }
   if(t==='lift'){
     const rows=[...document.querySelectorAll('#fields .setrow')];
     const sets=rows.map(r=>({reps:r.querySelector('.s_reps').value.trim(),weight:r.querySelector('.s_weight').value.trim()}));
@@ -1289,7 +1323,7 @@ document.getElementById('nextWk').onclick=()=>{curMon=addDays(curMon,7);openDays
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;render();});
 
 view.addEventListener('click',e=>{
-  const t=e.target.closest('[data-openplanner],[data-toggle],[data-edit],[data-del],[data-add],[data-qroll],[data-qstep],[data-qtypeset],[data-loadweek],[data-histex],[data-bpwin],[data-bkup],[data-bkx],[data-startlifttoday],[data-claim]');
+  const t=e.target.closest('[data-openplanner],[data-toggle],[data-edit],[data-del],[data-add],[data-qroll],[data-qstep],[data-qkind],[data-loadweek],[data-histex],[data-bpwin],[data-bkup],[data-bkx],[data-startlifttoday],[data-claim]');
   if(!t) return;
   if(t.dataset.startlifttoday!==undefined){ const d=DAYS[(new Date().getDay()+6)%7]; startLift(d,null); return; }
   if(t.dataset.claim!==undefined){ claimReward(+t.dataset.claim); return; }
@@ -1302,8 +1336,8 @@ view.addEventListener('click',e=>{
   if(t.dataset.del){ armDelete('del:'+t.dataset.del, t, ()=>{ const [d,id]=t.dataset.del.split(':'); const arr=week().acts[d]; const idx=arr.findIndex(x=>x.id===id); if(idx>-1){ arr.splice(idx,1); save(); render(); } }); return; }
   if(t.dataset.edit){ const [d,id]=t.dataset.edit.split(':'); openSheet(d,id); return; }
   if(t.dataset.add!==undefined){ openSheet(t.dataset.add,null); return; }
-  if(t.dataset.qstep){ const [i,d]=t.dataset.qstep.split(':'); const q=week().quests[+i]; q.target=Math.max(1,Math.min(60,(q.target||1)+(+d))); q.reward=null; save(); render(); return; }
-  if(t.dataset.qtypeset){ const [i,v]=t.dataset.qtypeset.split(':'); const q=week().quests[+i]; q.type=v; q.reward=null; save(); render(); return; }
+  if(t.dataset.qstep){ const [i,d]=t.dataset.qstep.split(':'); const q=week().quests[+i]; const kind=questKind(q); const step=kind==='reps'?2:1; q.target=Math.max(1,Math.min(kind==='miles'?200:kind==='reps'?300:60,(q.target||1)+(+d)*step)); q.reward=null; save(); render(); return; }
+  if(t.dataset.qkind){ const [i,v]=t.dataset.qkind.split(':'); const q=week().quests[+i]; if(questKind(q)!==v){ q.kind=v; delete q.type; q.target=v==='miles'?8:v==='reps'?16:v==='lifts'?3:6; q.reward=null; save(); render(); } return; }
   if(t.dataset.loadweek){ curMon=mondayOf(new Date(t.dataset.loadweek+'T00:00:00')); render(); return; }
   if(t.dataset.qroll){ const i=+t.dataset.qroll; const q=week().quests[i]; if(q.reward&&q.reward.claimed)return; q.reward=rollReward(q.tier); save(); render(); return; }
 });
@@ -1313,6 +1347,8 @@ scrim.onclick=closeSheet;
 sheet.addEventListener('click',e=>{
   const tBtn=e.target.closest('[data-type]');
   if(tBtn){ editing.data=readFields(); editing.type=tBtn.dataset.type; renderSheet(); return; }
+  const mBtn=e.target.closest('[data-mode]');
+  if(mBtn){ editing.data=readFields(); editing.data.mode=mBtn.dataset.mode; renderSheet(); return; }
   const sl=e.target.closest('[data-startlift]');
   if(sl){ startLift(editing.day, sl.dataset.startlift||null); return; }
   if(e.target.closest('[data-manageroutines]')){ openRoutineManager(); return; }
@@ -1688,8 +1724,8 @@ sheet2El.addEventListener('click',e=>{
   if(e.target.id==='planNext'){ questDraft=computeQuestDefaults(planDraft); planStep=2; renderPlanner(); return; }
   if(e.target.id==='planBack'){ planStep=1; renderPlanner(); return; }
   if(e.target.id==='planLock')return lockWeek();
-  const qds=e.target.closest('[data-qdstep]'); if(qds){const[i,d]=qds.dataset.qdstep.split(':');questDraft[+i].target=Math.max(1,Math.min(60,questDraft[+i].target+(+d)));renderPlanner();return;}
-  const qdt=e.target.closest('[data-qdtype]'); if(qdt){const[i,v]=qdt.dataset.qdtype.split(':');questDraft[+i].type=v;renderPlanner();return;}
+  const qds=e.target.closest('[data-qdstep]'); if(qds){const[i,d]=qds.dataset.qdstep.split(':');const qd=questDraft[+i];const step=qd.kind==='reps'?2:1;qd.target=Math.max(1,Math.min(qd.kind==='miles'?200:qd.kind==='reps'?300:60,qd.target+(+d)*step));renderPlanner();return;}
+  const qdk=e.target.closest('[data-qdkind]'); if(qdk){const[i,v]=qdk.dataset.qdkind.split(':');const qd=questDraft[+i];if(qd.kind!==v){qd.kind=v;qd.target=v==='miles'?8:v==='reps'?16:v==='lifts'?3:6;}renderPlanner();return;}
   const pe=e.target.closest('[data-pickexid]'); if(pe){toggleExerciseInWO(pe.dataset.pickexid,pe.dataset.pickexname);return;}
   const ce=e.target.closest('[data-customex]'); if(ce){const nm=ce.dataset.customex;addExerciseToWO('cx_'+slug(nm),nm);closeSheet2();return;}
   const rd=e.target.closest('[data-routinedel]'); if(rd){armDelete('routinedel:'+rd.dataset.routinedel, rd, ()=>{const idx=(DB.routines||[]).findIndex(r=>r.id===rd.dataset.routinedel);if(idx>-1){DB.routines.splice(idx,1);save();openRoutineManager();}});return;}
@@ -1706,12 +1742,12 @@ sheet2El.addEventListener('input',e=>{
 let planDraft=null, questDraft=null, planStep=1;
 function openPlanner(){
   const w=week(); planDraft={}; DAYS.forEach(d=>planDraft[d]=(w.plan&&w.plan[d])?w.plan[d].slice():[]);
-  questDraft=w.quests.map(q=>({tier:q.tier,type:q.type,target:q.target}));
+  questDraft=w.quests.map(q=>({tier:q.tier,kind:questKind(q),target:q.target}));
   planStep=1; renderPlanner(); scrim2El.classList.add('show'); sheet2El.classList.add('show');
 }
 function renderPlanner(){ planStep===1?renderPlanStep():renderQuestStep(); }
 function renderPlanStep(){
-  const opts=[['run','Run'],['sprint','Sprint'],['lift','Lift'],['other','Other'],['rest','Rest']];
+  const opts=[['cardio','Cardio'],['lift','Lift'],['other','Other'],['rest','Rest']];
   let h=`<h3>Set the week · plan</h3><div class="plan-note">Step 1 of 2 — a rough plan for each day.</div>`;
   DAYS.forEach(d=>{
     const sel=planDraft[d]||[];
@@ -1723,18 +1759,18 @@ function renderPlanStep(){
   sheet2Body.innerHTML=h;
 }
 function renderQuestStep(){
-  let h=`<h3>Set the week · quests</h3><div class="plan-note">Step 2 of 2 — lock your three goals for the week. Rewards come from your list.</div>`;
+  let h=`<h3>Set the week · quests</h3><div class="plan-note">Step 2 of 2 — lock your three goals. Suggested: lifts, sprint sets, cardio miles — tap to swap any tier's measure.</div>`;
   questDraft.forEach((q,i)=>{
-    const t=tierOf(q.tier);
+    const t=tierOf(q.tier), kl=KIND_LABEL[questKind(q)];
     h+=`<div class="qedit">
       <div class="qedit-top"><span class="q-tier">${t.name}</span><span class="q-budget">Reward ${budgetLabel(t.key)}</span></div>
       <div class="stepper">
         <button class="step" data-qdstep="${i}:-1" aria-label="Fewer">−</button>
         <span class="step-val">${q.target}</span>
         <button class="step" data-qdstep="${i}:1" aria-label="More">+</button>
-        <span class="step-lbl">sessions</span>
+        <span class="step-lbl">${kl}</span>
       </div>
-      <div class="qseg">${[['lift','Lift'],['run','Run'],['sprint','Sprint'],['other','Other'],['any','Any']].map(([v,l])=>`<button class="qsegb ${q.type===v?'on':''}" data-qdtype="${i}:${v}">${l}</button>`).join('')}</div>
+      <div class="qseg">${KIND_OPTS.map(([v,l])=>`<button class="qsegb ${questKind(q)===v?'on':''}" data-qdkind="${i}:${v}">${l}</button>`).join('')}</div>
     </div>`;
   });
   h+=`<div class="sheet-actions"><button class="btn ghost" id="planBack">← Back</button><button class="btn primary" id="planLock">Lock in the week</button></div>`;
@@ -1747,26 +1783,23 @@ function togglePlan(day,v){
   planDraft[day]=sel; renderPlanner();
 }
 function computeQuestDefaults(plan){
-  const counts={run:0,sprint:0,lift:0,other:0}; let total=0;
+  const counts={cardio:0,lift:0,other:0}; let total=0;
   DAYS.forEach(d=>(plan[d]||[]).forEach(t=>{ if(t!=='rest'&&counts[t]!=null){counts[t]++;total++;} }));
-  const order=['lift','run','sprint','other'];
-  const sorted=Object.keys(counts).filter(t=>counts[t]>0).sort((a,b)=>counts[b]-counts[a]||order.indexOf(a)-order.indexOf(b));
-  const dom=sorted[0];
-  const base=dom?{type:dom,target:counts[dom]}:{type:'any',target:Math.max(1,Math.floor(total/2)||3)};
-  const ridge={type:'any',target: total?Math.min(total,Math.max(base.target,Math.ceil(total*0.75))):Math.max(base.target+1,4)};
-  const summit={type:'any',target: total||6};
-  return [{tier:'basecamp',...base},{tier:'ridgeline',...ridge},{tier:'summit',...summit}];
+  const lifts=Math.max(1,counts.lift||3);
+  const sets=16;
+  const miles=Math.max(4,(counts.cardio||2)*4);
+  return [{tier:'basecamp',kind:'lifts',target:lifts},{tier:'ridgeline',kind:'reps',target:sets},{tier:'summit',kind:'miles',target:miles}];
 }
 function lockWeek(){
   const w=week(); w.plan={}; DAYS.forEach(d=>w.plan[d]=planDraft[d]||[]);
-  questDraft.forEach((qd,i)=>{ const q=w.quests[i]; if(q.type!==qd.type||q.target!==qd.target) q.reward=null; q.tier=qd.tier; q.type=qd.type; q.target=Math.max(1,qd.target); });
+  questDraft.forEach((qd,i)=>{ const q=w.quests[i]; if(questKind(q)!==qd.kind||q.target!==qd.target) q.reward=null; q.tier=qd.tier; q.kind=qd.kind; delete q.type; q.target=Math.max(1,qd.target); });
   w.locked=true; save(); closeSheet2(); render(); flash('Week locked in');
 }
 
 /* ================= STREAK + SUMMIT LOG ================= */
 function weekCamps(wk){
   if(!wk||!wk.quests) return 0; let n=0;
-  wk.quests.forEach(q=>{ if(q.target>0){ let c=0; DAYS.forEach(d=>(wk.acts[d]||[]).forEach(a=>{ if(a.done&&(q.type==='any'||a.type===q.type))c++; })); if(c>=q.target)n++; } });
+  wk.quests.forEach(q=>{ if(q.target>0 && questProgressIn(wk,q)>=q.target) n++; });
   return n;
 }
 function isRestWeek(wk){
