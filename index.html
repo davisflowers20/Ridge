@@ -31,8 +31,8 @@
     --haze:#43525c;
     --mist:#1e2c35;
     --muted:#677781;
-    --gold:#a85638;
-    --gold-2:#bd6a48;
+    --gold:#c25b3c;
+    --gold-2:#d06a4a;
     --pine:#3f6f57;
     --radius:14px;
     --maxw:520px;
@@ -41,7 +41,9 @@
   html{overscroll-behavior:none}
   html,body{margin:0;padding:0}
   body{
-    background:linear-gradient(180deg,#edf1f4 0%, #dfe6ea 100%);
+    background:
+      repeat top left / 460px 460px url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='460' height='460' viewBox='0 0 460 460'><g fill='none' stroke='%231e2c35' stroke-opacity='.05' stroke-width='1.1'><path d='M-20,80 C60,30 140,120 230,70 C320,20 400,110 480,60'/><path d='M-20,140 C70,95 150,175 230,130 C310,85 390,165 480,120'/><path d='M-20,200 C60,160 150,235 240,190 C330,145 400,225 480,180'/><path d='M-20,265 C70,220 140,300 230,255 C320,210 400,290 480,245'/><path d='M-20,330 C60,285 150,360 240,315 C330,270 400,350 480,305'/><path d='M-20,395 C70,350 140,430 230,385 C320,340 400,420 480,375'/><ellipse cx='120' cy='330' rx='46' ry='24' transform='rotate(-18 120 330)'/><ellipse cx='120' cy='330' rx='24' ry='11' transform='rotate(-18 120 330)'/><ellipse cx='356' cy='96' rx='40' ry='20' transform='rotate(-22 356 96)'/><ellipse cx='356' cy='96' rx='20' ry='9' transform='rotate(-22 356 96)'/></g></svg>"),
+      linear-gradient(180deg,#edf1f4 0%, #dfe6ea 100%);
     background-attachment:fixed;
     color:var(--ink);
     font-family:'Inter',system-ui,sans-serif;
@@ -536,7 +538,7 @@
   .peak-dots i.hollow{background:transparent;border:1.5px solid var(--gold)}
   .peak.graced .peak-label{color:var(--gold)}
   /* ---- design pass: hierarchy, grammar, identity, motion ---- */
-  .today-card{display:block;padding:16px;margin-bottom:16px}
+  .today-card{display:block;padding:16px;margin-bottom:16px;background-color:var(--ink);background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='160' viewBox='0 0 300 160'><g fill='none' stroke='%23ffffff' stroke-opacity='.06' stroke-width='1'><path d='M-10,40 C50,10 110,64 170,36 C230,8 280,58 310,34'/><path d='M-10,84 C55,54 115,108 175,80 C235,52 285,102 310,78'/><path d='M-10,128 C50,98 110,152 170,124 C230,96 285,146 310,122'/><ellipse cx='236' cy='44' rx='34' ry='15' transform='rotate(-16 236 44)'/><ellipse cx='236' cy='44' rx='16' ry='7' transform='rotate(-16 236 44)'/></g></svg>");background-size:300px 160px}
   .td-top{display:flex;align-items:center;justify-content:space-between;gap:14px}
   .td-stats{display:flex;flex-wrap:wrap;gap:14px;margin-top:13px;padding-top:12px;border-top:1px solid rgba(255,255,255,.14);font-family:'Space Mono';font-size:11px;color:rgba(255,255,255,.62)}
   .td-stats b{color:#fff;font-size:13px}
@@ -555,8 +557,6 @@
   .bp-h{display:flex;align-items:center;gap:8px}
   .bp-h::after{content:"";flex:1;height:14px;opacity:.35;background:repeat-x center / auto 14px url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='14' viewBox='0 0 120 14'><g fill='none' stroke='%231e2c35' stroke-width='1'><path d='M0,7 C20,2 40,12 60,7 C80,2 100,12 120,7'/><path d='M0,11 C24,7 44,14 64,11 C84,8 104,14 120,11'/></g></svg>")}
   .plan-col{position:relative}
-  .plan-col::after{content:"";position:absolute;right:8px;bottom:7px;width:26px;height:12px;opacity:.16;background:no-repeat center/contain url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='42' height='21' viewBox='0 0 42 21'><path d='M2 19 L14 5 L20 12 L26 4 L40 19' fill='none' stroke='%231e2c35' stroke-width='1.6' stroke-linejoin='round'/></svg>")}
-  .day2.today .plan-col::after{opacity:.3}
   @keyframes ckpop{0%{transform:scale(.7)}55%{transform:scale(1.18)}100%{transform:scale(1)}}
   .set-check.on{animation:ckpop .22s ease}
   .check.done{animation:ckpop .22s ease}
@@ -575,9 +575,8 @@
   <header>
     <div class="brand">
       <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true">
-        <polygon points="9,23.4 17.4,10.8 25.8,23.4" fill="#93a6b2"/>
-        <polygon points="3,23.4 12.6,9 22.2,23.4" fill="#1e2c35"/>
-        <circle cx="23.4" cy="7.2" r="1.8" fill="#c67a3e"/>
+        <circle cx="6.6" cy="6" r="2" fill="#c25b3c"/>
+        <path d="M3 24 L10.5 11.5 L14 17 L19.5 8 L27 24" fill="none" stroke="#1e2c35" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
       </svg>
       <div>
         <div class="word">Ridge</div>
@@ -619,7 +618,7 @@
 <div class="scrim" id="scrim2" style="z-index:49"></div>
 <div class="sheet" id="sheet2" style="z-index:50"><div class="grab"></div><div id="sheet2Body"></div></div>
 <div class="workout" id="workout"><div id="workoutBody"></div></div>
-<div class="welcome" id="welcome"><div class="welcome-inner">  <svg width="46" height="46" viewBox="0 0 30 30" aria-hidden="true"><path d="M2 24 L11 8 L16 16 L20 10 L28 24" fill="none" stroke="#1e2c35" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/><circle cx="11" cy="8" r="2" fill="#a85638"/></svg>
+<div class="welcome" id="welcome"><div class="welcome-inner">  <svg width="46" height="46" viewBox="0 0 30 30" aria-hidden="true"><circle cx="6.6" cy="6" r="2" fill="#c25b3c"/><path d="M3 24 L10.5 11.5 L14 17 L19.5 8 L27 24" fill="none" stroke="#1e2c35" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg>
   <h2>RIDGE</h2>
   <p class="tagline">Plan your week. Climb it.</p>
   <div class="wsteps">
@@ -1186,12 +1185,12 @@ function ascentSVG(states){
   const trail=`M${start.x},${start.y} L${camps[0].x},${camps[0].y} L${camps[1].x},${camps[1].y} L${camps[2].x},${camps[2].y}`;
   const trailDone=`M${start.x},${start.y} L${cx},${cy}`;
   const sunX=466, sunY=58-prog*26, sunR=(10+prog*2).toFixed(1);
-  const sunFill=states[2].done?'#e2974f':lerpHex('#aebfc9','#e2974f',prog);
+  const sunFill=states[2].done?'#c25b3c':lerpHex('#aebfc9','#c25b3c',prog);
   const glowA=(0.05+prog*0.5).toFixed(2), washA=(prog*0.14).toFixed(2);
   return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Ascent progress">
     <defs>
-      <radialGradient id="ag-glow"><stop offset="0" stop-color="#e2974f" stop-opacity="${glowA}"/><stop offset="100%" stop-color="#e2974f" stop-opacity="0"/></radialGradient>
-      <linearGradient id="ag-wash" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e2974f" stop-opacity="${washA}"/><stop offset="62%" stop-color="#e2974f" stop-opacity="0"/></linearGradient>
+      <radialGradient id="ag-glow"><stop offset="0" stop-color="#c25b3c" stop-opacity="${glowA}"/><stop offset="100%" stop-color="#c25b3c" stop-opacity="0"/></radialGradient>
+      <linearGradient id="ag-wash" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c25b3c" stop-opacity="${washA}"/><stop offset="62%" stop-color="#c25b3c" stop-opacity="0"/></linearGradient>
     </defs>
     <rect width="${W}" height="${H}" fill="url(#ag-wash)"/>
     <circle cx="${sunX}" cy="${sunY}" r="${40+prog*46}" fill="url(#ag-glow)"/>
@@ -1209,8 +1208,8 @@ function ascentSVG(states){
     ${camps.map((c,i)=>{
       const done=states[i].done;
       return `<g>
-        <circle cx="${c.x}" cy="${c.y}" r="5" fill="${done?'#a85638':'#ffffff'}" stroke="${done?'#a85638':'#9fb1bd'}" stroke-width="1.6"/>
-        <text x="${c.x}" y="${c.y-12}" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-size="10" letter-spacing="1" fill="${done?'#a85638':'#677781'}">${tierOf(states[i].q.tier).name.toUpperCase()}</text>
+        <circle cx="${c.x}" cy="${c.y}" r="5" fill="${done?'#c25b3c':'#ffffff'}" stroke="${done?'#c25b3c':'#9fb1bd'}" stroke-width="1.6"/>
+        <text x="${c.x}" y="${c.y-12}" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-size="10" letter-spacing="1" fill="${done?'#c25b3c':'#677781'}">${tierOf(states[i].q.tier).name.toUpperCase()}</text>
       </g>`;
     }).join('')}
     <circle cx="${cx}" cy="${cy}" r="5.5" fill="#ffffff" stroke="#1e2c35" stroke-width="1.6"/>
@@ -1835,7 +1834,7 @@ function computeStreak(){
 }
 function currentStreak(){ try{ return computeStreak(); }catch(e){ let s=0,m=mondayOf(new Date()); if(weekCamps(DB.weeks[iso(m)])<1)m=addDays(m,-7); while(DB.weeks[iso(m)]&&weekCamps(DB.weeks[iso(m)])>=1){s++;m=addDays(m,-7);} return s; } }
 function hasData(wk){ if(!wk)return false; const a=DAYS.some(d=>(wk.acts[d]||[]).length); const p=wk.plan&&DAYS.some(d=>(wk.plan[d]||[]).length); return a||p; }
-function streakGlyph(){ return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#a85638" stroke-width="2" stroke-linejoin="round"><path d="M3 20 L9 8 L13 14 L16 6 L21 20 Z"/></svg>`; }
+function streakGlyph(){ return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#c25b3c" stroke-width="2" stroke-linejoin="round"><path d="M3 20 L9 8 L13 14 L16 6 L21 20 Z"/></svg>`; }
 function claimsHTML(){
   const cl=(DB.claims||[]).slice(-10).reverse(); if(!cl.length) return '';
   let h=`<div class="eyebrow" style="margin-top:22px">Rewards claimed</div>`;
