@@ -711,7 +711,9 @@ function isSprint(a){ return (a.type==='cardio'||a.type==='sprint') && (((a.data
 function actMiles(a){
   if(a.type!=='cardio'&&a.type!=='run') return 0;
   if(isSprint(a)) return 0;                       // sprints are reps, not miles
-  return num(a.data&&a.data.distance);
+  const mi=num(a.data&&a.data.distance);
+  const mode=(a.data&&a.data.mode)||'run';
+  return mode==='bike' ? mi*0.5 : mi;             // bike miles count half
 }
 function questProgressIn(wk,q){
   const kind=questKind(q); let v=0;
