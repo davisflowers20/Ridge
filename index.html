@@ -1138,8 +1138,10 @@ function questsHTML(){
         </div>`;
       }
     } else {
-      const left=Math.max(0,s.q.target-s.prog);
-      h+=`<div class="locked">${IC.peak} ${left} more to unlock your ${t.budget} reward</div>`;
+      const kindU = kind==='miles'?' mi':kind==='reps'?' sets':'';
+      const leftRaw = Math.max(0, s.q.target - s.prog);
+      const left = kind==='miles' ? Math.round(leftRaw*10)/10 : Math.ceil(leftRaw);
+      h+=`<div class="locked">${IC.peak} ${left}${kindU} more to unlock your ${budgetLabel(t.key)} reward</div>`;
     }
     h+=`</div>`;
   });
