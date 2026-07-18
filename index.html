@@ -566,6 +566,22 @@
   .mode-seg{margin-bottom:13px}
   .mode-seg button.active{background:var(--ink);color:var(--surface);border-color:var(--ink)}
   .q-unit{font-size:10px;color:var(--muted);font-weight:400}
+  .cal{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:16px}
+  .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+  .cal-title{font-family:'Space Grotesk';font-weight:600;font-size:14px;letter-spacing:.02em}
+  .cal-nav{all:unset;cursor:pointer;width:34px;height:34px;display:grid;place-items:center;border-radius:50%;color:var(--muted);touch-action:manipulation}
+  .cal-nav:hover{background:var(--surface-2);color:var(--ink)}
+  .cal-dow{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:4px}
+  .cal-dow span{text-align:center;font-family:'Space Grotesk';font-size:9px;letter-spacing:.12em;color:var(--muted)}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);row-gap:4px}
+  .cal-cell{position:relative;display:grid;place-items:center;height:40px;border-radius:9px}
+  .cal-cell.today{background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--line-2)}
+  .cal-cell.fut .cal-num{color:var(--line-2)}
+  .cal-num{font-family:'Space Mono';font-size:12px;color:var(--ink-soft);line-height:1}
+  .cal-cell.today .cal-num{color:var(--ink);font-weight:700}
+  .cal-cell.done .cal-num{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--gold);color:#fff;font-weight:700}
+  .cal-cell.done.today{background:transparent;box-shadow:none}
+  .cal-cell.done.today .cal-num{box-shadow:0 0 0 2px var(--surface),0 0 0 3.5px var(--gold)}
   button:focus-visible,select:focus-visible,input:focus-visible,.check:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
   @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -986,6 +1002,31 @@ function milestonesHTML(){
     ${milestoneCard('Lifts logged',nlift,'lifts',SESH_MILES,v=>v.toLocaleString())}
   </div>`;
 }
+let calMon=null;  // first-of-month Date for the calendar view
+function calendarHTML(dayMap){
+  if(!calMon){ const n=new Date(); calMon=new Date(n.getFullYear(),n.getMonth(),1); }
+  const y=calMon.getFullYear(), mo=calMon.getMonth();
+  const monthName=calMon.toLocaleString('en-US',{month:'long',year:'numeric'});
+  const first=new Date(y,mo,1), startDow=(first.getDay()+6)%7;   // Monday-start
+  const daysIn=new Date(y,mo+1,0).getDate();
+  const today=new Date(); today.setHours(0,0,0,0);
+  let cells='';
+  for(let i=0;i<startDow;i++) cells+=`<div class="cal-cell empty"></div>`;
+  for(let day=1;day<=daysIn;day++){
+    const dt=new Date(y,mo,day), key=iso(dt);
+    const done=(dayMap[key]||0)>0, isToday=dt.getTime()===today.getTime(), fut=dt>today;
+    cells+=`<div class="cal-cell ${isToday?'today':''} ${fut?'fut':''} ${done?'done':''}"><span class="cal-num">${day}</span></div>`;
+  }
+  return `<div class="cal">
+    <div class="cal-head">
+      <button class="cal-nav" data-calnav="-1" aria-label="Previous month">${IC.cl}</button>
+      <span class="cal-title">${monthName}</span>
+      <button class="cal-nav" data-calnav="1" aria-label="Next month">${IC.cr}</button>
+    </div>
+    <div class="cal-dow">${['M','T','W','T','F','S','S'].map(d=>`<span>${d}</span>`).join('')}</div>
+    <div class="cal-grid">${cells}</div>
+  </div>`;
+}
 function historyHTML(){
   const m=doneDayMap();
   const sess=new Set(); Object.values(DB.exHistory||{}).forEach(h=>Object.keys(h.sessions||{}).forEach(a=>sess.add(a)));
@@ -997,6 +1038,7 @@ function historyHTML(){
       <div>Finish a workout to start building history. You'll see trends, a consistency map, and milestones here.</div></div>`;
     return h;
   }
+  h+=calendarHTML(m);
   h+=`<div class="hist-stats">
     <div class="hstat"><b>${totalLifts}</b><span>lifts logged</span></div>
     <div class="hstat"><b>${life.toLocaleString()}</b><span>${unit()} lifetime</span></div>
@@ -1326,8 +1368,9 @@ document.getElementById('nextWk').onclick=()=>{curMon=addDays(curMon,7);openDays
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;render();});
 
 view.addEventListener('click',e=>{
-  const t=e.target.closest('[data-openplanner],[data-toggle],[data-edit],[data-del],[data-add],[data-qroll],[data-qstep],[data-qkind],[data-loadweek],[data-histex],[data-bpwin],[data-bkup],[data-bkx],[data-startlifttoday],[data-claim]');
+  const t=e.target.closest('[data-openplanner],[data-toggle],[data-edit],[data-del],[data-add],[data-qroll],[data-qstep],[data-qkind],[data-loadweek],[data-histex],[data-bpwin],[data-bkup],[data-bkx],[data-startlifttoday],[data-claim],[data-calnav]');
   if(!t) return;
+  if(t.dataset.calnav){ if(!calMon){const n=new Date();calMon=new Date(n.getFullYear(),n.getMonth(),1);} calMon=new Date(calMon.getFullYear(),calMon.getMonth()+(+t.dataset.calnav),1); render(); return; }
   if(t.dataset.startlifttoday!==undefined){ const d=DAYS[(new Date().getDay()+6)%7]; startLift(d,null); return; }
   if(t.dataset.claim!==undefined){ claimReward(+t.dataset.claim); return; }
   if(t.dataset.bkup!==undefined){ exportData(); return; }
