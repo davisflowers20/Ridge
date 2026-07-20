@@ -1441,7 +1441,18 @@ const LIB={
   'Olympic':[{id:'powerclean',name:'Power Clean'},{id:'cj',name:'Clean & Jerk'},{id:'snatch',name:'Snatch'},{id:'pushpress',name:'Push Press'}]
 };
 const EX_GROUP={}; Object.keys(LIB).forEach(g=>LIB[g].forEach(x=>EX_GROUP[x.id]=g));
-function exGroupOf(id){ return EX_GROUP[id]||'Other'; }
+function exGroupOf(id){
+  if(EX_GROUP[id]) return EX_GROUP[id];
+  const n=String(id).toLowerCase();
+  if(/clean|snatch|jerk/.test(n)) return 'Olympic';
+  if(/squat|lunge|leg|calf|glute|hamstring|ham(?![a-z])|rdl|wallsit|hip_thrust|step_up/.test(n)) return 'Legs';
+  if(/plank|crunch|ab(?![a-z])|abs|core|twist|situp|sit_up|hollow|oblique|deadbug|dead_bug/.test(n)) return 'Core';
+  if(/row|pull|lat(?!eral)|deadlift|shrug|hang|chinup|chin_up|chin(?![a-z])/.test(n)) return 'Back';
+  if(/shoulder|delt|ohp|arnold|lateral|overhead|military|upright|face_pull/.test(n)) return 'Shoulders';
+  if(/bench|chest|fly|pec|dip|push_up|pushup|crossover|incline|decline|press/.test(n)) return 'Chest';
+  if(/curl|tricep|bicep|skull|pushdown|push_down|hammer|preacher|extension|kickback/.test(n)) return 'Arms';
+  return 'Other';
+}
 function bodyPartStats(winDays){
   const H=DB.exHistory||{}, G={};
   let cutoff=null;
@@ -1586,7 +1597,7 @@ function liftLauncherHTML(){
 }
 function startLift(day,routineId){
   const w=week(), id=uid(); let name='Lift', exercises=[];
-  if(routineId){ const rt=(DB.routines||[]).find(r=>r.id===routineId); if(rt){ name=rt.name; exercises=rt.exercises.map(x=>({exId:x.exId,name:x.name,note:x.note||'',sets:x.sets.map(s=>({reps:s.reps||'',weight:s.weight||'',warmup:!!s.warmup,done:false}))})); } }
+  if(routineId){ const rt=(DB.routines||[]).find(r=>r.id===routineId); if(rt){ name=rt.name; exercises=rt.exercises.map(x=>({exId:x.exId,name:x.name,note:exNote(x.exId)||x.note||'',sets:x.sets.map(s=>({reps:s.reps||'',weight:s.weight||'',warmup:!!s.warmup,done:false}))})); } }
   w.acts[day].push({id,type:'lift',done:false,data:{name,routineId:routineId||null,exercises}});
   save(); closeSheet(); openWorkout(day,id);
 }
@@ -1707,7 +1718,7 @@ function exerciseCardHTML(ex,ei){
   }).join('');
   return `<div class="ex-card">
     <div class="ex-head"><span class="ex-name">${esc(ex.name)}</span><button class="ex-del" data-exdel="${ei}" aria-label="Remove exercise">${IC.x}</button></div>
-    <input class="ex-note" value="${escAttr(ex.note||'')}" placeholder="Add a note…" data-exnoteinput="${ei}" aria-label="Exercise note">
+    <input class="ex-note" value="${escAttr(ex.note||'')}" placeholder="Note (saved for next time)…" data-exnoteinput="${ei}" aria-label="Exercise note">
     <div class="set-head"><span>Set</span><span>Prev</span><span>${timed?'+'+unit():unit()}</span><span>${timed?'Sec':'Reps'}</span><span></span><span></span></div>
     ${rows}
     <button class="ex-addset" data-addsetx="${ei}">${IC.plus} Add set</button>
@@ -1737,7 +1748,7 @@ woBody.addEventListener('input',e=>{
   const w=e.target.closest('[data-w]'); if(w){const[ei,si]=w.dataset.w.split(':').map(Number);woAct().data.exercises[ei].sets[si].weight=e.target.value;save();return;}
   const r=e.target.closest('[data-r]'); if(r){const[ei,si]=r.dataset.r.split(':').map(Number);woAct().data.exercises[ei].sets[si].reps=e.target.value;save();return;}
   if(e.target.dataset.woname!==undefined){woAct().data.name=e.target.value;save();return;}
-  const en=e.target.closest('[data-exnoteinput]'); if(en){woAct().data.exercises[+en.dataset.exnoteinput].note=e.target.value;save();return;}
+  const en=e.target.closest('[data-exnoteinput]'); if(en){const ex=woAct().data.exercises[+en.dataset.exnoteinput];ex.note=e.target.value;DB.exNotes=DB.exNotes||{};if(e.target.value.trim())DB.exNotes[ex.exId]=e.target.value;else delete DB.exNotes[ex.exId];save();return;}
 });
 /* set values persist on input; Prev/PR refresh on check, add, delete, or reopen */
 
@@ -1757,10 +1768,11 @@ function renderPicker(){
   sheet2Body.innerHTML=h;
 }
 function mkSets(exId){ const p=prevSession(exId,WO?WO.id:null); const n=Math.max(1,p.length); return Array.from({length:n},()=>({reps:'',weight:'',warmup:false,done:false})); }
-function addExerciseToWO(exId,name){woAct().data.exercises.push({exId,name,note:'',sets:mkSets(exId)});save();renderWorkout();const sc=woBody.querySelector('.wo-scroll');if(sc)sc.scrollTop=sc.scrollHeight;}
+function exNote(exId){ return (DB.exNotes&&DB.exNotes[exId])||''; }
+function addExerciseToWO(exId,name){woAct().data.exercises.push({exId,name,note:exNote(exId),sets:mkSets(exId)});save();renderWorkout();const sc=woBody.querySelector('.wo-scroll');if(sc)sc.scrollTop=sc.scrollHeight;}
 function toggleExerciseInWO(exId,name){
   const exs=woAct().data.exercises; const i=exs.findIndex(e=>e.exId===exId);
-  if(i>=0) exs.splice(i,1); else exs.push({exId,name,note:'',sets:mkSets(exId)});
+  if(i>=0) exs.splice(i,1); else exs.push({exId,name,note:exNote(exId),sets:mkSets(exId)});
   save(); renderWorkout(); renderPicker();
 }
 function saveAsRoutine(){
