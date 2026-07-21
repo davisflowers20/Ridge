@@ -379,6 +379,8 @@
   .set-row2 span{font-size:12px;color:var(--muted);display:block;margin-top:2px}
   .set-row2.danger-row b{color:#a8472f}
   .unit-toggle{display:flex;gap:4px;flex:none}
+  .rest-step{flex:none;gap:6px}
+  .rest-step .step-val{font-family:'Space Mono';min-width:46px;text-align:center}
   .ut{all:unset;cursor:pointer;font-family:'Space Mono';font-size:13px;padding:7px 13px;border-radius:8px;border:1px solid var(--line);color:var(--muted)}
   .ut.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
   .finishpop{position:fixed;inset:0;z-index:65;display:none;align-items:center;justify-content:center;pointer-events:none}
@@ -1629,7 +1631,7 @@ function stopWoTimer(){ clearInterval(woTick); woTick=null; }
 let restInt=null, restEnd=0;
 function startRest(){ const dur=DB.restDefault||120; restEnd=Date.now()+dur*1000; showRestBar(); }
 function skipRest(){ restEnd=0; clearInterval(restInt); restInt=null; const b=document.getElementById('restbar'); if(b){ b.classList.remove('show'); b.classList.remove('done'); } }
-function adjustRest(delta){ if(!restEnd) return; restEnd=Math.max(Date.now(), restEnd+delta*1000); DB.restDefault=Math.max(15,(DB.restDefault||120)+delta); save(); updateRestBar(); }
+function adjustRest(delta){ if(!restEnd) return; restEnd=Math.max(Date.now(), restEnd+delta*1000); updateRestBar(); }
 function showRestBar(){
   let b=document.getElementById('restbar');
   if(!b){ b=document.createElement('div'); b.id='restbar'; b.className='restbar';
@@ -1804,6 +1806,7 @@ sheet2El.addEventListener('click',e=>{
   if(e.target.closest('#exportBtn'))return exportData();
   if(e.target.closest('#importBtn'))return document.getElementById('importFile').click();
   if(e.target.closest('#introBtn')){closeSheet2();DB.onboarded=false;save();showWelcome();return;}
+  const rs=e.target.closest('[data-rest-set]'); if(rs){DB.restDefault=Math.max(15,Math.min(600,(DB.restDefault||120)+parseInt(rs.dataset.restSet,10)));save();openSettings();return;}
   const ub=e.target.closest('[data-unit]'); if(ub){DB.unit=ub.dataset.unit;save();render();openSettings();return;}
   const rb=e.target.closest('#resetBtn'); if(rb){armDelete('reset',rb,()=>resetAll());return;}
   const pt=e.target.closest('[data-plantoggle]'); if(pt){const[d,v]=pt.dataset.plantoggle.split(':');togglePlan(d,v);return;}
@@ -1955,6 +1958,7 @@ function openSettings(){
       <button class="set-row2" id="rewardsBtn"><div><b>Edit rewards</b><span>Your three reward tiers</span></div>${IC.cr}</button>
       <button class="set-row2" id="exportBtn"><div><b>Export data</b><span>Download a backup (.json)</span></div>${IC.cr}</button>
       <button class="set-row2" id="importBtn"><div><b>Import data</b><span>Restore from a backup file</span></div>${IC.cr}</button>
+      <div class="set-row2"><div><b>Rest timer</b><span>Same for every workout</span></div><div class="stepper rest-step"><button class="step" data-rest-set="-15" aria-label="Less">−</button><span class="step-val">${fmtDur(DB.restDefault||120)}</span><button class="step" data-rest-set="15" aria-label="More">+</button></div></div>
       <div class="set-row2"><div><b>Units</b><span>Weight label</span></div><div class="unit-toggle"><button class="ut ${unit()==='lb'?'on':''}" data-unit="lb">lb</button><button class="ut ${unit()==='kg'?'on':''}" data-unit="kg">kg</button></div></div>
       <button class="set-row2" id="introBtn"><div><b>Replay intro</b><span>Show the welcome screen again</span></div>${IC.cr}</button>
       <button class="set-row2 danger-row" id="resetBtn"><div><b>Reset all data</b><span>Erase everything — double-tap</span></div></button>
