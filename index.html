@@ -1523,12 +1523,12 @@ function bodyPartHTML(){
   if(!stats.length) return h+`<div class="hsec-meta" style="padding:4px 0">Nothing logged in this window.</div></div>`;
   stats.filter(s=>s.group!=='Olympic'&&s.group!=='Other').forEach(s=>{
     const [LO,HI]=BANDS[s.group]||[10,20];
-    const SCALE=Math.round(HI*1.25);
+    const SCALE=20;   // same axis for every group; bar maxes out, counter keeps climbing
     const pw=Math.round((s.sets/weeks)*10)/10;
     const shown=weeks===1?s.sets:pw;
     const st=pw>=LO&&pw<=HI?'ok':pw>HI?'high':pw>=LO*0.6?'near':'low';
     const stLbl=st==='ok'?'in range':st==='high'?'high':st==='near'?'close':'below';
-    const bandL=Math.round(LO/SCALE*100), bandW=Math.round((HI-LO)/SCALE*100);
+    const bandL=Math.min(100,Math.round(LO/SCALE*100)), bandW=Math.max(0,Math.min(100-bandL,Math.round((Math.min(HI,SCALE)-LO)/SCALE*100)));
     h+=`<div class="bp-row">
       <div class="bp-top"><span class="bp-name">${s.group} <small class="bp-band-lbl">${LO}–${HI}</small></span><span class="bp-sets ${st}">${shown}<small> sets/wk</small></span></div>
       <div class="bp-bar band"><b class="bp-zone" style="left:${bandL}%;width:${bandW}%"></b><i class="${st}" style="width:${Math.min(100,Math.round(pw/SCALE*100))}%"></i></div>
