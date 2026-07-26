@@ -255,6 +255,16 @@
   .picker-head h3{margin:0}
   .picker-done{all:unset;cursor:pointer;font-family:'Space Grotesk';font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--valley);background:var(--ink);padding:9px 17px;border-radius:999px;touch-action:manipulation}
   .picker-done:hover{background:var(--ink-soft)}
+  .ex-line{display:flex;align-items:center;gap:4px}
+  .ex-line .ex-pick{flex:1;min-width:0}
+  .ex-rm{all:unset;cursor:pointer;color:var(--muted);width:30px;height:30px;display:grid;place-items:center;border-radius:8px;flex:none}
+  .ex-rm .ic{width:14px;height:14px}
+  .ex-rm.arm{background:#b03b22;color:#fff}
+  .newex{margin-top:20px;padding-top:16px;border-top:1px solid var(--line)}
+  .newex-h{font-family:'Space Grotesk';font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .newex .rs-input{width:100%;box-sizing:border-box;margin-bottom:9px}
+  .newex-groups{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:11px}
+  .newex .btn{width:100%;box-sizing:border-box}
   .ex-check{color:var(--gold);font-weight:700;font-size:12px;letter-spacing:.04em}
   .custom-add{all:unset;cursor:pointer;display:block;text-align:center;padding:11px;border:1px dashed var(--gold);border-radius:11px;color:var(--gold-2);font-size:13px;margin:6px 0}
   .rt-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)}
@@ -921,7 +931,7 @@ function heroHTML(){
 }
 let histEx=null, bpWin='7';
 function exNameMap(){
-  const m={}; Object.keys(LIB).forEach(g=>LIB[g].forEach(x=>m[x.id]=x.name));
+  const m={},L=lib(); Object.keys(L).forEach(g=>L[g].forEach(x=>m[x.id]=x.name));
   Object.values(DB.weeks||{}).forEach(wk=>wk&&wk.acts&&DAYS.forEach(d=>(wk.acts[d]||[]).forEach(a=>{ if(a.type==='lift'&&Array.isArray(a.data.exercises))a.data.exercises.forEach(ex=>{ if(ex.exId&&ex.name)m[ex.exId]=ex.name; }); })));
   return m;
 }
@@ -1433,18 +1443,25 @@ const woEl=document.getElementById('workout'), woBody=document.getElementById('w
 const scrim2El=document.getElementById('scrim2'), sheet2El=document.getElementById('sheet2'), sheet2Body=document.getElementById('sheet2Body');
 let WO=null, pickerQuery='';
 
-const LIB={
-  'Chest':[{id:'bench_bb',name:'Bench Press (Barbell)'},{id:'incline_bb',name:'Incline Bench Press (Barbell)'},{id:'bench_db',name:'Bench Press (Dumbbell)'},{id:'incline_db',name:'Incline Press (Dumbbell)'},{id:'fly_m',name:'Chest Fly (Machine)'},{id:'cable_cross',name:'Cable Crossover'},{id:'pushup',name:'Push-Up'},{id:'dip',name:'Dip'}],
-  'Back':[{id:'deadlift',name:'Deadlift (Barbell)'},{id:'row_bb',name:'Bent-Over Row (Barbell)'},{id:'row_db',name:'Bent-Over Row (Dumbbell)'},{id:'pullup',name:'Pull-Up'},{id:'chinup',name:'Chin-Up'},{id:'latpull',name:'Lat Pulldown (Cable)'},{id:'seatedrow',name:'Seated Row (Cable)'},{id:'tbar',name:'T-Bar Row'},{id:'facepull',name:'Face Pull'},{id:'deadhang',name:'Dead Hang'}],
-  'Shoulders':[{id:'ohp',name:'Overhead Press (Barbell)'},{id:'shoulder_db',name:'Shoulder Press (Dumbbell)'},{id:'latraise',name:'Lateral Raise (Dumbbell)'},{id:'latraise_c',name:'Lateral Raise (Cable)'},{id:'frontraise',name:'Front Raise'},{id:'reardelt',name:'Rear Delt Fly'},{id:'arnold',name:'Arnold Press'},{id:'uprightrow',name:'Upright Row'}],
-  'Legs':[{id:'squat_bb',name:'Back Squat (Barbell)'},{id:'frontsquat',name:'Front Squat (Barbell)'},{id:'rdl',name:'Romanian Deadlift (Barbell)'},{id:'legpress',name:'Leg Press (Machine)'},{id:'lunge',name:'Lunge (Dumbbell)'},{id:'bss',name:'Bulgarian Split Squat'},{id:'legcurl',name:'Leg Curl (Machine)'},{id:'legext',name:'Leg Extension (Machine)'},{id:'calfraise',name:'Calf Raise'},{id:'wallsit',name:'Wall Sit'},{id:'hipthrust',name:'Hip Thrust (Barbell)'}],
-  'Arms':[{id:'curl_bb',name:'Bicep Curl (Barbell)'},{id:'curl_db',name:'Bicep Curl (Dumbbell)'},{id:'hammer',name:'Hammer Curl'},{id:'preacher',name:'Preacher Curl'},{id:'pushdown',name:'Tricep Pushdown (Cable)'},{id:'skull',name:'Skullcrusher'},{id:'cgbench',name:'Close-Grip Bench'},{id:'ohtri',name:'Overhead Tricep Extension'}],
-  'Core':[{id:'plank',name:'Plank'},{id:'sideplank',name:'Side Plank'},{id:'hollowhold',name:'Hollow Hold'},{id:'hlr',name:'Hanging Leg Raise'},{id:'cablecrunch',name:'Cable Crunch'},{id:'rtwist',name:'Russian Twist'},{id:'abwheel',name:'Ab Wheel'}],
-  'Olympic':[{id:'powerclean',name:'Power Clean'},{id:'cj',name:'Clean & Jerk'},{id:'snatch',name:'Snatch'},{id:'pushpress',name:'Push Press'}]
+const LIB_BASE={
+  'Chest':[{id:'bench_bb',name:'Bench Press (Barbell)'},{id:'bench_db',name:'Bench Press (Dumbbell)'},{id:'incline_db',name:'Incline Press (Dumbbell)'},{id:'fly_m',name:'Chest Fly (Machine)'},{id:'cable_cross',name:'Cable Crossover'},{id:'pushup',name:'Push-Up'},{id:'dip',name:'Dip'}],
+  'Back':[{id:'deadlift',name:'Deadlift (Barbell)'},{id:'row_bb',name:'Bent-Over Row (Barbell)'},{id:'row_db',name:'Bent-Over Row (Dumbbell)'},{id:'pullup',name:'Pull-Up'},{id:'latpull',name:'Lat Pulldown (Cable)'},{id:'seatedrow',name:'Seated Row (Cable)'},{id:'deadhang',name:'Dead Hang'}],
+  'Shoulders':[{id:'ohp',name:'Overhead Press (Barbell)'},{id:'shoulder_db',name:'Shoulder Press (Dumbbell)'},{id:'latraise',name:'Lateral Raise (Dumbbell)'},{id:'latraise_c',name:'Lateral Raise (Cable)'},{id:'frontraise',name:'Front Raise'}],
+  'Legs':[{id:'squat_bb',name:'Back Squat (Barbell)'},{id:'rdl',name:'Romanian Deadlift (Barbell)'},{id:'bss',name:'Bulgarian Split Squat'},{id:'calfraise',name:'Calf Raise'}],
+  'Arms':[{id:'curl_bb',name:'Bicep Curl (Barbell)'},{id:'curl_db',name:'Bicep Curl (Dumbbell)'},{id:'hammer',name:'Hammer Curl'},{id:'pushdown',name:'Tricep Pushdown (Cable)'},{id:'skull',name:'Skullcrusher'}],
+  'Core':[{id:'plank',name:'Plank'},{id:'hlr',name:'Hanging Leg Raise'},{id:'rtwist',name:'Russian Twist'},{id:'abwheel',name:'Ab Wheel'}]
 };
-const EX_GROUP={}; Object.keys(LIB).forEach(g=>LIB[g].forEach(x=>EX_GROUP[x.id]=g));
+const LIB_GROUPS=['Chest','Back','Shoulders','Legs','Arms','Core'];
+function lib(){
+  const out={}; LIB_GROUPS.forEach(g=>out[g]=LIB_BASE[g]?LIB_BASE[g].slice():[]);
+  Object.values(DB.customEx||{}).forEach(x=>{ const g=LIB_GROUPS.includes(x.group)?x.group:'Chest'; (out[g]=out[g]||[]).push({id:x.id,name:x.name,custom:true}); });
+  LIB_GROUPS.forEach(g=>out[g].sort((a,b)=>a.name.localeCompare(b.name)));
+  return out;
+}
+const EX_GROUP={}; Object.keys(LIB_BASE).forEach(g=>LIB_BASE[g].forEach(x=>EX_GROUP[x.id]=g));
 function exGroupOf(id){
   if(EX_GROUP[id]) return EX_GROUP[id];
+  const cu=DB.customEx&&DB.customEx[id]; if(cu&&cu.group) return cu.group;
   const n=String(id).toLowerCase();
   if(/clean|snatch|jerk/.test(n)) return 'Olympic';
   if(/squat|lunge|leg|calf|glute|hamstring|ham(?![a-z])|rdl|wallsit|hip_thrust|step_up/.test(n)) return 'Legs';
@@ -1542,8 +1559,8 @@ const slug=s=>String(s).toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/
 const num=v=>{const n=parseFloat(v);return isNaN(n)?0:n;};
 function fmtDur(sec){ sec=Math.max(0,Math.round(sec)); const h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60),s=sec%60; return h?`${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`:`${m}:${String(s).padStart(2,'0')}`; }
 const e1rm=s=>{const w=num(s.weight),r=num(s.reps);return (w>0&&r>0)?w*(1+r/30):0;};
-const TIMED_EX=new Set(['plank','sideplank','hollowhold','wallsit','deadhang']);
-function isTimedEx(exId){ return TIMED_EX.has(exId); }
+const TIMED_EX=new Set(['plank','deadhang']);
+function isTimedEx(exId){ if(TIMED_EX.has(exId)) return true; const n=String(exId).toLowerCase(); return /plank|hold|hang|wall_?sit|carry|iso/.test(n); }
 function exMetric(exId,s){ return isTimedEx(exId) ? num(s.reps) : e1rm(s); }
 const esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 const escAttr=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
@@ -1756,17 +1773,26 @@ woBody.addEventListener('input',e=>{
 
 function closeSheet2(){scrim2El.classList.remove('show');sheet2El.classList.remove('show');sheet2El.__cb=null;}
 function openPicker(){pickerQuery='';renderPicker();scrim2El.classList.add('show');sheet2El.classList.add('show');}
+let newExName='', newExGroup='Chest';
 function renderPicker(){
   const q=pickerQuery.trim().toLowerCase();
   const inWO=new Set(woAct().data.exercises.map(e=>e.exId));
   let h=`<div class="picker-head"><h3>Add exercise</h3><button class="picker-done" id="pickerDone">Done</button></div>`;
-  h+=`<input class="search" id="exSearch" value="${escAttr(pickerQuery)}" placeholder="Search, or type a custom name…">`;
-  if(q) h+=`<button class="custom-add" data-customex="${escAttr(pickerQuery.trim())}">${IC.plus} Add “${esc(pickerQuery.trim())}” as custom</button>`;
-  Object.keys(LIB).forEach(g=>{
-    const items=LIB[g].filter(x=>x.name.toLowerCase().includes(q));
+  h+=`<input class="search" id="exSearch" value="${escAttr(pickerQuery)}" placeholder="Search exercises…">`;
+  const L=lib(); let any=false;
+  Object.keys(L).forEach(g=>{
+    const items=L[g].filter(x=>x.name.toLowerCase().includes(q));
     if(!items.length)return;
-    h+=`<div class="grp">${g}</div>`+items.map(x=>{const added=inWO.has(x.id);return `<button class="ex-pick ${added?'added':''}" data-pickexid="${x.id}" data-pickexname="${escAttr(x.name)}">${esc(x.name)}${added?' <span class="ex-check">✓ added</span>':''}</button>`;}).join('');
+    any=true;
+    h+=`<div class="grp">${g}</div>`+items.map(x=>{const added=inWO.has(x.id);return `<div class="ex-line"><button class="ex-pick ${added?'added':''}" data-pickexid="${x.id}" data-pickexname="${escAttr(x.name)}">${esc(x.name)}${added?' <span class="ex-check">✓ added</span>':''}</button>${x.custom?`<button class="ex-rm" data-exlibdel="${x.id}" aria-label="Remove from library">${IC.x}</button>`:''}</div>`;}).join('');
   });
+  if(!any) h+=`<div class="hsec-meta" style="padding:12px 2px">No matches — add it below.</div>`;
+  h+=`<div class="newex">
+    <div class="newex-h">Add an exercise</div>
+    <input class="rs-input" id="newExName" value="${escAttr(newExName)}" placeholder="Exercise name">
+    <div class="newex-groups">${LIB_GROUPS.map(g=>`<button class="qsegb ${newExGroup===g?'on':''}" data-newexgrp="${g}">${g}</button>`).join('')}</div>
+    <button class="btn primary" id="newExAdd">${IC.plus} Add to library</button>
+  </div>`;
   sheet2Body.innerHTML=h;
 }
 function mkSets(exId){ const p=prevSession(exId,WO?WO.id:null); const n=Math.max(1,p.length); return Array.from({length:n},()=>({reps:'',weight:'',warmup:false,done:false})); }
@@ -1816,7 +1842,15 @@ sheet2El.addEventListener('click',e=>{
   const qds=e.target.closest('[data-qdstep]'); if(qds){const[i,d]=qds.dataset.qdstep.split(':');const qd=questDraft[+i];const step=qd.kind==='reps'?2:1;qd.target=Math.max(1,Math.min(qd.kind==='miles'?200:qd.kind==='reps'?300:60,qd.target+(+d)*step));renderPlanner();return;}
   const qdk=e.target.closest('[data-qdkind]'); if(qdk){const[i,v]=qdk.dataset.qdkind.split(':');const qd=questDraft[+i];if(qd.kind!==v){qd.kind=v;qd.target=v==='miles'?8:v==='reps'?16:v==='lifts'?3:6;}renderPlanner();return;}
   const pe=e.target.closest('[data-pickexid]'); if(pe){toggleExerciseInWO(pe.dataset.pickexid,pe.dataset.pickexname);return;}
-  const ce=e.target.closest('[data-customex]'); if(ce){const nm=ce.dataset.customex;addExerciseToWO('cx_'+slug(nm),nm);closeSheet2();return;}
+  const ng=e.target.closest('[data-newexgrp]'); if(ng){const inp=document.getElementById('newExName');if(inp)newExName=inp.value;newExGroup=ng.dataset.newexgrp;renderPicker();return;}
+  if(e.target.closest('#newExAdd')){
+    const inp=document.getElementById('newExName'); const nm=(inp?inp.value:newExName).trim();
+    if(!nm){flash('Name it first');return;}
+    const id='cx_'+slug(nm);
+    DB.customEx=DB.customEx||{}; DB.customEx[id]={id,name:nm,group:newExGroup}; save();
+    newExName=''; addExerciseToWO(id,nm); renderPicker(); flash(nm+' added to '+newExGroup); return;
+  }
+  const xd=e.target.closest('[data-exlibdel]'); if(xd){armDelete('exlib:'+xd.dataset.exlibdel, xd, ()=>{ if(DB.customEx) delete DB.customEx[xd.dataset.exlibdel]; save(); renderPicker(); });return;}
   const rd=e.target.closest('[data-routinedel]'); if(rd){armDelete('routinedel:'+rd.dataset.routinedel, rd, ()=>{const idx=(DB.routines||[]).findIndex(r=>r.id===rd.dataset.routinedel);if(idx>-1){DB.routines.splice(idx,1);save();openRoutineManager();}});return;}
   if(e.target.id==='nameSave'){const v=(document.getElementById('nameInput').value||'').trim();const cb=sheet2El.__cb;closeSheet2();if(cb)cb(v);return;}
 });
