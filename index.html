@@ -609,6 +609,69 @@
   .bp-status.ok{color:var(--pine);font-weight:700}
   .bp-status.high{color:var(--gold);font-weight:700}
   .bp-sets.ok{color:var(--pine)}
+  /* ---- tokens: bank, chips, ledger, shop ---- */
+  .bank{background-color:var(--ink);color:#fff;border-radius:var(--radius);padding:16px;margin-bottom:12px;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='150' viewBox='0 0 300 150'><g fill='none' stroke='%23ffffff' stroke-opacity='.07' stroke-width='1'><ellipse cx='232' cy='70' rx='74' ry='36' transform='rotate(-14 232 70)'/><ellipse cx='232' cy='70' rx='50' ry='24' transform='rotate(-14 232 70)'/><ellipse cx='232' cy='70' rx='26' ry='12' transform='rotate(-14 232 70)'/></g></svg>");background-repeat:no-repeat;background-position:right -10px center}
+  .bank-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .bank-lbl{font-family:'Space Grotesk';font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.55)}
+  .bank-n{font-family:'Space Mono';font-weight:700;font-size:40px;line-height:1;margin-top:5px;letter-spacing:-.02em}
+  .bank-n small{font-size:12px;color:rgba(255,255,255,.6);font-weight:400;margin-left:7px;letter-spacing:0}
+  .bank.neg .bank-n{color:#f0a58e}
+  .bank-shop{all:unset;cursor:pointer;flex:none;display:inline-flex;align-items:center;gap:5px;font-family:'Space Grotesk';font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:#fff;color:var(--ink);padding:10px 15px;border-radius:999px;touch-action:manipulation}
+  .bank-shop .ic{width:13px;height:13px}
+  .bank-flow{font-family:'Space Mono';font-size:10.5px;color:rgba(255,255,255,.6);margin-top:12px;padding-top:11px;border-top:1px solid rgba(255,255,255,.14)}
+  .bank-flow b{color:#fff}
+  .pin{margin-top:13px;padding-top:12px;border-top:1px solid rgba(255,255,255,.14)}
+  .pin-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+  .pin-n{font-family:'Space Grotesk';font-weight:600;font-size:13.5px}
+  .pin-c{font-family:'Space Mono';font-size:12px;color:var(--gold-2)}
+  .pin-bar{height:6px;background:rgba(255,255,255,.14);border-radius:99px;overflow:hidden;margin:7px 0 5px}
+  .pin-bar i{display:block;height:100%;background:var(--gold-2);border-radius:99px;transition:width .4s ease}
+  .pin-l{font-family:'Space Mono';font-size:10.5px;color:rgba(255,255,255,.6)}
+  .chips{display:flex;gap:7px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{all:unset;cursor:pointer;flex:none;display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:9px 13px;font-size:12.5px;white-space:nowrap;touch-action:manipulation}
+  .chip b{font-family:'Space Mono';font-size:11.5px;color:var(--gold)}
+  .chip.off{opacity:.45}
+  .chip.arm{border-color:#b03b22;color:#b03b22}
+  .ledg{margin-top:12px}
+  .ledg-row{display:flex;align-items:center;gap:9px;padding:8px 2px;border-bottom:1px solid var(--line);font-size:12.5px}
+  .ledg-d{font-family:'Space Mono';font-size:10.5px;color:var(--muted);width:40px;flex:none}
+  .ledg-t{flex:1;min-width:0;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ledg-v{font-family:'Space Mono';font-size:12px;font-weight:700;color:var(--gold);flex:none}
+  .ledg-x{all:unset;cursor:pointer;color:var(--muted);width:26px;height:26px;display:grid;place-items:center;flex:none}
+  .ledg-x .ic{width:12px;height:12px}
+  .ledg-x.arm{background:#b03b22;color:#fff;border-radius:7px}
+  .shop-bal{display:flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:13px 14px;margin:16px 0 4px}
+  .shop-bal-n{font-family:'Space Mono';font-weight:700;font-size:26px;color:var(--ink);line-height:1}
+  .shop-bal.neg .shop-bal-n{color:#b03b22}
+  .shop-bal-l{flex:1;font-family:'Space Grotesk';font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .shop-edit{all:unset;cursor:pointer;font-family:'Space Grotesk';font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:8px 14px;touch-action:manipulation}
+  .shop-grp{font-family:'Space Mono';font-size:10px;color:var(--muted);letter-spacing:.04em;margin:18px 0 8px}
+  .shop-item{all:unset;cursor:pointer;box-sizing:border-box;width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 13px;margin-bottom:7px;touch-action:manipulation}
+  .shop-item.locked{opacity:.5}
+  .shop-item.arm{border-color:#b03b22}
+  .shop-l{min-width:0}
+  .shop-n{display:block;font-family:'Space Grotesk';font-weight:600;font-size:13.5px;letter-spacing:.01em}
+  .shop-s{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+  .shop-c{font-family:'Space Mono';font-weight:700;font-size:14px;color:var(--gold);flex:none}
+  .shop-item.locked .shop-c{color:var(--line-2)}
+  .pin-tag{font-style:normal;font-family:'Space Grotesk';font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);border-radius:999px;padding:1px 6px;margin-left:5px;vertical-align:1px}
+  .shop-item.edit{cursor:default}
+  .stepper.mini{margin:0;gap:6px;flex:none}
+  .stepper.mini .step{width:26px;height:26px;font-size:15px}
+  .stepper.mini .step-val{font-size:14px;min-width:20px}
+  .shop-pin,.shop-del{all:unset;cursor:pointer;width:30px;height:30px;display:grid;place-items:center;border-radius:8px;color:var(--muted);flex:none}
+  .shop-pin.on{color:var(--gold)}
+  .shop-pin .ic-peak,.shop-del .ic{width:15px;height:15px}
+  .shop-del.arm{background:#b03b22;color:#fff}
+  .onb-count{font-family:'Space Mono';font-size:11px;color:var(--muted);margin:16px 0 -4px;line-height:1.5}
+  .bonus{display:flex;align-items:center;gap:7px;margin-top:9px;font-family:'Space Mono';font-size:10.5px;color:rgba(255,255,255,.6)}
+  .bonus b{color:#fff}
+  .bonus .ic-peak{width:13px;height:13px;flex:none;color:rgba(255,255,255,.45)}
+  .bonus.won{color:var(--gold-2)}
+  .bonus.won b{color:var(--gold-2)}
+  .bonus.won .ic-peak{color:var(--gold-2)}
+  .bonus-n{margin-left:auto;color:rgba(255,255,255,.45);flex:none}
   button:focus-visible,select:focus-visible,input:focus-visible,.check:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
   @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -667,7 +730,7 @@
   <div class="wsteps">
     <div class="wstep"><span class="wn">1</span><div><b>Plan</b><span>Set each day — run, lift, rest.</span></div></div>
     <div class="wstep"><span class="wn">2</span><div><b>Log</b><span>Track every set, run, and sprint.</span></div></div>
-    <div class="wstep"><span class="wn">3</span><div><b>Earn</b><span>Clear camps to unlock real rewards.</span></div></div>
+    <div class="wstep"><span class="wn">3</span><div><b>Earn</b><span>Bank tokens, spend them on what you actually want.</span></div></div>
   </div>
   <button class="btn primary" id="welcomeStart">Set your first week</button>
   <button class="link-btn" id="welcomeSkip">Skip for now</button>
@@ -742,15 +805,23 @@ const REWARDS = {
 
 function defaultQuests(){
   return [
-    {tier:'basecamp',  kind:'lifts', target:3,  reward:null},
-    {tier:'ridgeline', kind:'reps',  target:16, reward:null},
-    {tier:'summit',    kind:'miles', target:8,  reward:null}
+    {tier:'basecamp',  kind:'lifts', target:4,  reward:null},
+    {tier:'ridgeline', kind:'reps',  target:10, reward:null},
+    {tier:'summit',    kind:'miles', target:10, reward:null}
   ];
 }
-const KIND_LABEL={lifts:'lifts',miles:'miles',reps:'sprint sets',sessions:'sessions'};
-const KIND_OPTS=[['lifts','Lifts'],['miles','Miles'],['reps','Sprint sets'],['sessions','Sessions']];
+const KIND_LABEL={sets:'working sets',lifts:'lifts',miles:'miles',reps:'sprint sets',sessions:'sessions'};
+const KIND_OPTS=[['sets','Sets'],['miles','Miles'],['reps','Sprint sets'],['lifts','Lifts'],['sessions','Sessions']];
 function questKind(q){ return q.kind || (q.tier==='basecamp'?'lifts':q.tier==='ridgeline'?'reps':'miles'); }
 function isSprint(a){ return (a.type==='cardio'||a.type==='sprint') && (((a.data&&a.data.mode)||(a.type==='sprint'?'sprint':'run'))==='sprint'); }
+function actWorkingSets(a){
+  if(a.type!=='lift'||!a.data||!Array.isArray(a.data.exercises)) return 0;
+  let n=0;
+  a.data.exercises.forEach(ex=>(ex.sets||[]).forEach(s=>{
+    if(!s.warmup && num(s.reps)>0 && (num(s.weight)>0 || isTimedEx(ex.exId))) n++;
+  }));
+  return n;
+}
 function actMiles(a){
   if(a.type!=='cardio'&&a.type!=='run') return 0;
   if(isSprint(a)) return 0;                       // sprints are reps, not miles
@@ -763,6 +834,7 @@ function questProgressIn(wk,q){
   DAYS.forEach(d=>((wk.acts&&wk.acts[d])||[]).forEach(a=>{
     if(!a.done) return;
     if(kind==='lifts'){ if(a.type==='lift') v++; }
+    else if(kind==='sets'){ v+=actWorkingSets(a); }
     else if(kind==='miles'){ v+=actMiles(a); }
     else if(kind==='reps'){ if(isSprint(a)) v+=num(a.data&&a.data.reps); }
     else { v++; }
@@ -830,6 +902,10 @@ function migrate(db){
         W.plan[d]=[...new Set(W.plan[d].map(t=>t==='run'||t==='sprint'?'cardio':t))];
         W.acts[d].forEach(migrateAct);
       });
+      DAYS.forEach(d=>(W.acts[d]||[]).forEach(a=>{
+        if(a.type!=='lift'||!a.data||!Array.isArray(a.data.exercises))return;
+        a.data.exercises.forEach(ex=>{ if(ex.note&&ex.note.trim()){ db.exNotes=db.exNotes||{}; if(!db.exNotes[ex.exId]) db.exNotes[ex.exId]=ex.note; delete ex.note; } });
+      }));
       W.locked=!!W.locked;
       if(Array.isArray(W.quests)) W.quests.forEach(q=>{ if(!q)return;
         if(!q.kind){
@@ -1169,8 +1245,8 @@ function questsHTML(){
     h+=`<div class="quest ${s.done?'done':''}">
       <div class="q-top">
         <span class="q-icon">${campIcon(s.q.tier)}</span>
-        <div><div class="q-tier">${t.name}</div><div class="q-budget">Reward ${budgetLabel(t.key)}</div></div>
-        <span class="q-prog-num">${fmtProg(s.prog,kind)}/${s.q.target}<small class="q-unit">${kind==='miles'?' mi':kind==='reps'?' sets':''}</small></span>
+        <div><div class="q-tier">${t.name}</div><div class="q-budget">${s.done?'Camp reached':`${s.q.target} ${kl}`}</div></div>
+        <span class="q-prog-num">${fmtProg(s.prog,kind)}/${s.q.target}<small class="q-unit">${kind==='miles'?' mi':kind==='reps'?' sets':kind==='sets'?' sets':''}</small></span>
       </div>`;
     if(w.locked){
       h+=`<div class="q-readout"><span>${s.q.target} ${kl}</span><span class="q-lock">${IC.lock} locked</span></div>`;
@@ -1186,36 +1262,47 @@ function questsHTML(){
       </div>`;
     }
     h+=`<div class="bar"><i style="width:${pct}%"></i></div>`;
-    if(s.done){
-      if(!s.q.reward){ s.q.reward=rollReward(t.key); save(); }
-      const r=s.q.reward; const rn=r.name||r.n||'Treat yourself';
-      if(r.claimed){
-        h+=`<div class="reward claimed-r">
-          <div class="reward-lead">${IC.sun} Claimed · ${r.claimed.slice(5)}</div>
-          <div class="prize"><div class="info"><div class="name claimed-name">${esc(rn)}</div><div class="note">Enjoy it — you earned it.</div></div></div>
-        </div>`;
-      } else {
-        h+=`<div class="reward">
-          <div class="reward-lead">${IC.sun} Summit reached — claim your reward</div>
-          <div class="prize">
-            <div class="info"><div class="name">${esc(rn)}</div><div class="note">${budgetLabel(t.key)} range</div></div>
-            <button class="reroll" data-qroll="${i}" aria-label="Reroll reward">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4M21 3v6h-6"/></svg>
-            </button>
-            <button class="claim-btn" data-claim="${i}">Claim</button>
-          </div>
-        </div>`;
-      }
-    } else {
-      const kindU = kind==='miles'?' mi':kind==='reps'?' sets':'';
+    if(!s.done){
+      const kindU = kind==='miles'?' mi':kind==='reps'?' sets':kind==='sets'?' sets':'';
       const leftRaw = Math.max(0, s.q.target - s.prog);
       const left = kind==='miles' ? Math.round(leftRaw*10)/10 : Math.ceil(leftRaw);
-      h+=`<div class="locked">${IC.peak} ${left}${kindU} more to unlock your ${budgetLabel(t.key)} reward</div>`;
+      h+=`<div class="locked">${IC.peak} ${left}${kindU} to reach camp</div>`;
     }
     h+=`</div>`;
   });
+  h+=bankHTML();
   h+=summitLogHTML();
-  h+=claimsHTML();
+  return h;
+}
+
+function bankHTML(){
+  const bal=tokenBalance(), pin=pinnedItem();
+  let h=`<div class="eyebrow">Banked</div>`;
+  h+=`<div class="bank ${bal<0?'neg':''}">
+    <div class="bank-top">
+      <div><div class="bank-lbl">Balance</div><div class="bank-n">${bal}<small>token${bal===1?'':'s'}</small></div></div>
+      <button class="bank-shop" data-openshop>Shop ${IC.cr}</button>
+    </div>`;
+  if(pin){
+    const pct=Math.max(0,Math.min(100,Math.round(bal/pin.cost*100)));
+    const left=Math.max(0,pin.cost-bal);
+    h+=`<div class="pin">
+      <div class="pin-top"><span class="pin-n">${esc(pin.name)}</span><span class="pin-c">${Math.max(0,bal)}/${pin.cost}</span></div>
+      <div class="pin-bar"><i style="width:${pct}%"></i></div>
+      <div class="pin-l">${left>0?`${left} more to go`:'Ready — claim it in the shop'}</div>
+    </div>`;
+  }
+  const pw=perfectWeeks(), perfect=weekIsPerfect();
+  h+=`<div class="bank-flow">${bal>=TOKEN_CAP?'<b>At cap</b> — spend some before it stops counting':`<b>${SETS_PER_TOKEN} sets</b> · <b>${MILES_PER_TOKEN} miles</b> · <b>${SPRINTSETS_PER_TOKEN} sprint sets</b> = 1 token`}</div>`;
+  h+=`<div class="bonus ${perfect?'won':''}">${perfect?`${IC.peak} All three camps — <b>+${PERFECT_WEEK_BONUS}</b> banked this week`:`${IC.peak} Clear all three camps for <b>+${PERFECT_WEEK_BONUS}</b>`}${pw?`<span class="bonus-n">${pw} perfect wk${pw!==1?'s':''}</span>`:''}</div></div>`;
+  const quick=shop().filter(x=>x.tier==='small').slice(0,6);
+  h+=`<div class="chips">${quick.map(x=>`<button class="chip ${bal<x.cost?'off':''}" data-spend="${x.id}">${esc(x.name)} <b>${x.cost}</b></button>`).join('')}</div>`;
+  const recent=(DB.spends||[]).slice(-4).reverse();
+  if(recent.length){
+    h+=`<div class="ledg">`;
+    recent.forEach(x=>{ h+=`<div class="ledg-row"><span class="ledg-d">${x.date.slice(5)}</span><span class="ledg-t">${esc(x.name)}</span><span class="ledg-v">−${x.cost}</span><button class="ledg-x" data-unspend="${x.sid}" aria-label="Undo">${IC.x}</button></div>`; });
+    h+=`</div>`;
+  }
   return h;
 }
 
@@ -1292,35 +1379,56 @@ function ascentSVG(states){
 
 function budgetLabel(tierKey){ return (DB.budgets&&DB.budgets[tierKey])||(tierOf(tierKey)?tierOf(tierKey).budget:''); }
 function typeLabel(tp){ return tp==='any'?'any session':(TYPES[tp]?TYPES[tp].label:tp); }
-function rollReward(tierKey){
-  const pool=(DB.rewards&&DB.rewards[tierKey])||[];
-  if(!pool.length) return {name:'Treat yourself', price:budgetLabel(tierKey)};
-  const claimed=(DB.claims||[]).filter(c=>c.tier===tierKey).map(c=>c.name);
-  const recent=new Set(claimed.slice(-(pool.length-1)));  // rest of pool must cycle before repeat
-  const fresh=pool.filter(p=>!recent.has(p));
-  const pick=(fresh.length?fresh:pool);
-  return {name:pick[Math.floor(Math.random()*pick.length)], price:budgetLabel(tierKey)};
-}
-function claimReward(i){
-  const q=week().quests[i]; if(!q||!q.reward||q.reward.claimed) return;
-  q.reward.claimed=iso(new Date());
-  if(!Array.isArray(DB.claims)) DB.claims=[];
-  DB.claims.push({tier:q.tier,name:q.reward.name||q.reward.n||'Reward',date:q.reward.claimed});
-  save(); render(); flash('Claimed — go get it');
-}
 function defaultRewards(){ return {basecamp:[],ridgeline:[],summit:[]}; }
-const REWARD_SEEDS={
-  'Coffee & tea':{basecamp:['Specialty beans','A new mug'],ridgeline:['Pour-over kit','Tea sampler'],summit:['Burr grinder','Espresso gear']},
-  'Books':{basecamp:['A paperback','Used-book haul'],ridgeline:['Hardcover set','Audiobook credits'],summit:['Signed edition','An e-reader']},
-  'Gaming':{basecamp:['An indie game','In-game pass'],ridgeline:['A new release','Extra controller'],summit:['Game + accessory','A headset']},
-  'Drinks':{basecamp:['A nice bottle','Craft six-pack'],ridgeline:['Mid-shelf spirit','A good wine'],summit:['Top-shelf bottle','Tasting flight']},
-  'Food & dining':{basecamp:['Takeout night','Bakery treat'],ridgeline:['Dinner out','Specialty groceries'],summit:['Tasting menu','Chef night']},
-  'Gear & clothes':{basecamp:['Good socks','A tee'],ridgeline:['A flannel','Cap or belt'],summit:['Boots or denim','A jacket']},
-  'Music':{basecamp:['An album','Cables'],ridgeline:['A vinyl record','A pedal'],summit:['A plugin','Concert ticket']},
-  'Self-care':{basecamp:['A candle','Bath set'],ridgeline:['Skincare','Massage add-on'],summit:['Spa session','Wellness day']},
-  'Tech':{basecamp:['An accessory','A subscription'],ridgeline:['A peripheral','Smart gadget'],summit:['Device upgrade','Premium gadget']},
-  'Outdoors':{basecamp:['Trail snacks','Water bottle'],ridgeline:['A daypack','A layer'],summit:['Tent or boots','Gear upgrade']}
-};
+
+/* ================= TOKENS: earn by volume, spend in the shop ================= */
+const SETS_PER_TOKEN=6, MILES_PER_TOKEN=3, SPRINTSETS_PER_TOKEN=5, TOKEN_CAP=40, PERFECT_WEEK_BONUS=5;
+const SHOP_DEFAULT=[
+  {id:'coffee',   name:'Coffee out',                    cost:1,  tier:'small'},
+  {id:'pour',     name:'A pour of the good whiskey',    cost:2,  tier:'small'},
+  {id:'takeout',  name:'Takeout night',                 cost:3,  tier:'small'},
+  {id:'noemail',  name:'A no-email evening',            cost:3,  tier:'small'},
+  {id:'pack',     name:'MTG booster pack',              cost:4,  tier:'small'},
+  {id:'gaming',   name:'An hour of gaming',             cost:4,  tier:'small'},
+  {id:'slowmorn', name:'Slow morning / sleep in',       cost:4,  tier:'small'},
+  {id:'vinyl',    name:'A vinyl record or album',       cost:6,  tier:'mid'},
+  {id:'dinner',   name:'Dinner out',                    cost:8,  tier:'mid'},
+  {id:'mtgacc',   name:'MTG accessories',               cost:8,  tier:'mid'},
+  {id:'gamebook', name:'A game or a book',              cost:12, tier:'mid'},
+  {id:'mtgdeck',  name:'MTG deck / precon',             cost:15, tier:'big'},
+  {id:'cart',     name:"Something you've had in a cart",cost:18, tier:'big'},
+  {id:'denim',    name:'Denim or a jacket',             cost:20, tier:'big'},
+  {id:'bottle',   name:'The good bottle',               cost:25, tier:'big'}
+];
+const TIER_ORDER=['small','mid','big'];
+const TIER_NAME={small:'Small · everyday',mid:'Medium · weekly',big:'Big · save up'};
+function shop(){ if(!Array.isArray(DB.shop)||!DB.shop.length){ DB.shop=SHOP_DEFAULT.map(x=>Object.assign({},x)); save(); } return DB.shop; }
+function shopItem(id){ return shop().find(x=>x.id===id)||null; }
+function tokensEarned(){
+  let sets=0, miles=0, sprintSets=0;
+  Object.values(DB.exHistory||{}).forEach(h=>Object.values(h.sessions||{}).forEach(ss=>{ sets+=(ss.sets?ss.sets.length:0); }));
+  Object.values(DB.weeks||{}).forEach(wk=>{ if(!wk||!wk.acts)return; DAYS.forEach(d=>(wk.acts[d]||[]).forEach(a=>{
+    if(!a.done) return;
+    if(isSprint(a)) sprintSets+=num(a.data&&a.data.reps); else miles+=actMiles(a);
+  })); });
+  return Math.floor(sets/SETS_PER_TOKEN)+Math.floor(miles/MILES_PER_TOKEN)+Math.floor(sprintSets/SPRINTSETS_PER_TOKEN)+perfectWeeks()*PERFECT_WEEK_BONUS;
+}
+function perfectWeeks(){ let n=0; Object.values(DB.weeks||{}).forEach(wk=>{ if(weekCamps(wk)>=3) n++; }); return n; }
+function weekIsPerfect(){ return weekCamps(week())>=3; }
+function tokensSpent(){ return (DB.spends||[]).reduce((a,x)=>a+num(x.cost),0); }
+function tokenBalance(){
+  const raw=tokensEarned()-tokensSpent()-num(DB.tokenForfeit);
+  if(raw>TOKEN_CAP){ DB.tokenForfeit=num(DB.tokenForfeit)+(raw-TOKEN_CAP); save(); return TOKEN_CAP; }
+  return raw;
+}
+function spendToken(id){
+  const it=shopItem(id); if(!it) return;
+  DB.spends=DB.spends||[];
+  DB.spends.push({sid:'s'+Date.now().toString(36),id:it.id,name:it.name,cost:it.cost,date:iso(new Date())});
+  save(); flash(it.name+' — '+it.cost+' token'+(it.cost!==1?'s':''));
+}
+function undoSpend(sid){ DB.spends=(DB.spends||[]).filter(x=>x.sid!==sid); save(); flash('Spend removed'); }
+function pinnedItem(){ return DB.pinned?shopItem(DB.pinned):null; }
 
 /* ---------- sheet (add/edit activity) ---------- */
 const scrim=document.getElementById('scrim'), sheet=document.getElementById('sheet'), sheetBody=document.getElementById('sheetBody');
@@ -1395,11 +1503,15 @@ document.getElementById('nextWk').onclick=()=>{curMon=addDays(curMon,7);openDays
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;render();});
 
 view.addEventListener('click',e=>{
-  const t=e.target.closest('[data-openplanner],[data-toggle],[data-edit],[data-del],[data-add],[data-qroll],[data-qstep],[data-qkind],[data-loadweek],[data-histex],[data-bpwin],[data-bkup],[data-bkx],[data-startlifttoday],[data-claim],[data-calnav]');
+  const t=e.target.closest('[data-openplanner],[data-toggle],[data-edit],[data-del],[data-add],[data-qstep],[data-qkind],[data-loadweek],[data-histex],[data-bpwin],[data-bkup],[data-bkx],[data-startlifttoday],[data-calnav],[data-spend],[data-unspend],[data-openshop]');
   if(!t) return;
   if(t.dataset.calnav){ if(!calMon){const n=new Date();calMon=new Date(n.getFullYear(),n.getMonth(),1);} calMon=new Date(calMon.getFullYear(),calMon.getMonth()+(+t.dataset.calnav),1); render(); return; }
   if(t.dataset.startlifttoday!==undefined){ const d=DAYS[(new Date().getDay()+6)%7]; startLift(d,null); return; }
-  if(t.dataset.claim!==undefined){ claimReward(+t.dataset.claim); return; }
+  if(t.dataset.openshop!==undefined){ openShop(); return; }
+  if(t.dataset.unspend){ undoSpend(t.dataset.unspend); render(); return; }
+  if(t.dataset.spend){ const it=shopItem(t.dataset.spend); if(!it) return;
+    if(tokenBalance()<it.cost){ armDelete('ovr:'+it.id,t,()=>{spendToken(it.id);render();}); return; }
+    spendToken(it.id); render(); return; }
   if(t.dataset.bkup!==undefined){ exportData(); return; }
   if(t.dataset.bkx!==undefined){ DB.bkDismiss=Date.now(); save(); render(); return; }
   if(t.dataset.histex){ histEx=t.dataset.histex; render(); return; }
@@ -1409,10 +1521,9 @@ view.addEventListener('click',e=>{
   if(t.dataset.del){ armDelete('del:'+t.dataset.del, t, ()=>{ const [d,id]=t.dataset.del.split(':'); const arr=week().acts[d]; const idx=arr.findIndex(x=>x.id===id); if(idx>-1){ arr.splice(idx,1); save(); render(); } }); return; }
   if(t.dataset.edit){ const [d,id]=t.dataset.edit.split(':'); openSheet(d,id); return; }
   if(t.dataset.add!==undefined){ openSheet(t.dataset.add,null); return; }
-  if(t.dataset.qstep){ const [i,d]=t.dataset.qstep.split(':'); const q=week().quests[+i]; const kind=questKind(q); const step=kind==='reps'?2:1; q.target=Math.max(1,Math.min(kind==='miles'?200:kind==='reps'?300:60,(q.target||1)+(+d)*step)); q.reward=null; save(); render(); return; }
-  if(t.dataset.qkind){ const [i,v]=t.dataset.qkind.split(':'); const q=week().quests[+i]; if(questKind(q)!==v){ q.kind=v; delete q.type; q.target=v==='miles'?8:v==='reps'?16:v==='lifts'?3:6; q.reward=null; save(); render(); } return; }
+  if(t.dataset.qstep){ const [i,d]=t.dataset.qstep.split(':'); const q=week().quests[+i]; const kind=questKind(q); const step=kind==='sets'?5:kind==='reps'?2:1; q.target=Math.max(1,Math.min(kind==='miles'?200:kind==='reps'?300:kind==='sets'?200:60,(q.target||1)+(+d)*step)); q.reward=null; save(); render(); return; }
+  if(t.dataset.qkind){ const [i,v]=t.dataset.qkind.split(':'); const q=week().quests[+i]; if(questKind(q)!==v){ q.kind=v; delete q.type; q.target=v==='sets'?40:v==='miles'?10:v==='reps'?10:v==='lifts'?4:6; q.reward=null; save(); render(); } return; }
   if(t.dataset.loadweek){ curMon=mondayOf(new Date(t.dataset.loadweek+'T00:00:00')); render(); return; }
-  if(t.dataset.qroll){ const i=+t.dataset.qroll; const q=week().quests[i]; if(q.reward&&q.reward.claimed)return; q.reward=rollReward(q.tier); save(); render(); return; }
 });
 view.addEventListener('change',e=>{ if(e.target&&e.target.dataset&&e.target.dataset.histsel!==undefined){ histEx=e.target.value; render(); } });
 
@@ -1616,7 +1727,7 @@ function liftLauncherHTML(){
 }
 function startLift(day,routineId){
   const w=week(), id=uid(); let name='Lift', exercises=[];
-  if(routineId){ const rt=(DB.routines||[]).find(r=>r.id===routineId); if(rt){ name=rt.name; exercises=rt.exercises.map(x=>({exId:x.exId,name:x.name,note:exNote(x.exId)||x.note||'',sets:x.sets.map(s=>({reps:s.reps||'',weight:s.weight||'',warmup:!!s.warmup,done:false}))})); } }
+  if(routineId){ const rt=(DB.routines||[]).find(r=>r.id===routineId); if(rt){ name=rt.name; exercises=rt.exercises.map(x=>({exId:x.exId,name:x.name,sets:x.sets.map(s=>({reps:s.reps||'',weight:s.weight||'',warmup:!!s.warmup,done:false}))})); } }
   w.acts[day].push({id,type:'lift',done:false,data:{name,routineId:routineId||null,exercises}});
   save(); closeSheet(); openWorkout(day,id);
 }
@@ -1737,7 +1848,7 @@ function exerciseCardHTML(ex,ei){
   }).join('');
   return `<div class="ex-card">
     <div class="ex-head"><span class="ex-name">${esc(ex.name)}</span><button class="ex-del" data-exdel="${ei}" aria-label="Remove exercise">${IC.x}</button></div>
-    <input class="ex-note" value="${escAttr(ex.note||'')}" placeholder="Note (saved for next time)…" data-exnoteinput="${ei}" aria-label="Exercise note">
+    <input class="ex-note" value="${escAttr(exNote(ex.exId)||ex.note||'')}" placeholder="Note — sticks to this exercise…" data-exnoteinput="${ei}" aria-label="Exercise note">
     <div class="set-head"><span>Set</span><span>Prev</span><span>${timed?'+'+unit():unit()}</span><span>${timed?'Sec':'Reps'}</span><span></span><span></span></div>
     ${rows}
     <button class="ex-addset" data-addsetx="${ei}">${IC.plus} Add set</button>
@@ -1767,7 +1878,7 @@ woBody.addEventListener('input',e=>{
   const w=e.target.closest('[data-w]'); if(w){const[ei,si]=w.dataset.w.split(':').map(Number);woAct().data.exercises[ei].sets[si].weight=e.target.value;save();return;}
   const r=e.target.closest('[data-r]'); if(r){const[ei,si]=r.dataset.r.split(':').map(Number);woAct().data.exercises[ei].sets[si].reps=e.target.value;save();return;}
   if(e.target.dataset.woname!==undefined){woAct().data.name=e.target.value;save();return;}
-  const en=e.target.closest('[data-exnoteinput]'); if(en){const ex=woAct().data.exercises[+en.dataset.exnoteinput];ex.note=e.target.value;DB.exNotes=DB.exNotes||{};if(e.target.value.trim())DB.exNotes[ex.exId]=e.target.value;else delete DB.exNotes[ex.exId];save();return;}
+  const en=e.target.closest('[data-exnoteinput]'); if(en){const ex=woAct().data.exercises[+en.dataset.exnoteinput];const v=e.target.value;DB.exNotes=DB.exNotes||{};if(v.trim())DB.exNotes[ex.exId]=v;else delete DB.exNotes[ex.exId];delete ex.note;save();return;}
 });
 /* set values persist on input; Prev/PR refresh on check, add, delete, or reopen */
 
@@ -1797,10 +1908,10 @@ function renderPicker(){
 }
 function mkSets(exId){ const p=prevSession(exId,WO?WO.id:null); const n=Math.max(1,p.length); return Array.from({length:n},()=>({reps:'',weight:'',warmup:false,done:false})); }
 function exNote(exId){ return (DB.exNotes&&DB.exNotes[exId])||''; }
-function addExerciseToWO(exId,name){woAct().data.exercises.push({exId,name,note:exNote(exId),sets:mkSets(exId)});save();renderWorkout();const sc=woBody.querySelector('.wo-scroll');if(sc)sc.scrollTop=sc.scrollHeight;}
+function addExerciseToWO(exId,name){woAct().data.exercises.push({exId,name,sets:mkSets(exId)});save();renderWorkout();const sc=woBody.querySelector('.wo-scroll');if(sc)sc.scrollTop=sc.scrollHeight;}
 function toggleExerciseInWO(exId,name){
   const exs=woAct().data.exercises; const i=exs.findIndex(e=>e.exId===exId);
-  if(i>=0) exs.splice(i,1); else exs.push({exId,name,note:exNote(exId),sets:mkSets(exId)});
+  if(i>=0) exs.splice(i,1); else exs.push({exId,name,sets:mkSets(exId)});
   save(); renderWorkout(); renderPicker();
 }
 function saveAsRoutine(){
@@ -1828,7 +1939,7 @@ function openRoutineManager(){
 scrim2El.onclick=closeSheet2;
 sheet2El.addEventListener('click',e=>{
   if(e.target.id==='pickerDone'||e.target.id==='sheet2Cancel')return closeSheet2();
-  if(e.target.closest('#rewardsBtn')){ closeSheet2(); openRewards(false); return; }
+  if(e.target.closest('#rewardsBtn')){ closeSheet2(); openShop(); return; }
   if(e.target.closest('#exportBtn'))return exportData();
   if(e.target.closest('#importBtn'))return document.getElementById('importFile').click();
   if(e.target.closest('#introBtn')){closeSheet2();DB.onboarded=false;save();showWelcome();return;}
@@ -1839,8 +1950,8 @@ sheet2El.addEventListener('click',e=>{
   if(e.target.id==='planNext'){ questDraft=computeQuestDefaults(planDraft); planStep=2; renderPlanner(); return; }
   if(e.target.id==='planBack'){ planStep=1; renderPlanner(); return; }
   if(e.target.id==='planLock')return lockWeek();
-  const qds=e.target.closest('[data-qdstep]'); if(qds){const[i,d]=qds.dataset.qdstep.split(':');const qd=questDraft[+i];const step=qd.kind==='reps'?2:1;qd.target=Math.max(1,Math.min(qd.kind==='miles'?200:qd.kind==='reps'?300:60,qd.target+(+d)*step));renderPlanner();return;}
-  const qdk=e.target.closest('[data-qdkind]'); if(qdk){const[i,v]=qdk.dataset.qdkind.split(':');const qd=questDraft[+i];if(qd.kind!==v){qd.kind=v;qd.target=v==='miles'?8:v==='reps'?16:v==='lifts'?3:6;}renderPlanner();return;}
+  const qds=e.target.closest('[data-qdstep]'); if(qds){const[i,d]=qds.dataset.qdstep.split(':');const qd=questDraft[+i];const step=qd.kind==='sets'?5:qd.kind==='reps'?2:1;qd.target=Math.max(1,Math.min(qd.kind==='miles'?200:qd.kind==='reps'?300:qd.kind==='sets'?200:60,qd.target+(+d)*step));renderPlanner();return;}
+  const qdk=e.target.closest('[data-qdkind]'); if(qdk){const[i,v]=qdk.dataset.qdkind.split(':');const qd=questDraft[+i];if(qd.kind!==v){qd.kind=v;qd.target=v==='sets'?40:v==='miles'?10:v==='reps'?10:v==='lifts'?4:6;}renderPlanner();return;}
   const pe=e.target.closest('[data-pickexid]'); if(pe){toggleExerciseInWO(pe.dataset.pickexid,pe.dataset.pickexname);return;}
   const ng=e.target.closest('[data-newexgrp]'); if(ng){const inp=document.getElementById('newExName');if(inp)newExName=inp.value;newExGroup=ng.dataset.newexgrp;renderPicker();return;}
   if(e.target.closest('#newExAdd')){
@@ -1882,11 +1993,11 @@ function renderPlanStep(){
   sheet2Body.innerHTML=h;
 }
 function renderQuestStep(){
-  let h=`<h3>Set the week · quests</h3><div class="plan-note">Step 2 of 2 — lock your three goals. Suggested: lifts, sprint sets, cardio miles — tap to swap any tier's measure.</div>`;
+  let h=`<h3>Set the week · quests</h3><div class="plan-note">Step 2 of 2 — lock your three goals. Suggested: working sets, sprint sets, cardio miles — tap to swap any tier's measure.</div>`;
   questDraft.forEach((q,i)=>{
     const t=tierOf(q.tier), kl=KIND_LABEL[questKind(q)];
     h+=`<div class="qedit">
-      <div class="qedit-top"><span class="q-tier">${t.name}</span><span class="q-budget">Reward ${budgetLabel(t.key)}</span></div>
+      <div class="qedit-top"><span class="q-tier">${t.name}</span><span class="q-budget">${q.target} ${kl}</span></div>
       <div class="stepper">
         <button class="step" data-qdstep="${i}:-1" aria-label="Fewer">−</button>
         <span class="step-val">${q.target}</span>
@@ -1908,10 +2019,10 @@ function togglePlan(day,v){
 function computeQuestDefaults(plan){
   const counts={cardio:0,lift:0,other:0}; let total=0;
   DAYS.forEach(d=>(plan[d]||[]).forEach(t=>{ if(t!=='rest'&&counts[t]!=null){counts[t]++;total++;} }));
-  const lifts=Math.max(1,counts.lift||3);
-  const sets=16;
-  const miles=Math.max(4,(counts.cardio||2)*4);
-  return [{tier:'basecamp',kind:'lifts',target:lifts},{tier:'ridgeline',kind:'reps',target:sets},{tier:'summit',kind:'miles',target:miles}];
+  const lifts=Math.max(1,counts.lift||4);
+  const sprintSets=10;
+  const miles=Math.max(6,Math.round((counts.cardio||3)*3.5));
+  return [{tier:'basecamp',kind:'lifts',target:lifts},{tier:'ridgeline',kind:'reps',target:sprintSets},{tier:'summit',kind:'miles',target:miles}];
 }
 function lockWeek(){
   const w=week(); w.plan={}; DAYS.forEach(d=>w.plan[d]=planDraft[d]||[]);
@@ -1959,12 +2070,6 @@ function computeStreak(){
 function currentStreak(){ try{ return computeStreak(); }catch(e){ let s=0,m=mondayOf(new Date()); if(weekCamps(DB.weeks[iso(m)])<1)m=addDays(m,-7); while(DB.weeks[iso(m)]&&weekCamps(DB.weeks[iso(m)])>=1){s++;m=addDays(m,-7);} return s; } }
 function hasData(wk){ if(!wk)return false; const a=DAYS.some(d=>(wk.acts[d]||[]).length); const p=wk.plan&&DAYS.some(d=>(wk.plan[d]||[]).length); return a||p; }
 function streakGlyph(){ return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#c25b3c" stroke-width="2" stroke-linejoin="round"><path d="M3 20 L9 8 L13 14 L16 6 L21 20 Z"/></svg>`; }
-function claimsHTML(){
-  const cl=(DB.claims||[]).slice(-10).reverse(); if(!cl.length) return '';
-  let h=`<div class="eyebrow" style="margin-top:22px">Rewards claimed</div>`;
-  cl.forEach(c=>{ const t=tierOf(c.tier); h+=`<div class="claim-row"><span class="claim-star">★</span><span class="claim-name">${esc(c.name)}</span><span class="claim-meta">${t?t.name:c.tier} · ${c.date.slice(5)}</span></div>`; });
-  return h;
-}
 function summitLogHTML(){
   const entries=Object.keys(DB.weeks||{}).map(k=>({k,mon:new Date(k+'T00:00:00'),wk:DB.weeks[k]}))
     .filter(e=>hasData(e.wk)).sort((a,b)=>b.mon-a.mon).slice(0,8);
@@ -1989,7 +2094,7 @@ function summitLogHTML(){
 function openSettings(){
   sheet2Body.innerHTML=`<h3>Settings</h3>
     <div class="set-list">
-      <button class="set-row2" id="rewardsBtn"><div><b>Edit rewards</b><span>Your three reward tiers</span></div>${IC.cr}</button>
+      <button class="set-row2" id="rewardsBtn"><div><b>Reward shop</b><span>Spend tokens, edit the menu</span></div>${IC.cr}</button>
       <button class="set-row2" id="exportBtn"><div><b>Export data</b><span>Download a backup (.json)</span></div>${IC.cr}</button>
       <button class="set-row2" id="importBtn"><div><b>Import data</b><span>Restore from a backup file</span></div>${IC.cr}</button>
       <div class="set-row2"><div><b>Rest timer</b><span>Same for every workout</span></div><div class="stepper rest-step"><button class="step" data-rest-set="-15" aria-label="Less">−</button><span class="step-val">${fmtDur(DB.restDefault||120)}</span><button class="step" data-rest-set="15" aria-label="More">+</button></div></div>
@@ -2016,136 +2121,120 @@ function handleImport(file){
 }
 function resetAll(){ DB={weeks:{},onboarded:true,unit:unit(),rewards:defaultRewards(),budgets:{basecamp:'~$20',ridgeline:'~$50',summit:'~$100'}}; save(); curMon=mondayOf(new Date()); closeSheet2(); render(); flash('All data reset'); }
 
-/* ---- reward setup: areas -> specifics -> tiers ---- */
-const AREAS=[
- {key:'gaming',label:'Gaming',subs:[
-   {key:'video',label:'Video games',items:{b:['An indie game','In-game pass'],r:['A new release','Extra controller'],s:['AAA game + add-on','A gaming headset']}},
-   {key:'cards',label:'Trading cards',items:{b:['A booster pack','Card sleeves'],r:['A few packs','A new deck'],s:['A booster box','A graded card']}},
-   {key:'board',label:'Board & tabletop',items:{b:['A small board game','A dice set'],r:['A mid board game','Miniatures'],s:['A big-box game','A premium set']}},
-   {key:'ttrpg',label:'Tabletop RPG',items:{b:['A module / PDF','A dice set'],r:['A rulebook','A map pack'],s:['A collector rulebook','A terrain set']}}
- ]},
- {key:'food',label:'Food',subs:[
-   {key:'dining',label:'Dining out',items:{b:['Takeout night','A bakery treat'],r:['Dinner out','Brunch out'],s:['A tasting menu','A steak dinner']}},
-   {key:'cooking',label:'Cooking',items:{b:['A sauce or spice','A new ingredient'],r:['A kitchen tool','Specialty groceries'],s:['A good knife','A cookware piece']}},
-   {key:'sweets',label:'Sweets & snacks',items:{b:['Fancy chocolate','A snack haul'],r:['A dessert box','Artisan treats'],s:['A premium hamper']}}
- ]},
- {key:'drinks',label:'Drinks',subs:[
-   {key:'wine',label:'Wine',items:{b:['A bottle of wine'],r:['A nicer bottle','A wine pairing'],s:['A premium bottle','A tasting flight']}},
-   {key:'whiskey',label:'Whiskey & spirits',items:{b:['A single pour'],r:['A mid-shelf bottle'],s:['A top-shelf bottle']}},
-   {key:'beer',label:'Beer',items:{b:['A craft six-pack'],r:['A mixed case'],s:['A brewery haul']}},
-   {key:'coffee',label:'Coffee & tea',items:{b:['Specialty beans','A new mug'],r:['A pour-over kit','Tea sampler'],s:['A burr grinder','Espresso gear']}}
- ]},
- {key:'style',label:'Style & apparel',subs:[
-   {key:'clothes',label:'Clothes',items:{b:['A tee','Good socks'],r:['A flannel','A cap'],s:['Denim or boots','A jacket']}},
-   {key:'access',label:'Accessories',items:{b:['A belt'],r:['A wallet','A watch strap'],s:['A watch','Sunglasses']}},
-   {key:'groom',label:'Grooming',items:{b:['A grooming item'],r:['A barber visit'],s:['A fragrance','A grooming set']}}
- ]},
- {key:'music',label:'Music',subs:[
-   {key:'listen',label:'Listening',items:{b:['An album'],r:['A vinyl record','Earbuds'],s:['A vinyl haul','Nice headphones']}},
-   {key:'instr',label:'Gear & instruments',items:{b:['Picks / strings','Cables'],r:['A pedal','A mic accessory'],s:['A pedal or interface','An instrument upgrade']}},
-   {key:'prod',label:'Production',items:{b:['A sample pack'],r:['A plugin','A MIDI controller'],s:['A studio plugin','Studio gear']}},
-   {key:'live',label:'Live shows',items:{b:['A local show'],r:['A concert ticket'],s:['Premium seats']}}
- ]},
- {key:'books',label:'Books & learning',subs:[
-   {key:'reading',label:'Books',items:{b:['A paperback','Used-book haul'],r:['A hardcover set','Audiobook credits'],s:['A signed edition','An e-reader']}},
-   {key:'courses',label:'Courses & skills',items:{b:['A short course'],r:['A workshop','A subscription'],s:['A masterclass']}}
- ]},
- {key:'wellness',label:'Wellness',subs:[
-   {key:'relax',label:'Relax & self-care',items:{b:['A candle','A bath set'],r:['Skincare','A massage add-on'],s:['A spa session','A wellness day']}},
-   {key:'fitness',label:'Fitness gear',items:{b:['Resistance bands','A water bottle'],r:['Lifting straps','A foam roller'],s:['Training shoes','A wearable']}}
- ]},
- {key:'home',label:'Home & space',subs:[
-   {key:'decor',label:'Decor',items:{b:['A plant','A print'],r:['A lamp','Cozy textiles'],s:['A chair','A rug']}},
-   {key:'kitchenbar',label:'Kitchen & bar',items:{b:['A bar tool','A mug'],r:['Glassware set','A gadget'],s:['An appliance','A cookware set']}}
- ]},
- {key:'experiences',label:'Experiences',subs:[
-   {key:'dayout',label:'Day out',items:{b:['A movie night','A coffee date'],r:['A class together','A day trip'],s:['Event tickets','A night out']}},
-   {key:'getaway',label:'Getaways',items:{b:['A picnic'],r:['A day-trip fund'],s:['An overnight stay','Weekend fund']}}
- ]},
- {key:'tech',label:'Tech & gadgets',subs:[
-   {key:'access',label:'Accessories',items:{b:['An accessory','A subscription'],r:['A peripheral','A smart gadget'],s:['A device upgrade','A premium gadget']}},
-   {key:'photo',label:'Photo & creative',items:{b:['An SD card'],r:['A tripod','A filter'],s:['A lens','A creative device']}}
- ]},
- {key:'outdoors',label:'Outdoors & active',subs:[
-   {key:'trail',label:'Trail & camp',items:{b:['Trail snacks','A water bottle'],r:['A daypack','A layer'],s:['Tent or boots','Gear upgrade']}},
-   {key:'sports',label:'Sports',items:{b:['New grip / laces'],r:['Gloves / accessory','A kit'],s:['A racket / club','Premium kit']}}
- ]},
- {key:'hobbies',label:'Hobbies & craft',subs:[
-   {key:'making',label:'Making',items:{b:['Supplies refill'],r:['A tool','A kit'],s:['A machine','A premium kit']}},
-   {key:'collect',label:'Collecting',items:{b:['A small piece'],r:['A mid piece'],s:['A showpiece']}}
- ]}
-];
-const TIER_KEY={b:'basecamp',r:'ridgeline',s:'summit'};
-const RS_CAP=6;
-let rwDraft=null, rwBudget=null, rsOnboard=false, recog=null;
+/* ================= SHOP: spend tokens, edit the menu, pin a goal ================= */
+const SHOP_SEEDS={
+  'Gaming':[{name:'An hour of gaming',cost:4,tier:'small'},{name:'In-game pass',cost:3,tier:'small'},{name:'An indie game',cost:8,tier:'mid'},{name:'A new release',cost:15,tier:'big'}],
+  'MTG & cards':[{name:'MTG booster pack',cost:4,tier:'small'},{name:'MTG accessories',cost:8,tier:'mid'},{name:'MTG deck / precon',cost:15,tier:'big'},{name:'A booster box',cost:25,tier:'big'}],
+  'Coffee & food':[{name:'Coffee out',cost:1,tier:'small'},{name:'Takeout night',cost:3,tier:'small'},{name:'Dinner out',cost:8,tier:'mid'},{name:'A tasting menu',cost:20,tier:'big'}],
+  'Drinks':[{name:'A pour of the good whiskey',cost:2,tier:'small'},{name:'A craft six-pack',cost:3,tier:'small'},{name:'A nice bottle of wine',cost:8,tier:'mid'},{name:'The good bottle',cost:25,tier:'big'}],
+  'Time & rest':[{name:'A no-email evening',cost:3,tier:'small'},{name:'Slow morning / sleep in',cost:4,tier:'small'},{name:'A guilt-free rest day',cost:4,tier:'small'},{name:'A day off the grid',cost:15,tier:'big'}],
+  'Music':[{name:'An album',cost:3,tier:'small'},{name:'A vinyl record',cost:6,tier:'mid'},{name:'A pedal or accessory',cost:12,tier:'mid'},{name:'Concert tickets',cost:20,tier:'big'}],
+  'Books':[{name:'A paperback',cost:4,tier:'small'},{name:'A hardcover',cost:8,tier:'mid'},{name:'A signed edition',cost:18,tier:'big'}],
+  'Style':[{name:'Good socks',cost:2,tier:'small'},{name:'A tee',cost:4,tier:'small'},{name:'A flannel',cost:10,tier:'mid'},{name:'Denim or a jacket',cost:20,tier:'big'}],
+  'Outdoors':[{name:'Trail snacks',cost:2,tier:'small'},{name:'A water bottle',cost:4,tier:'small'},{name:'A daypack',cost:12,tier:'mid'},{name:'Boots or a tent',cost:25,tier:'big'}],
+  'Tech':[{name:'An accessory',cost:4,tier:'small'},{name:'A peripheral',cost:12,tier:'mid'},{name:'A device upgrade',cost:25,tier:'big'}],
+  'Home':[{name:'A candle',cost:2,tier:'small'},{name:'A plant',cost:3,tier:'small'},{name:'Glassware or a bar tool',cost:8,tier:'mid'},{name:'A rug or a chair',cost:25,tier:'big'}],
+  'Self-care':[{name:'Skincare',cost:6,tier:'mid'},{name:'A massage',cost:12,tier:'mid'},{name:'A spa session',cost:20,tier:'big'}]
+};
+let shopEdit=false, newItemName='', newItemTier='small', shopOnboard=false, seedPicked=[];
 const rsetupEl=document.getElementById('rsetup'), rsetupBody=document.getElementById('rsetupBody');
-function voiceSupported(){ return !!(window.SpeechRecognition||window.webkitSpeechRecognition); }
-function openRewards(onboard){
-  rsOnboard=!!onboard;
-  if(onboard){ rwDraft={basecamp:[],ridgeline:[],summit:[]}; }
-  else { rwDraft={basecamp:((DB.rewards&&DB.rewards.basecamp)||[]).slice(),ridgeline:((DB.rewards&&DB.rewards.ridgeline)||[]).slice(),summit:((DB.rewards&&DB.rewards.summit)||[]).slice()}; }
-  rwBudget=Object.assign({basecamp:'~$20',ridgeline:'~$50',summit:'~$100'}, DB.budgets||{});
-  renderRewards(); rsetupEl.classList.add('show'); document.body.style.overflow='hidden';
+function openShop(onboard){
+  shopOnboard=!!onboard; shopEdit=false; seedPicked=[];
+  if(shopOnboard){ DB.shop=[]; save(); }
+  renderShop(); rsetupEl.classList.add('show'); document.body.style.overflow='hidden';
 }
-function closeRewards(){ if(recog){try{recog.stop();}catch(e){}recog=null;} rsetupEl.classList.remove('show'); document.body.style.overflow=''; }
-function captureBudgets(){ rsetupEl.querySelectorAll('[data-budget]').forEach(b=>{ rwBudget[b.dataset.budget]=b.value.trim()||rwBudget[b.dataset.budget]; }); }
-function renderRewards(){
-  const vOK=voiceSupported();
-  let h=`<div class="rs-head"><h2>Your rewards</h2><p class="tagline">Keep each tier to a few things you'll be genuinely pumped to claim — up to ${RS_CAP} each, so every win lands.${vOK?' Tap the mic and just say them.':''}</p></div>`;
-  [['basecamp','Basecamp'],['ridgeline','Ridgeline'],['summit','Summit']].forEach(([tk,nm])=>{
-    const items=rwDraft[tk]||[], full=items.length>=RS_CAP;
-    h+=`<div class="rs-tier">
-      <div class="rs-tier-top"><span class="q-tier">${nm}</span><input class="rs-budget" data-budget="${tk}" value="${escAttr(rwBudget[tk]||'')}" placeholder="~$20" aria-label="${nm} budget"></div>
-      <div class="rs-items">${items.length?items.map((it,idx)=>`<span class="rs-item">${esc(it)}<button class="rs-del" data-rdel="${tk}:${idx}" aria-label="Remove">${IC.x}</button></span>`).join(''):'<span class="rs-empty">Nothing yet — add a few good ones</span>'}</div>
-      <div class="rs-add">
-        <input class="rs-input" data-radd="${tk}" placeholder="${full?'Full — remove one to add':'Add a reward…'}" ${full?'disabled':''} aria-label="Add ${nm} reward">
-        ${vOK?`<button class="rs-mic" data-mic="${tk}" ${full?'disabled':''} aria-label="Speak rewards">${IC.mic}</button>`:''}
-        <button class="rs-addbtn" data-raddbtn="${tk}" ${full?'disabled':''}>Add</button>
-      </div>
-      <div class="rs-foot"><button class="rs-clear" data-rclear="${tk}" ${items.length?'':'style="visibility:hidden"'}>Clear all</button><span class="rs-count">${items.length}/${RS_CAP}</span></div>
-    </div>`;
+function closeShop(){
+  if(shopOnboard && !(DB.shop||[]).length){ DB.shop=SHOP_DEFAULT.map(x=>Object.assign({},x)); save(); }
+  rsetupEl.classList.remove('show'); document.body.style.overflow='';
+  const wasOnboard=shopOnboard; shopOnboard=false;
+  if(wasOnboard) openPlanner(); else render();
+}
+function seedShop(area){
+  const items=SHOP_SEEDS[area]||[]; const cur=shop();
+  const i=seedPicked.indexOf(area);
+  if(i>=0){ seedPicked.splice(i,1); items.forEach(it=>{ const id='it_'+slug(it.name); DB.shop=shop().filter(x=>x.id!==id); if(DB.pinned===id)DB.pinned=null; }); }
+  else { seedPicked.push(area); items.forEach(it=>{ const id='it_'+slug(it.name); if(!cur.some(x=>x.id===id)) cur.push({id,name:it.name,cost:it.cost,tier:it.tier}); }); }
+  save(); renderShop();
+}
+function renderShop(){
+  const bal=tokenBalance();
+  let h='';
+  if(shopOnboard){
+    h+=`<div class="rs-head"><h2>What are you working for?</h2><p class="tagline">Training banks <b>tokens</b> — <b>${SETS_PER_TOKEN}</b> working sets, <b>${MILES_PER_TOKEN}</b> miles, or <b>${SPRINTSETS_PER_TOKEN}</b> sprint sets each. Clear all three camps in a week for <b>+${PERFECT_WEEK_BONUS}</b>. Spend them on this.</p></div>`;
+    h+=`<div class="rs-int"><div class="rs-lbl">Tap what you'd actually want</div><div class="rs-chips">`;
+    Object.keys(SHOP_SEEDS).forEach(k=>{ const on=seedPicked.includes(k); h+=`<button class="rs-chip ${on?'on':''}" data-seed="${escAttr(k)}">${on?'':IC.plus} ${esc(k)}</button>`; });
+    h+=`</div></div>`;
+    const n=shop().length;
+    h+=`<div class="onb-count">${n?`${n} item${n!==1?'s':''} in your shop — tweak any price below`:'Nothing yet — pick a few areas above, or add your own at the bottom'}</div>`;
+  } else {
+    h+=`<div class="rs-head"><h2>Shop</h2><p class="tagline">Training earns tokens. Spend them here — and log it even when you dip under.</p></div>`;
+    h+=`<div class="shop-bal ${bal<0?'neg':''}"><span class="shop-bal-n">${bal}</span><span class="shop-bal-l">token${bal===1?'':'s'} banked</span><button class="shop-edit" data-shopedit>${shopEdit?'Done':'Edit'}</button></div>`;
+  }
+  TIER_ORDER.forEach(tr=>{
+    const items=shop().filter(x=>x.tier===tr).sort((a,b)=>a.cost-b.cost);
+    if(!items.length) return;
+    h+=`<div class="shop-grp">${TIER_NAME[tr]}</div>`;
+    items.forEach(x=>{
+      const afford=bal>=x.cost, pinned=DB.pinned===x.id;
+      if(shopEdit||shopOnboard){
+        h+=`<div class="shop-item edit">
+          <span class="shop-n">${esc(x.name)}</span>
+          <span class="stepper mini"><button class="step" data-costadj="${x.id}:-1" aria-label="Cheaper">−</button><span class="step-val">${x.cost}</span><button class="step" data-costadj="${x.id}:1" aria-label="Dearer">+</button></span>
+          <button class="shop-pin ${pinned?'on':''}" data-pin="${x.id}" aria-label="Pin as goal">${IC.peak}</button>
+          <button class="shop-del" data-itemdel="${x.id}" aria-label="Remove">${IC.x}</button>
+        </div>`;
+      } else {
+        h+=`<button class="shop-item ${afford?'':'locked'}" data-buy="${x.id}">
+          <span class="shop-l"><span class="shop-n">${esc(x.name)}${pinned?' <i class="pin-tag">goal</i>':''}</span>${afford?'':`<span class="shop-s">${x.cost-bal} more to unlock</span>`}</span>
+          <span class="shop-c">${x.cost}</span>
+        </button>`;
+      }
+    });
   });
-  h+=`<div class="sheet-actions"><button class="btn ghost" id="rsBack">${rsOnboard?'Skip':'Cancel'}</button><button class="btn primary" id="rsSave">${rsOnboard?'Save & continue →':'Save'}</button></div>`;
+  if(shopEdit||shopOnboard){
+    h+=`<div class="newex">
+      <div class="newex-h">Add an item</div>
+      <input class="rs-input" id="newItemName" value="${escAttr(newItemName)}" placeholder="Reward name">
+      <div class="newex-groups">${TIER_ORDER.map(t=>`<button class="qsegb ${newItemTier===t?'on':''}" data-itemtier="${t}">${TIER_NAME[t].split(' ·')[0]}</button>`).join('')}</div>
+      <button class="btn primary" id="newItemAdd">${IC.plus} Add to shop</button>
+    </div>`;
+  }
+  const recent=(DB.spends||[]).slice(-6).reverse();
+  if(recent.length && !shopEdit && !shopOnboard){
+    h+=`<div class="eyebrow" style="margin-top:22px">Recently spent</div><div class="ledg">`;
+    recent.forEach(x=>{ h+=`<div class="ledg-row"><span class="ledg-d">${x.date.slice(5)}</span><span class="ledg-t">${esc(x.name)}</span><span class="ledg-v">−${x.cost}</span><button class="ledg-x" data-unspend2="${x.sid}" aria-label="Undo">${IC.x}</button></div>`; });
+    h+=`</div>`;
+  }
+  h+=`<div class="sheet-actions">${shopOnboard?`<button class="btn primary" id="shopClose">Continue →</button>`:`<button class="btn primary" id="shopClose">Done</button>`}</div>`;
   rsetupBody.innerHTML=h;
 }
-function addOne(tk,v){ v=(v||'').trim(); if(!v)return false; if(rwDraft[tk].length>=RS_CAP)return false; if(rwDraft[tk].some(x=>x.toLowerCase()===v.toLowerCase()))return false; rwDraft[tk].push(v); return true; }
-function addReward(tk){ const inp=rsetupEl.querySelector('[data-radd="'+tk+'"]'); const v=inp?inp.value:''; if(!v.trim())return; if(rwDraft[tk].length>=RS_CAP){flash('Up to '+RS_CAP+' per tier — remove one first');return;} addOne(tk,v); captureBudgets(); renderRewards(); }
-function addRewardsFromText(tk,text){
-  const parts=text.split(/,|;|\n|·|\bthen\b|\band\b/i).map(s=>s.replace(/^(a|an|some|the)\s+/i,'').trim()).filter(Boolean);
-  let added=0; parts.forEach(p=>{ p=p.charAt(0).toUpperCase()+p.slice(1); if(addOne(tk,p)) added++; });
-  captureBudgets(); renderRewards(); if(added) flash(added+' added to '+tk); else flash('Nothing new caught — try again');
-}
-function toggleVoice(tk,btn){
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){ flash('Voice not supported here'); return; }
-  if(recog){ try{recog.stop();}catch(e){} return; }
-  const inp=rsetupEl.querySelector('[data-radd="'+tk+'"]'); let finalText='';
-  recog=new SR(); recog.lang='en-US'; recog.interimResults=true; recog.continuous=true;
-  btn.classList.add('listening');
-  recog.onresult=(e)=>{ let interim=''; for(let i=e.resultIndex;i<e.results.length;i++){ const r=e.results[i]; if(r.isFinal) finalText+=r[0].transcript+', '; else interim+=r[0].transcript; } if(inp) inp.value=(finalText+interim).trim(); };
-  recog.onerror=(e)=>{ btn.classList.remove('listening'); recog=null; if(e&&e.error==='not-allowed') flash('Mic permission blocked'); };
-  recog.onend=()=>{ btn.classList.remove('listening'); recog=null; const txt=inp?inp.value.trim():''; if(txt){ if(inp) inp.value=''; addRewardsFromText(tk,txt); } };
-  try{ recog.start(); flash('Listening… tap mic to stop'); }catch(err){ btn.classList.remove('listening'); recog=null; }
-}
 rsetupEl.addEventListener('click',e=>{
-  const rc=e.target.closest('[data-rclear]'); if(rc){ rwDraft[rc.dataset.rclear]=[]; captureBudgets(); renderRewards(); return; }
-  const rd=e.target.closest('[data-rdel]'); if(rd){ const [tk,idx]=rd.dataset.rdel.split(':'); rwDraft[tk].splice(+idx,1); captureBudgets(); renderRewards(); return; }
-  const mc=e.target.closest('[data-mic]'); if(mc){ toggleVoice(mc.dataset.mic, mc); return; }
-  const ab=e.target.closest('[data-raddbtn]'); if(ab){ addReward(ab.dataset.raddbtn); return; }
-  if(e.target.id==='rsSave'){ captureBudgets();
-    ['basecamp','ridgeline','summit'].forEach(tk=>rwDraft[tk]=(rwDraft[tk]||[]).filter(Boolean));
-    DB.rewards={basecamp:rwDraft.basecamp,ridgeline:rwDraft.ridgeline,summit:rwDraft.summit}; DB.budgets=rwBudget; DB.rewardsSet=true; save();
-    closeRewards(); if(rsOnboard){ openPlanner(); } else { render(); flash('Rewards saved'); } return; }
-  if(e.target.id==='rsBack'){ closeRewards(); if(rsOnboard) openPlanner(); return; }
+  if(e.target.closest('#shopClose')) return closeShop();
+  const sd=e.target.closest('[data-seed]'); if(sd){ seedShop(sd.dataset.seed); return; }
+  if(e.target.closest('[data-shopedit]')){ const inp=document.getElementById('newItemName'); if(inp)newItemName=inp.value; shopEdit=!shopEdit; renderShop(); return; }
+  const b=e.target.closest('[data-buy]'); if(b){ const it=shopItem(b.dataset.buy); if(!it)return;
+    if(tokenBalance()<it.cost){ armDelete('shopovr:'+it.id,b,()=>{spendToken(it.id);renderShop();}); return; }
+    spendToken(it.id); renderShop(); return; }
+  const ca=e.target.closest('[data-costadj]'); if(ca){ const [id,d]=ca.dataset.costadj.split(':'); const it=shopItem(id); if(it){ it.cost=Math.max(1,Math.min(99,it.cost+(+d))); save(); renderShop(); } return; }
+  const pn=e.target.closest('[data-pin]'); if(pn){ DB.pinned = DB.pinned===pn.dataset.pin?null:pn.dataset.pin; save(); renderShop(); return; }
+  const dl=e.target.closest('[data-itemdel]'); if(dl){ armDelete('item:'+dl.dataset.itemdel, dl, ()=>{ const id=dl.dataset.itemdel; DB.shop=shop().filter(x=>x.id!==id); if(DB.pinned===id)DB.pinned=null; save(); renderShop(); }); return; }
+  const us=e.target.closest('[data-unspend2]'); if(us){ undoSpend(us.dataset.unspend2); renderShop(); return; }
+  const tt=e.target.closest('[data-itemtier]'); if(tt){ const inp=document.getElementById('newItemName'); if(inp)newItemName=inp.value; newItemTier=tt.dataset.itemtier; renderShop(); return; }
+  if(e.target.closest('#newItemAdd')){
+    const inp=document.getElementById('newItemName'); const nm=(inp?inp.value:newItemName).trim();
+    if(!nm){flash('Name it first');return;}
+    shop().push({id:'it_'+slug(nm),name:nm,cost:newItemTier==='big'?15:newItemTier==='mid'?8:3,tier:newItemTier});
+    newItemName=''; save(); renderShop(); flash(nm+' added'); return;
+  }
 });
-rsetupEl.addEventListener('keydown',e=>{ if(e.key==='Enter'&&e.target.classList&&e.target.classList.contains('rs-input')){ e.preventDefault(); addReward(e.target.dataset.radd); } });
+rsetupEl.addEventListener('input',e=>{ if(e.target.id==='newItemName') newItemName=e.target.value; });
 
 document.getElementById('gearBtn').onclick=openSettings;
 document.getElementById('wkBtn').onclick=()=>{ curMon=mondayOf(new Date()); render(); };
 
 /* ================= FIRST RUN ================= */
 function showWelcome(){ document.getElementById('welcome').classList.add('show'); }
-function closeWelcome(start){ DB.onboarded=true; save(); document.getElementById('welcome').classList.remove('show'); if(start) openRewards(true); }
+function closeWelcome(start){ DB.onboarded=true; save(); document.getElementById('welcome').classList.remove('show'); if(start) openShop(true); }
 document.getElementById('welcomeStart').onclick=()=>closeWelcome(true);
 document.getElementById('welcomeSkip').onclick=()=>closeWelcome(false);
 
