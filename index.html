@@ -1297,7 +1297,7 @@ function bankHTML(){
   h+=`<div class="bonus ${perfect?'won':''}">${perfect?`${IC.peak} All three camps — <b>+${PERFECT_WEEK_BONUS}</b> banked this week`:`${IC.peak} Clear all three camps for <b>+${PERFECT_WEEK_BONUS}</b>`}${pw?`<span class="bonus-n">${pw} perfect wk${pw!==1?'s':''}</span>`:''}</div></div>`;
   const quick=shop().filter(x=>x.tier==='small').slice(0,6);
   h+=`<div class="chips">${quick.map(x=>`<button class="chip ${bal<x.cost?'off':''}" data-spend="${x.id}">${esc(x.name)} <b>${x.cost}</b></button>`).join('')}</div>`;
-  const recent=(DB.spends||[]).slice(-4).reverse();
+  const recent=(DB.spends||[]).slice(-3).reverse();
   if(recent.length){
     h+=`<div class="ledg">`;
     recent.forEach(x=>{ h+=`<div class="ledg-row"><span class="ledg-d">${x.date.slice(5)}</span><span class="ledg-t">${esc(x.name)}</span><span class="ledg-v">−${x.cost}</span><button class="ledg-x" data-unspend="${x.sid}" aria-label="Undo">${IC.x}</button></div>`; });
@@ -2072,7 +2072,7 @@ function hasData(wk){ if(!wk)return false; const a=DAYS.some(d=>(wk.acts[d]||[])
 function streakGlyph(){ return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#c25b3c" stroke-width="2" stroke-linejoin="round"><path d="M3 20 L9 8 L13 14 L16 6 L21 20 Z"/></svg>`; }
 function summitLogHTML(){
   const entries=Object.keys(DB.weeks||{}).map(k=>({k,mon:new Date(k+'T00:00:00'),wk:DB.weeks[k]}))
-    .filter(e=>hasData(e.wk)).sort((a,b)=>b.mon-a.mon).slice(0,8);
+    .filter(e=>hasData(e.wk)).sort((a,b)=>b.mon-a.mon).slice(0,3);
   let h=`<div class="eyebrow">Summit log</div>`;
   if(!entries.length){ h+=`<div class="empty2" style="padding:6px 2px">Climb a week to start your log.</div>`; return h; }
   h+=`<div class="peaks">`;
