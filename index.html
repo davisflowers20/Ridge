@@ -664,6 +664,24 @@
   .shop-pin.on{color:var(--gold)}
   .shop-pin .ic-peak,.shop-del .ic{width:15px;height:15px}
   .shop-del.arm{background:#b03b22;color:#fff}
+  .q-intro{font-size:12px;color:var(--ink-soft);line-height:1.55;margin:-6px 2px 13px}
+  .q-intro b{font-family:'Space Grotesk';font-weight:600}
+  .bank-btns{display:flex;align-items:center;gap:7px;flex:none}
+  .bank-info{all:unset;cursor:pointer;width:32px;height:32px;display:grid;place-items:center;border-radius:50%;border:1px solid rgba(255,255,255,.28);color:rgba(255,255,255,.8);font-family:'Space Grotesk';font-size:14px;font-weight:600;touch-action:manipulation}
+  .bank-info:hover{background:rgba(255,255,255,.14);color:#fff}
+  .tk-list{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+  .tk-row{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line);border-radius:12px;padding:12px 13px}
+  .tk-l b{display:block;font-family:'Space Grotesk';font-size:14px;letter-spacing:.01em}
+  .tk-l span{display:block;font-size:11.5px;color:var(--muted);margin-top:2px}
+  .tk-r{font-family:'Space Mono';font-weight:700;font-size:15px;color:var(--ink);flex:none;white-space:nowrap}
+  .tk-r small{font-size:11px;color:var(--muted);font-weight:400;margin-left:5px}
+  .tk-bonus{display:flex;gap:9px;align-items:flex-start;background:var(--surface-2);border-radius:12px;padding:12px 13px;font-size:12.5px;line-height:1.5;color:var(--ink-soft)}
+  .tk-bonus .ic-peak{color:var(--gold);flex:none;margin-top:2px}
+  .tk-bonus b{color:var(--gold)}
+  .tk-notes{margin-top:14px;display:flex;flex-direction:column;gap:9px;font-size:12px;color:var(--muted);line-height:1.5}
+  .tk-notes b{color:var(--ink-soft)}
+  .tk-now{display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding-top:13px;border-top:1px solid var(--line);font-family:'Space Grotesk';font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .tk-now b{font-family:'Space Mono';font-size:22px;color:var(--ink);letter-spacing:0}
   .onb-count{font-family:'Space Mono';font-size:11px;color:var(--muted);margin:16px 0 -4px;line-height:1.5}
   .bonus{display:flex;align-items:center;gap:7px;margin-top:9px;font-family:'Space Mono';font-size:10.5px;color:rgba(255,255,255,.6)}
   .bonus b{color:#fff}
@@ -811,6 +829,9 @@ function defaultQuests(){
   ];
 }
 const KIND_LABEL={sets:'working sets',lifts:'lifts',miles:'miles',reps:'sprint sets',sessions:'sessions'};
+const KIND_TITLE={sets:'Working sets',lifts:'Lifts',miles:'Cardio miles',reps:'Sprint sets',sessions:'Sessions'};
+const MILESTONES=['Basecamp','Ridgeline','Summit'];
+function milestoneName(n){ return n>=3?'Summit':n>=1?MILESTONES[n-1]:''; }
 const KIND_OPTS=[['sets','Sets'],['miles','Miles'],['reps','Sprint sets'],['lifts','Lifts'],['sessions','Sessions']];
 function questKind(q){ return q.kind || (q.tier==='basecamp'?'lifts':q.tier==='ridgeline'?'reps':'miles'); }
 function isSprint(a){ return (a.type==='cardio'||a.type==='sprint') && (((a.data&&a.data.mode)||(a.type==='sprint'?'sprint':'run'))==='sprint'); }
@@ -1235,17 +1256,18 @@ function questsHTML(){
   const streak=currentStreak();
   let h = streak>0 ? `<div class="streak-top">${streakGlyph()}<span><b>${streak}</b> week${streak!==1?'s':''} climbed in a row</span></div>` : '';
   h+=`<div class="ascent">${ascentSVG(states)}
-    <div class="ascent-cap"><span class="t">${ascentPhase(alt)}</span><span class="n">${doneCount}/3 camps</span></div>
+    <div class="ascent-cap"><span class="t">${doneCount?milestoneName(doneCount):ascentPhase(alt)}</span><span class="n">${doneCount}/3 cleared</span></div>
   </div>`;
   h+=`<div class="eyebrow">This week's quests</div>`;
+  h+=`<div class="q-intro">Three goals, any order. Clear <b>one</b> and you reach Basecamp, <b>two</b> the Ridgeline, <b>all three</b> the Summit — worth <b>+${PERFECT_WEEK_BONUS}</b> tokens.</div>`;
   if(w.locked) h+=`<div class="lock-note">${IC.lock} Locked for the week — re-run “Set the week” to change.</div>`;
   states.forEach((s,i)=>{
-    const t=tierOf(s.q.tier), kind=questKind(s.q), kl=KIND_LABEL[kind];
+    const kind=questKind(s.q), kl=KIND_LABEL[kind];
     const pct=Math.min(100, s.q.target>0 ? Math.round(s.prog/s.q.target*100):0);
     h+=`<div class="quest ${s.done?'done':''}">
       <div class="q-top">
-        <span class="q-icon">${campIcon(s.q.tier)}</span>
-        <div><div class="q-tier">${t.name}</div><div class="q-budget">${s.done?'Camp reached':`${s.q.target} ${kl}`}</div></div>
+        <span class="q-icon">${questIcon(kind)}</span>
+        <div><div class="q-tier">${KIND_TITLE[kind]||'Goal'}</div><div class="q-budget">${s.done?'Cleared':`Target ${s.q.target} ${kl}`}</div></div>
         <span class="q-prog-num">${fmtProg(s.prog,kind)}/${s.q.target}<small class="q-unit">${kind==='miles'?' mi':kind==='reps'?' sets':kind==='sets'?' sets':''}</small></span>
       </div>`;
     if(w.locked){
@@ -1281,7 +1303,7 @@ function bankHTML(){
   h+=`<div class="bank ${bal<0?'neg':''}">
     <div class="bank-top">
       <div><div class="bank-lbl">Balance</div><div class="bank-n">${bal}<small>token${bal===1?'':'s'}</small></div></div>
-      <button class="bank-shop" data-openshop>Shop ${IC.cr}</button>
+      <div class="bank-btns"><button class="bank-info" data-tokeninfo aria-label="How tokens work">?</button><button class="bank-shop" data-openshop>Shop ${IC.cr}</button></div>
     </div>`;
   if(pin){
     const pct=Math.max(0,Math.min(100,Math.round(bal/pin.cost*100)));
@@ -1306,6 +1328,12 @@ function bankHTML(){
   return h;
 }
 
+function questIcon(kind){
+  if(kind==='lifts'||kind==='sets') return `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9v6M6.5 6.5v11M17.5 6.5v11M21 9v6M6.5 12h11"/></svg>`;
+  if(kind==='reps') return `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>`;
+  if(kind==='miles') return `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20 L9 4 M15 20 L20 4 M9 12h6"/></svg>`;
+  return `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4l9 2-2 4 2 4-9-2"/></svg>`;
+}
 function campIcon(tier){
   if(tier==='basecamp') return `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 4 20h16zM12 4v16"/></svg>`;
   if(tier==='ridgeline') return `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18l5-9 4 6 3-5 6 8z"/></svg>`;
@@ -1314,12 +1342,10 @@ function campIcon(tier){
 
 /* ascent signature: climber rises through the 3 camps */
 function ascentAlt(states){
-  let alt=0;
-  for(let i=0;i<3;i++){
-    if(states[i].done) alt+=1;
-    else { alt += states[i].q.target>0 ? Math.min(1,states[i].prog/states[i].q.target):0; break; }
-  }
-  return alt;
+  const done=states.filter(s=>s.done).length;
+  if(done>=3) return 3;
+  const rest=states.filter(s=>!s.done).map(s=>s.q.target>0?Math.min(1,s.prog/s.q.target):0);
+  return done+(rest.length?Math.max.apply(null,rest):0);
 }
 function ascentPhase(alt){
   if(alt>=3) return 'Summit · golden hour';
@@ -1366,10 +1392,10 @@ function ascentSVG(states){
     <path d="${trail}" fill="none" stroke="#8ea0ac" stroke-width="1.4" stroke-dasharray="2 6" stroke-linecap="round"/>
     <path d="${trailDone}" fill="none" stroke="#1e2c35" stroke-width="2" stroke-linecap="round"/>
     ${camps.map((c,i)=>{
-      const done=states[i].done;
+      const reached=states.filter(x=>x.done).length>i;
       return `<g>
-        <circle cx="${c.x}" cy="${c.y}" r="5" fill="${done?'#c25b3c':'#ffffff'}" stroke="${done?'#c25b3c':'#9fb1bd'}" stroke-width="1.6"/>
-        <text x="${c.x}" y="${c.y-12}" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-size="10" letter-spacing="1" fill="${done?'#c25b3c':'#677781'}">${tierOf(states[i].q.tier).name.toUpperCase()}</text>
+        <circle cx="${c.x}" cy="${c.y}" r="5" fill="${reached?'#c25b3c':'#ffffff'}" stroke="${reached?'#c25b3c':'#9fb1bd'}" stroke-width="1.6"/>
+        <text x="${c.x}" y="${c.y-12}" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-size="10" letter-spacing="1" fill="${reached?'#c25b3c':'#677781'}">${MILESTONES[i].toUpperCase()}</text>
       </g>`;
     }).join('')}
     <circle cx="${cx}" cy="${cy}" r="5.5" fill="#ffffff" stroke="#1e2c35" stroke-width="1.6"/>
@@ -1503,11 +1529,12 @@ document.getElementById('nextWk').onclick=()=>{curMon=addDays(curMon,7);openDays
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;render();});
 
 view.addEventListener('click',e=>{
-  const t=e.target.closest('[data-openplanner],[data-toggle],[data-edit],[data-del],[data-add],[data-qstep],[data-qkind],[data-loadweek],[data-histex],[data-bpwin],[data-bkup],[data-bkx],[data-startlifttoday],[data-calnav],[data-spend],[data-unspend],[data-openshop]');
+  const t=e.target.closest('[data-openplanner],[data-toggle],[data-edit],[data-del],[data-add],[data-qstep],[data-qkind],[data-loadweek],[data-histex],[data-bpwin],[data-bkup],[data-bkx],[data-startlifttoday],[data-calnav],[data-spend],[data-unspend],[data-openshop],[data-tokeninfo]');
   if(!t) return;
   if(t.dataset.calnav){ if(!calMon){const n=new Date();calMon=new Date(n.getFullYear(),n.getMonth(),1);} calMon=new Date(calMon.getFullYear(),calMon.getMonth()+(+t.dataset.calnav),1); render(); return; }
   if(t.dataset.startlifttoday!==undefined){ const d=DAYS[(new Date().getDay()+6)%7]; startLift(d,null); return; }
   if(t.dataset.openshop!==undefined){ openShop(); return; }
+  if(t.dataset.tokeninfo!==undefined){ openTokenInfo(); return; }
   if(t.dataset.unspend){ undoSpend(t.dataset.unspend); render(); return; }
   if(t.dataset.spend){ const it=shopItem(t.dataset.spend); if(!it) return;
     if(tokenBalance()<it.cost){ armDelete('ovr:'+it.id,t,()=>{spendToken(it.id);render();}); return; }
@@ -1939,6 +1966,7 @@ function openRoutineManager(){
 scrim2El.onclick=closeSheet2;
 sheet2El.addEventListener('click',e=>{
   if(e.target.id==='pickerDone'||e.target.id==='sheet2Cancel')return closeSheet2();
+  if(e.target.closest('#tokenInfoBtn')){ openTokenInfo(); return; }
   if(e.target.closest('#rewardsBtn')){ closeSheet2(); openShop(); return; }
   if(e.target.closest('#exportBtn'))return exportData();
   if(e.target.closest('#importBtn'))return document.getElementById('importFile').click();
@@ -1993,11 +2021,11 @@ function renderPlanStep(){
   sheet2Body.innerHTML=h;
 }
 function renderQuestStep(){
-  let h=`<h3>Set the week · quests</h3><div class="plan-note">Step 2 of 2 — lock your three goals. Suggested: working sets, sprint sets, cardio miles — tap to swap any tier's measure.</div>`;
+  let h=`<h3>Set the week · quests</h3><div class="plan-note">Step 2 of 2 — three goals, any order. One cleared = Basecamp, two = Ridgeline, all three = Summit.</div>`;
   questDraft.forEach((q,i)=>{
-    const t=tierOf(q.tier), kl=KIND_LABEL[questKind(q)];
+    const kd=questKind(q), kl=KIND_LABEL[kd];
     h+=`<div class="qedit">
-      <div class="qedit-top"><span class="q-tier">${t.name}</span><span class="q-budget">${q.target} ${kl}</span></div>
+      <div class="qedit-top"><span class="q-tier">${KIND_TITLE[kd]||'Goal'}</span><span class="q-budget">${q.target} ${kl}</span></div>
       <div class="stepper">
         <button class="step" data-qdstep="${i}:-1" aria-label="Fewer">−</button>
         <span class="step-val">${q.target}</span>
@@ -2080,7 +2108,7 @@ function summitLogHTML(){
     const camps=weekCamps(e.wk), isCur=iso(e.mon)===iso(curMon);
     const graced=(DB.graceUsed||{})[e.k.slice(0,7)]===e.k && camps<1;
     const rest=isRestWeek(e.wk);
-    const lbl=camps===3?'Summit':rest?'Rest':graced?'Grace':camps+'/3';
+    const lbl=rest?'Rest':graced?'Grace':camps>=1?milestoneName(camps):'0/3';
     h+=`<button class="peak ${isCur?'cur':''} ${graced?'graced':''}" data-loadweek="${e.k}">
       <span class="peak-range">${fmtRange(e.mon)}</span>
       <span class="peak-dots">${graced?'<i class="hollow"></i><i></i><i></i>':[0,1,2].map(i=>`<i class="${i<camps?'on':''}"></i>`).join('')}</span>
@@ -2090,10 +2118,32 @@ function summitLogHTML(){
   return h+`</div>`;
 }
 
+/* ================= HOW TOKENS WORK ================= */
+function openTokenInfo(){
+  const rows=[
+    ['Working sets',SETS_PER_TOKEN+' sets','Any logged set that isn\u2019t a warm-up'],
+    ['Cardio miles',MILES_PER_TOKEN+' miles','Run and walk at full; bike counts half'],
+    ['Sprint sets',SPRINTSETS_PER_TOKEN+' sets','Reps logged on a sprint session']
+  ];
+  sheet2Body.innerHTML=`<h3>How you earn</h3>
+    <div class="plan-note">Every token comes from work you logged. Nothing else pays.</div>
+    <div class="tk-list">${rows.map(r=>`<div class="tk-row"><div class="tk-l"><b>${r[0]}</b><span>${r[2]}</span></div><span class="tk-r">${r[1]}<small>= 1</small></span></div>`).join('')}</div>
+    <div class="tk-bonus">${IC.peak} <span><b>+${PERFECT_WEEK_BONUS} tokens</b> for clearing all three goals in a week. One cleared is Basecamp, two the Ridgeline, all three the Summit.</span></div>
+    <div class="tk-notes">
+      <div><b>Balance caps at ${TOKEN_CAP}.</b> Past that, new tokens stop counting — spend some.</div>
+      <div><b>It can go negative.</b> Take something you haven\u2019t earned and log it anyway; the number tells the truth.</div>
+      <div><b>Cardio and lifts both count.</b> Session length doesn\u2019t matter — only sets, miles, and sprint sets.</div>
+    </div>
+    <div class="tk-now"><span>Banked now</span><b>${tokenBalance()}</b></div>
+    <button class="btn primary" id="sheet2Cancel" style="margin-top:16px">Close</button>`;
+  scrim2El.classList.add('show'); sheet2El.classList.add('show');
+}
+
 /* ================= SETTINGS / DATA ================= */
 function openSettings(){
   sheet2Body.innerHTML=`<h3>Settings</h3>
     <div class="set-list">
+      <button class="set-row2" id="tokenInfoBtn"><div><b>How you earn</b><span>What banks a token</span></div>${IC.cr}</button>
       <button class="set-row2" id="rewardsBtn"><div><b>Reward shop</b><span>Spend tokens, edit the menu</span></div>${IC.cr}</button>
       <button class="set-row2" id="exportBtn"><div><b>Export data</b><span>Download a backup (.json)</span></div>${IC.cr}</button>
       <button class="set-row2" id="importBtn"><div><b>Import data</b><span>Restore from a backup file</span></div>${IC.cr}</button>
