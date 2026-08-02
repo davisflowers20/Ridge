@@ -641,6 +641,10 @@
   .ledg-x{all:unset;cursor:pointer;color:var(--muted);width:26px;height:26px;display:grid;place-items:center;flex:none}
   .ledg-x .ic{width:12px;height:12px}
   .ledg-x.arm{background:#b03b22;color:#fff;border-radius:7px}
+  .shop-nav{position:sticky;top:0;z-index:4;margin:-8px -18px 6px;padding:10px 18px 8px;background:linear-gradient(180deg,#eef2f5 72%,rgba(238,242,245,0))}
+  .shop-back{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:'Space Grotesk';font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);padding:8px 4px;touch-action:manipulation}
+  .shop-back:hover{color:var(--ink)}
+  .shop-back .ic{width:15px;height:15px}
   .shop-bal{display:flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:13px 14px;margin:16px 0 4px}
   .shop-bal-n{font-family:'Space Mono';font-weight:700;font-size:26px;color:var(--ink);line-height:1}
   .shop-bal.neg .shop-bal-n{color:#b03b22}
@@ -795,32 +799,6 @@ const TIERS = [
   {key:'ridgeline', name:'Ridgeline', budget:'~$50',  band:'t50'},
   {key:'summit',    name:'Summit',    budget:'~$100', band:'t100'}
 ];
-const CATS = ['mtg','whiskey','wine','clothes'];
-const CAT_LABEL = {mtg:'MTG', whiskey:'Whiskey', wine:'Wine', clothes:'Clothes'};
-
-const REWARDS = {
-  mtg:{
-    t20:[{n:"Commander precon deck",p:"$20–25",d:"Ready-to-play 100-card deck"},{n:"Secret Lair drop",p:"~$20",d:"Limited alt-art set"},{n:"Draft Booster 3-pack",p:"~$18",d:"Crack 'em at the table"},{n:"Two Play Boosters",p:"~$20",d:"Latest set, fresh pulls"},{n:"Foil playmat",p:"~$20",d:"Protect the battlefield"}],
-    t50:[{n:"Collector Booster",p:"~$50",d:"Foils & alt-arts only"},{n:"Set Bundle (gift)",p:"~$50",d:"9 boosters + promos"},{n:"Two Commander decks",p:"~$48",d:"Build a pod night"},{n:"Premium Secret Lair",p:"~$50",d:"Foil-etched edition"},{n:"Singles splurge",p:"~$50",d:"Chase cards for a deck you're tuning"}],
-    t100:[{n:"Half a Collector box",p:"~$100",d:"Stack of collector packs"},{n:"Commander Masters set",p:"~$100",d:"High-power reprints"},{n:"That chase single",p:"~$100",d:"The card the deck's been missing"},{n:"Bundle + targeted singles",p:"~$100",d:"Sealed fun plus pickups"},{n:"Two CBs + playmat",p:"~$100",d:"Treat the whole table"}]
-  },
-  whiskey:{
-    t20:[{n:"Wild Turkey 101",p:"~$25",d:"High-proof, dependable"},{n:"Evan Williams BiB",p:"~$18",d:"Sleeper value"},{n:"Old Grand-Dad 114",p:"~$25",d:"Big proof for the price"},{n:"Buffalo Trace",p:"~$25",d:"If it's on the shelf"},{n:"Rittenhouse Rye BiB",p:"~$25",d:"Backbone of a great cocktail"}],
-    t50:[{n:"Russell's Reserve 10yr",p:"~$45",d:"Polished older brother to the 101"},{n:"Four Roses Small Batch Select",p:"~$55",d:"Higher proof, complex"},{n:"Knob Creek Single Barrel 120",p:"~$50",d:"Big, oaky pour"},{n:"Redbreast 12",p:"~$58",d:"Benchmark Irish pot still"},{n:"Old Forester 1920",p:"~$55",d:"115 proof, rich"}],
-    t100:[{n:"Booker's (current batch)",p:"~$90",d:"Barrel-proof small batch"},{n:"Redbreast 15",p:"~$110",d:"A step up from the 12"},{n:"Aberlour A'bunadh",p:"~$95",d:"Cask-strength sherried Scotch"},{n:"Stagg",p:"~$100",d:"Hazmat-proof hunter's prize"},{n:"Michter's Toasted Barrel",p:"~$100",d:"If you spot it"}]
-  },
-  wine:{
-    t20:[{n:"Côtes du Rhône (Guigal)",p:"~$18",d:"Reliable weeknight red"},{n:"Willamette Pinot (value)",p:"~$22",d:"Bright and food-friendly"},{n:"Rioja Reserva",p:"~$20",d:"Aged, savory"},{n:"Chianti Classico",p:"~$20",d:"Built for the dinner table"},{n:"Grower Cava",p:"~$20",d:"Bubbles without the Champagne tab"}],
-    t50:[{n:"Single-vineyard Pinot Noir",p:"~$45",d:"Willamette step-up"},{n:"Barolo (entry producer)",p:"~$55",d:"Nebbiolo to lay down"},{n:"Brunello di Montalcino",p:"~$55",d:"Big Tuscan"},{n:"Grower Champagne NV",p:"~$55",d:"Real-deal bubbles"},{n:"Mid-tier Napa Cab",p:"~$50",d:"Steak-night red"}],
-    t100:[{n:"Vintage grower Champagne",p:"~$90",d:"Special-occasion fizz"},{n:"Named-cru Barolo",p:"~$100",d:"Cellar it or splurge"},{n:"Reserve Napa Cabernet",p:"~$100",d:"Big and age-worthy"},{n:"Village+ Burgundy",p:"~$100",d:"Pinot at its finest"},{n:"Brunello Riserva",p:"~$100",d:"Top Tuscan tier"}]
-  },
-  clothes:{
-    t20:[{n:"Darn Tough socks (2-pk)",p:"~$20",d:"Lifetime-guarantee wool"},{n:"Heavyweight tee",p:"~$20",d:"The good blank"},{n:"Knit beanie",p:"~$20",d:"Trail to town"},{n:"Waxed cap",p:"~$22",d:"Field staple"},{n:"Full-grain belt",p:"~$25",d:"Buy-once basic"}],
-    t50:[{n:"Merino tee",p:"~$45",d:"Travel-ready, odor-resistant"},{n:"Heavyweight flannel",p:"~$50",d:"Blue Ridge weather"},{n:"Selvedge denim shirt",p:"~$55",d:"Breaks in nicely"},{n:"Chinos",p:"~$50",d:"Versatile workhorse"},{n:"Wool cap + gloves",p:"~$45",d:"Cold-morning kit"}],
-    t100:[{n:"Raw selvedge denim",p:"~$100+",d:"Break in your own fades"},{n:"Flannel-lined jacket",p:"~$100",d:"Shoulder-season shell"},{n:"Heavy knit sweater",p:"~$100",d:"Cabin-grade wool"},{n:"Resoleable leather boots",p:"~$110",d:"Trail to town, for years"},{n:"Type III denim jacket",p:"~$100+",d:"Ages beautifully"}]
-  }
-};
-
 function defaultQuests(){
   return [
     {tier:'basecamp',  kind:'lifts', target:4,  reward:null},
@@ -866,7 +844,7 @@ function fmtProg(v,kind){ return kind==='miles'?(Math.round(v*10)/10).toLocaleSt
 
 /* ---------- dates ---------- */
 function mondayOf(d){ const x=new Date(d); const day=(x.getDay()+6)%7; x.setHours(0,0,0,0); x.setDate(x.getDate()-day); return x; }
-function iso(d){ return d.toISOString().slice(0,10); }
+function iso(d){ const x=new Date(d); return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0'); }
 function addDays(d,n){ const x=new Date(d); x.setDate(x.getDate()+n); return x; }
 function fmtRange(mon){
   const sun=addDays(mon,6);
@@ -940,6 +918,9 @@ function migrate(db){
     return db;
   }catch(e){ return (db&&typeof db==='object')?db:{weeks:{}}; }
 }
+/* derived-value cache: cleared whenever state changes. Declared before the
+   first save() at init, or the let would sit in the temporal dead zone. */
+let _memo=Object.create(null), _saveT=null;
 let DB = migrate(load());
 save();
 let curMon = mondayOf(new Date());
@@ -948,7 +929,10 @@ let openDays = {};   // dayKey -> bool
 let editCat = {};    // questIndex -> category currently shown
 
 function load(){ try{ const r=store.get('ridge.v1'); return r?JSON.parse(r):{weeks:{}}; }catch(e){ return {weeks:{}}; } }
-function save(){ store.set('ridge.v1', JSON.stringify(DB)); }
+function memo(k,fn){ const v=_memo[k]; return v!==undefined?v:(_memo[k]=fn()); }
+function save(){ if(_saveT){clearTimeout(_saveT);_saveT=null;} _memo=Object.create(null); store.set('ridge.v1', JSON.stringify(DB)); }
+/* coalesce keystroke-rate writes: one save per pause instead of one per character */
+function saveSoon(){ _memo=Object.create(null); if(_saveT)clearTimeout(_saveT); _saveT=setTimeout(()=>{_saveT=null;store.set('ridge.v1',JSON.stringify(DB));},400); }
 function week(){
   const k=iso(curMon);
   if(!DB.weeks[k]){ const acts={},plan={}; DAYS.forEach(d=>{acts[d]=[];plan[d]=[];}); DB.weeks[k]={acts,plan,quests:defaultQuests()}; save(); }
@@ -1002,7 +986,7 @@ function render(){
 }
 
 function weeklyVolume(){ const w=week(); let v=0; DAYS.forEach(d=>w.acts[d].forEach(a=>{ if(a.type==='lift') v+=workoutVolume(a); })); return v; }
-function lifetimeVolume(){ let v=0; Object.values(DB.weeks||{}).forEach(wk=>DAYS.forEach(d=>(wk.acts&&wk.acts[d]||[]).forEach(a=>{ if(a.type==='lift') v+=workoutVolume(a); }))); return v; }
+function lifetimeVolume(){ return memo('lifetimeVolume',()=>{ let v=0; Object.values(DB.weeks||{}).forEach(wk=>DAYS.forEach(d=>(wk.acts&&wk.acts[d]||[]).forEach(a=>{ if(a.type==='lift') v+=workoutVolume(a); }))); return v; }); }
 function weeklyDone(){ const w=week(); let n=0; DAYS.forEach(d=>w.acts[d].forEach(a=>{ if(a.done) n++; })); return n; }
 function weeklyPRs(){ const w=week(); let n=0; DAYS.forEach(d=>w.acts[d].forEach(a=>{ if(a.type==='lift'&&workoutHasPR(a)) n++; })); return n; }
 function heroHTML(){
@@ -1027,104 +1011,12 @@ function heroHTML(){
   </div>`;
 }
 let histEx=null, bpWin='7';
-function exNameMap(){
-  const m={},L=lib(); Object.keys(L).forEach(g=>L[g].forEach(x=>m[x.id]=x.name));
-  Object.values(DB.weeks||{}).forEach(wk=>wk&&wk.acts&&DAYS.forEach(d=>(wk.acts[d]||[]).forEach(a=>{ if(a.type==='lift'&&Array.isArray(a.data.exercises))a.data.exercises.forEach(ex=>{ if(ex.exId&&ex.name)m[ex.exId]=ex.name; }); })));
-  return m;
-}
-function doneDayMap(){
+function doneDayMap(){ return memo('doneDayMap',_doneDayMap); }
+function _doneDayMap(){
   const m={};
   Object.keys(DB.weeks||{}).forEach(mon=>{ const wk=DB.weeks[mon]; if(!wk||!wk.acts)return;
     DAYS.forEach((d,i)=>{ (wk.acts[d]||[]).forEach(a=>{ if(a.done){ const k=iso(addDays(new Date(mon+'T00:00:00'),i)); m[k]=(m[k]||0)+1; } }); }); });
   return m;
-}
-function weeklyVolSeries(n){
-  const out=[], thisMon=mondayOf(new Date());
-  for(let k=n-1;k>=0;k--){ const mon=addDays(thisMon,-7*k), key=iso(mon), wk=DB.weeks&&DB.weeks[key]; let v=0;
-    if(wk&&wk.acts)DAYS.forEach(d=>(wk.acts[d]||[]).forEach(a=>{if(a.type==='lift')v+=workoutVolume(a);}));
-    out.push({key,vol:v}); }
-  return out;
-}
-function exWithHistory(){ const H=DB.exHistory||{}; return Object.keys(H).filter(id=>Object.keys(H[id].sessions||{}).length>0).map(id=>({id,n:Object.keys(H[id].sessions).length})).sort((a,b)=>b.n-a.n); }
-function exE1RMSeries(exId){
-  const h=DB.exHistory&&DB.exHistory[exId]; if(!h||!h.sessions)return [];
-  const arr=Object.values(h.sessions).map(s=>({date:s.date,e1rm:Math.max(0,...s.sets.map(x=>e1rm(x)))})).filter(p=>p.e1rm>0);
-  arr.sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:0); return arr;
-}
-function weekTrainStreaks(){
-  const map=doneDayMap(), mons=new Set();
-  Object.keys(map).forEach(dt=>mons.add(iso(mondayOf(new Date(dt+'T00:00:00')))));
-  if(!mons.size) return {cur:0,longest:0};
-  const base=new Date('2020-01-06T00:00:00');
-  const idx=[...mons].map(k=>Math.round((new Date(k+'T00:00:00')-base)/(7*86400000))).sort((a,b)=>a-b);
-  const has=new Set(idx); let longest=1,run=1;
-  for(let i=1;i<idx.length;i++){ run=idx[i]===idx[i-1]+1?run+1:1; longest=Math.max(longest,run); }
-  const thisIdx=Math.round((mondayOf(new Date())-base)/(7*86400000));
-  let cur=0,k=has.has(thisIdx)?thisIdx:thisIdx-1; while(has.has(k)){cur++;k--;}
-  return {cur,longest};
-}
-function volChartHTML(){
-  const series=weeklyVolSeries(12), max=Math.max(1,...series.map(s=>s.vol));
-  if(max<=1) return '';
-  const W=320,H=104,pad=4,bw=(W-pad*2)/series.length; let bars='';
-  series.forEach((s,i)=>{ const bh=s.vol>0?Math.max(2,(s.vol/max)*(H-22)):0,x=pad+i*bw+bw*0.16,w=bw*0.68,y=H-14-bh;
-    bars+=`<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="${bh.toFixed(1)}" rx="2" fill="var(--ink)" opacity="${i===series.length-1?1:0.78}"/>`; });
-  const cur=series[series.length-1].vol, total=series.reduce((a,s)=>a+s.vol,0);
-  return `<div class="hsec"><div class="hsec-h">Weekly volume · last 12 weeks</div>
-    <div class="hbig">${cur.toLocaleString()}<small>${unit()} this week</small></div>
-    <svg class="vchart" viewBox="0 0 ${W} ${H}"><line x1="${pad}" y1="${H-14}" x2="${W-pad}" y2="${H-14}" stroke="var(--line-2)" stroke-width="1"/>${bars}</svg>
-    <div class="hsec-meta">peak <b>${max.toLocaleString()}</b> · 12-wk total <b>${total.toLocaleString()}</b></div></div>`;
-}
-function strengthHTML(){
-  const exs=exWithHistory(); if(!exs.length) return '';
-  const names=exNameMap();
-  const sel=(histEx&&exs.find(e=>e.id===histEx))?histEx:exs[0].id;
-  const opts=exs.slice(0,60).map(e=>`<option value="${e.id}" ${e.id===sel?'selected':''}>${esc(names[e.id]||e.id)} · ${e.n}</option>`).join('');
-  const series=exE1RMSeries(sel); let chart;
-  const bestVal=series.length?Math.max.apply(null,series.map(p=>p.e1rm)):0;
-  if(series.length>=2){
-    const W=320,H=120,pl=8,pr=8,pt=14,pb=12,vals=series.map(p=>p.e1rm),mn=Math.min(...vals),mx=Math.max(...vals),span=(mx-mn)||1,n=series.length;
-    const xs=i=>pl+(i/(n-1))*(W-pl-pr), ys=v=>pt+(1-(v-mn)/span)*(H-pt-pb);
-    let path='',dots='',run=0;
-    series.forEach((p,i)=>{ const x=xs(i),y=ys(p.e1rm); path+=(i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)+' '; const pr2=p.e1rm>run+0.01; if(pr2)run=p.e1rm; dots+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${pr2?3.4:2.3}" fill="${pr2?'var(--gold)':'var(--ink)'}"/>`; });
-    chart=`<svg class="lchart" viewBox="0 0 ${W} ${H}"><path d="${path}" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>${dots}</svg>
-      <div class="hsec-meta">${n} sessions · <span class="pr-mark">★</span> = PR</div>`;
-  } else chart=`<div class="hsec-meta" style="padding:10px 0">Log this lift once more to draw a trend.</div>`;
-  return `<div class="hsec"><div class="hsec-h">Strength over time</div><div class="hsel-wrap"><select class="hsel" data-histsel aria-label="Choose exercise">${opts}</select><span class="hsel-ar">${IC.cr}</span></div><div class="hbig">${Math.round(bestVal).toLocaleString()}<small>${unit()} best e1RM</small></div>${chart}</div>`;
-}
-function heatmapHTML(){
-  const m=doneDayMap(); if(!Object.keys(m).length) return '';
-  const weeks=18, thisMon=mondayOf(new Date()), start=addDays(thisMon,-7*(weeks-1)), now=new Date();
-  let cells='';
-  for(let w=0;w<weeks;w++)for(let d=0;d<7;d++){ const dt=addDays(start,w*7+d),key=iso(dt),c=m[key]||0,lvl=c<=0?0:c===1?1:c===2?2:3,fut=dt>now?' fut':'';
-    cells+=`<div class="hm-cell lv${lvl}${fut}" title="${key}${c?': '+c+' logged':''}"></div>`; }
-  const st=weekTrainStreaks();
-  return `<div class="hsec"><div class="hsec-h">Consistency · last ${weeks} weeks</div>
-    <div class="heatmap">${cells}</div>
-    <div class="hm-foot"><span class="hm-legend">Less <span class="hm-cell lv0"></span><span class="hm-cell lv1"></span><span class="hm-cell lv2"></span><span class="hm-cell lv3"></span> More</span><span class="hm-streak"><b>${st.cur}</b> wk streak · best <b>${st.longest}</b></span></div></div>`;
-}
-const TON_MILES=[{v:25000,l:'≈ two elephants'},{v:100000,l:'≈ a humpback whale'},{v:250000,l:'≈ a blue whale'},{v:500000,l:'≈ the Statue of Liberty'},{v:1000000,l:'the million-pound club'},{v:2500000,l:'≈ a fully loaded 747'}];
-const SESH_MILES=[{v:1,l:'First ascent'},{v:10,l:'Finding your footing'},{v:25,l:'Sure-footed'},{v:50,l:'Seasoned climber'},{v:100,l:'Centurion'},{v:250,l:'Mountaineer'}];
-function milestoneCard(label,cur,unitLbl,tiers,fmt){
-  let ri=-1; tiers.forEach((t,i)=>{ if(cur>=t.v)ri=i; });
-  const curTier=ri>=0?tiers[ri]:null, next=tiers[ri+1];
-  const pct=next?Math.min(100,Math.round(cur/next.v*100)):100;
-  const badges=tiers.map((t,i)=>`<span class="mb ${cur>=t.v?'on':''}" title="${fmt(t.v)} ${unitLbl}">${cur>=t.v?'★':'○'}</span>`).join('');
-  return `<div class="ms-card">
-    <div class="ms-top"><span class="ms-lbl">${label}</span><span class="ms-val">${fmt(cur)}<small>${unitLbl}</small></span></div>
-    <div class="ms-tier">${curTier?`${curTier.l}`:'Just getting started'}</div>
-    <div class="bp-bar"><i style="width:${pct}%"></i></div>
-    <div class="ms-next">${next?`${fmt(next.v-cur)} ${unitLbl} to “${next.l}”`:'Top tier reached — legend.'}</div>
-    <div class="ms-badges">${badges}</div>
-  </div>`;
-}
-function milestonesHTML(){
-  const ton=lifetimeVolume(); const sess=new Set(); Object.values(DB.exHistory||{}).forEach(h=>Object.keys(h.sessions||{}).forEach(a=>sess.add(a)));
-  const nlift=sess.size; if(ton<=0&&nlift<=0) return '';
-  return `<div class="hsec"><div class="hsec-h">Milestones</div>
-    ${milestoneCard('Lifetime moved',ton,unit(),TON_MILES,v=>Math.round(v).toLocaleString())}
-    ${milestoneCard('Lifts logged',nlift,'lifts',SESH_MILES,v=>v.toLocaleString())}
-  </div>`;
 }
 let calMon=null;  // first-of-month Date for the calendar view
 function calendarHTML(dayMap){
@@ -1334,12 +1226,6 @@ function questIcon(kind){
   if(kind==='miles') return `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20 L9 4 M15 20 L20 4 M9 12h6"/></svg>`;
   return `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4l9 2-2 4 2 4-9-2"/></svg>`;
 }
-function campIcon(tier){
-  if(tier==='basecamp') return `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 4 20h16zM12 4v16"/></svg>`;
-  if(tier==='ridgeline') return `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18l5-9 4 6 3-5 6 8z"/></svg>`;
-  return `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4l9 2-2 4 2 4-9-2"/></svg>`;
-}
-
 /* ascent signature: climber rises through the 3 camps */
 function ascentAlt(states){
   const done=states.filter(s=>s.done).length;
@@ -1403,15 +1289,13 @@ function ascentSVG(states){
   </svg>`;
 }
 
-function budgetLabel(tierKey){ return (DB.budgets&&DB.budgets[tierKey])||(tierOf(tierKey)?tierOf(tierKey).budget:''); }
-function typeLabel(tp){ return tp==='any'?'any session':(TYPES[tp]?TYPES[tp].label:tp); }
 function defaultRewards(){ return {basecamp:[],ridgeline:[],summit:[]}; }
 
 /* ================= TOKENS: earn by volume, spend in the shop ================= */
 const SETS_PER_TOKEN=6, MILES_PER_TOKEN=3, SPRINTSETS_PER_TOKEN=5, TOKEN_CAP=40, PERFECT_WEEK_BONUS=5;
 const SHOP_DEFAULT=[
   {id:'coffee',   name:'Coffee out',                    cost:1,  tier:'small'},
-  {id:'pour',     name:'A pour of the good whiskey',    cost:2,  tier:'small'},
+  {id:'pour',     name:'A pour of the good whiskey',    cost:3,  tier:'small'},
   {id:'takeout',  name:'Takeout night',                 cost:3,  tier:'small'},
   {id:'noemail',  name:'A no-email evening',            cost:3,  tier:'small'},
   {id:'pack',     name:'MTG booster pack',              cost:4,  tier:'small'},
@@ -1430,7 +1314,8 @@ const TIER_ORDER=['small','mid','big'];
 const TIER_NAME={small:'Small · everyday',mid:'Medium · weekly',big:'Big · save up'};
 function shop(){ if(!Array.isArray(DB.shop)||!DB.shop.length){ DB.shop=SHOP_DEFAULT.map(x=>Object.assign({},x)); save(); } return DB.shop; }
 function shopItem(id){ return shop().find(x=>x.id===id)||null; }
-function tokensEarned(){
+function tokensEarned(){ return memo('tokensEarned',_tokensEarned); }
+function _tokensEarned(){
   let sets=0, miles=0, sprintSets=0;
   Object.values(DB.exHistory||{}).forEach(h=>Object.values(h.sessions||{}).forEach(ss=>{ sets+=(ss.sets?ss.sets.length:0); }));
   Object.values(DB.weeks||{}).forEach(wk=>{ if(!wk||!wk.acts)return; DAYS.forEach(d=>(wk.acts[d]||[]).forEach(a=>{
@@ -1439,19 +1324,21 @@ function tokensEarned(){
   })); });
   return Math.floor(sets/SETS_PER_TOKEN)+Math.floor(miles/MILES_PER_TOKEN)+Math.floor(sprintSets/SPRINTSETS_PER_TOKEN)+perfectWeeks()*PERFECT_WEEK_BONUS;
 }
-function perfectWeeks(){ let n=0; Object.values(DB.weeks||{}).forEach(wk=>{ if(weekCamps(wk)>=3) n++; }); return n; }
+function perfectWeeks(){ return memo('perfectWeeks',()=>{ let n=0; Object.values(DB.weeks||{}).forEach(wk=>{ if(weekCamps(wk)>=3) n++; }); return n; }); }
 function weekIsPerfect(){ return weekCamps(week())>=3; }
 function tokensSpent(){ return (DB.spends||[]).reduce((a,x)=>a+num(x.cost),0); }
-function tokenBalance(){
+function tokenBalance(){ return Math.min(TOKEN_CAP, tokensEarned()-tokensSpent()-num(DB.tokenForfeit)); }
+/* the cap is use-it-or-lose-it, so overflow is banked away — but only at real
+   state changes, never from a render path (rendering must not mutate). */
+function reconcileCap(){
   const raw=tokensEarned()-tokensSpent()-num(DB.tokenForfeit);
-  if(raw>TOKEN_CAP){ DB.tokenForfeit=num(DB.tokenForfeit)+(raw-TOKEN_CAP); save(); return TOKEN_CAP; }
-  return raw;
+  if(raw>TOKEN_CAP){ DB.tokenForfeit=num(DB.tokenForfeit)+(raw-TOKEN_CAP); save(); }
 }
 function spendToken(id){
   const it=shopItem(id); if(!it) return;
   DB.spends=DB.spends||[];
   DB.spends.push({sid:'s'+Date.now().toString(36),id:it.id,name:it.name,cost:it.cost,date:iso(new Date())});
-  save(); flash(it.name+' — '+it.cost+' token'+(it.cost!==1?'s':''));
+  save(); reconcileCap(); flash(it.name+' — '+it.cost+' token'+(it.cost!==1?'s':''));
 }
 function undoSpend(sid){ DB.spends=(DB.spends||[]).filter(x=>x.sid!==sid); save(); flash('Spend removed'); }
 function pinnedItem(){ return DB.pinned?shopItem(DB.pinned):null; }
@@ -1629,42 +1516,6 @@ function bodyPartStats(winDays){
     .sort((a,b)=>b.times-a.times||order.indexOf(a.group)-order.indexOf(b.group));
 }
 function daysAgo(dISO){ if(!dISO)return''; const d=new Date(dISO+'T00:00:00'),n=new Date(); n.setHours(0,0,0,0); const x=Math.round((n-d)/86400000); return x<=0?'today':x===1?'1d ago':x+'d ago'; }
-function mmFill(t,max){ if(!t) return 'var(--surface-2)'; const r=max?t/max:0; return r>=0.8?'#1e2c35':r>=0.55?'#3f5666':r>=0.32?'#6f8a98':'#a8bcc6'; }
-function muscleMapHTML(by,max){
-  const f=g=>mmFill(by[g]||0,max), NEU='var(--surface-2)';
-  const mir=(p,cx)=>p.map(([x,y])=>[2*cx-x,y]);
-  const ptsStr=p=>p.map(q=>q.join(',')).join(' ');
-  const P=(p,g)=>`<polygon points="${ptsStr(p)}" fill="${f(g)}"/>`;
-  const MP=(p,cx,g)=>P(p,g)+P(mir(p,cx),g);
-  const E=(cx,cy,rx,ry,g)=>`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="${f(g)}"/>`;
-  const ME=(cx,cy,rx,ry,c,g)=>E(cx,cy,rx,ry,g)+E(2*c-cx,cy,rx,ry,g);
-  const cf=75, cb=225;
-  let front=''
-    +`<circle cx="75" cy="22" r="12" fill="${NEU}"/><polygon points="69,33 81,33 80,42 70,42" fill="${NEU}"/>`
-    +MP([[60,40],[74,38],[74,45],[58,47]],cf,'Shoulders')
-    +MP([[48,46],[63,45],[65,60],[50,63]],cf,'Shoulders')
-    +MP([[62,50],[74,52],[74,71],[60,69],[59,57]],cf,'Chest')
-    +ME(48,74,7,15,cf,'Arms')+ME(45,101,6,15,cf,'Arms')
-    +P([[67,72],[83,72],[82,112],[68,112]],'Core')
-    +MP([[60,75],[67,73],[68,108],[60,104]],cf,'Core')
-    +MP([[63,114],[75,114],[73,173],[65,173]],cf,'Legs')
-    +MP([[66,177],[74,177],[73,230],[67,230]],cf,'Legs')
-    +`<g stroke="var(--line)" stroke-width="0.8" opacity=".5"><line x1="75" y1="72" x2="75" y2="112"/><line x1="67" y1="84" x2="83" y2="84"/><line x1="67" y1="94" x2="83" y2="94"/><line x1="67" y1="104" x2="83" y2="104"/></g>`;
-  let back=''
-    +`<circle cx="225" cy="22" r="12" fill="${NEU}"/><polygon points="219,33 231,33 230,42 220,42" fill="${NEU}"/>`
-    +MP([[212,40],[225,39],[225,66],[216,60]],cb,'Back')
-    +MP([[198,46],[213,45],[215,60],[200,63]],cb,'Shoulders')
-    +MP([[210,60],[224,64],[221,95],[207,84]],cb,'Back')
-    +P([[219,86],[231,86],[229,112],[221,112]],'Back')
-    +ME(198,74,7,15,cb,'Arms')+ME(195,101,6,15,cb,'Arms')
-    +ME(217,122,9,11,cb,'Legs')
-    +MP([[212,130],[224,130],[222,174],[214,174]],cb,'Legs')
-    +ME(217,200,6,16,cb,'Legs');
-  return `<div class="mmap"><svg viewBox="0 0 300 250" class="mmap-svg" aria-label="Muscle map">
-    <g stroke="var(--line)" stroke-width="0.8" stroke-linejoin="round">${front}${back}</g>
-    <text x="75" y="246" class="mm-cap">Front</text><text x="225" y="246" class="mm-cap">Back</text>
-  </svg><div class="mm-note">Darker = trained more this window</div></div>`;
-}
 function bodyPartHTML(){
   if(!bodyPartStats(0).length) return '';
   const winDays=bpWin==='14'?14:bpWin==='28'?28:7;
@@ -1721,7 +1572,8 @@ function armDelete(key,el,onConfirm){
   flash('Tap again to delete');
 }
 
-function bestE1RM(exId,excl){const h=DB.exHistory&&DB.exHistory[exId];if(!h||!h.sessions)return 0;let best=0;Object.entries(h.sessions).forEach(([aid,s])=>{if(aid===excl)return;s.sets.forEach(x=>best=Math.max(best,exMetric(exId,x)));});return best;}
+function bestE1RM(exId,excl){ return memo('b1:'+exId+':'+excl,()=>_bestE1RM(exId,excl)); }
+function _bestE1RM(exId,excl){const h=DB.exHistory&&DB.exHistory[exId];if(!h||!h.sessions)return 0;let best=0;Object.entries(h.sessions).forEach(([aid,s])=>{if(aid===excl)return;s.sets.forEach(x=>best=Math.max(best,exMetric(exId,x)));});return best;}
 function prevSession(exId,excl){const h=DB.exHistory&&DB.exHistory[exId];if(!h||!h.sessions)return [];let pick=null;Object.entries(h.sessions).forEach(([aid,s])=>{if(aid===excl)return;if(!pick||s.date>pick.date)pick=s;});return pick?pick.sets:[];}
 function commitHistory(act,dateISO){
   DB.exHistory=DB.exHistory||{};
@@ -1818,7 +1670,7 @@ function finishWorkout(){
   const vol=workoutVolume(act);
   if(!act.done && act.data.startedAt) act.data.duration=Math.max(1,Math.round((Date.now()-act.data.startedAt)/1000));
   const dur=act.data.duration||0;
-  act.done=true; commitHistory(act,woDateISO()); save(); closeWorkout(); celebrate(vol,prs,dur);
+  act.done=true; commitHistory(act,woDateISO()); save(); reconcileCap(); closeWorkout(); celebrate(vol,prs,dur);
 }
 function discardWorkout(){
   stopWoTimer(); skipRest();
@@ -1902,10 +1754,10 @@ woBody.addEventListener('click',e=>{
   const xd=e.target.closest('[data-exdel]'); if(xd){armDelete('exdel:'+xd.dataset.exdel, xd, ()=>{woAct().data.exercises.splice(+xd.dataset.exdel,1);save();renderWorkout();});return;}
 });
 woBody.addEventListener('input',e=>{
-  const w=e.target.closest('[data-w]'); if(w){const[ei,si]=w.dataset.w.split(':').map(Number);woAct().data.exercises[ei].sets[si].weight=e.target.value;save();return;}
-  const r=e.target.closest('[data-r]'); if(r){const[ei,si]=r.dataset.r.split(':').map(Number);woAct().data.exercises[ei].sets[si].reps=e.target.value;save();return;}
-  if(e.target.dataset.woname!==undefined){woAct().data.name=e.target.value;save();return;}
-  const en=e.target.closest('[data-exnoteinput]'); if(en){const ex=woAct().data.exercises[+en.dataset.exnoteinput];const v=e.target.value;DB.exNotes=DB.exNotes||{};if(v.trim())DB.exNotes[ex.exId]=v;else delete DB.exNotes[ex.exId];delete ex.note;save();return;}
+  const w=e.target.closest('[data-w]'); if(w){const[ei,si]=w.dataset.w.split(':').map(Number);woAct().data.exercises[ei].sets[si].weight=e.target.value;saveSoon();return;}
+  const r=e.target.closest('[data-r]'); if(r){const[ei,si]=r.dataset.r.split(':').map(Number);woAct().data.exercises[ei].sets[si].reps=e.target.value;saveSoon();return;}
+  if(e.target.dataset.woname!==undefined){woAct().data.name=e.target.value;saveSoon();return;}
+  const en=e.target.closest('[data-exnoteinput]'); if(en){const ex=woAct().data.exercises[+en.dataset.exnoteinput];const v=e.target.value;DB.exNotes=DB.exNotes||{};if(v.trim())DB.exNotes[ex.exId]=v;else delete DB.exNotes[ex.exId];delete ex.note;saveSoon();return;}
 });
 /* set values persist on input; Prev/PR refresh on check, add, delete, or reopen */
 
@@ -2095,7 +1947,7 @@ function computeStreak(){
   }
   return streak;
 }
-function currentStreak(){ try{ return computeStreak(); }catch(e){ let s=0,m=mondayOf(new Date()); if(weekCamps(DB.weeks[iso(m)])<1)m=addDays(m,-7); while(DB.weeks[iso(m)]&&weekCamps(DB.weeks[iso(m)])>=1){s++;m=addDays(m,-7);} return s; } }
+function currentStreak(){ return memo('currentStreak',()=>{ try{ return computeStreak(); }catch(e){ let s=0,m=mondayOf(new Date()); if(weekCamps(DB.weeks[iso(m)])<1)m=addDays(m,-7); while(DB.weeks[iso(m)]&&weekCamps(DB.weeks[iso(m)])>=1){s++;m=addDays(m,-7);} return s; } }); }
 function hasData(wk){ if(!wk)return false; const a=DAYS.some(d=>(wk.acts[d]||[]).length); const p=wk.plan&&DAYS.some(d=>(wk.plan[d]||[]).length); return a||p; }
 function streakGlyph(){ return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#c25b3c" stroke-width="2" stroke-linejoin="round"><path d="M3 20 L9 8 L13 14 L16 6 L21 20 Z"/></svg>`; }
 function summitLogHTML(){
@@ -2176,7 +2028,7 @@ const SHOP_SEEDS={
   'Gaming':[{name:'An hour of gaming',cost:4,tier:'small'},{name:'In-game pass',cost:3,tier:'small'},{name:'An indie game',cost:8,tier:'mid'},{name:'A new release',cost:15,tier:'big'}],
   'MTG & cards':[{name:'MTG booster pack',cost:4,tier:'small'},{name:'MTG accessories',cost:8,tier:'mid'},{name:'MTG deck / precon',cost:15,tier:'big'},{name:'A booster box',cost:25,tier:'big'}],
   'Coffee & food':[{name:'Coffee out',cost:1,tier:'small'},{name:'Takeout night',cost:3,tier:'small'},{name:'Dinner out',cost:8,tier:'mid'},{name:'A tasting menu',cost:20,tier:'big'}],
-  'Drinks':[{name:'A pour of the good whiskey',cost:2,tier:'small'},{name:'A craft six-pack',cost:3,tier:'small'},{name:'A nice bottle of wine',cost:8,tier:'mid'},{name:'The good bottle',cost:25,tier:'big'}],
+  'Drinks':[{name:'A pour of the good whiskey',cost:3,tier:'small'},{name:'A craft six-pack',cost:3,tier:'small'},{name:'A nice bottle of wine',cost:8,tier:'mid'},{name:'The good bottle',cost:25,tier:'big'}],
   'Time & rest':[{name:'A no-email evening',cost:3,tier:'small'},{name:'Slow morning / sleep in',cost:4,tier:'small'},{name:'A guilt-free rest day',cost:4,tier:'small'},{name:'A day off the grid',cost:15,tier:'big'}],
   'Music':[{name:'An album',cost:3,tier:'small'},{name:'A vinyl record',cost:6,tier:'mid'},{name:'A pedal or accessory',cost:12,tier:'mid'},{name:'Concert tickets',cost:20,tier:'big'}],
   'Books':[{name:'A paperback',cost:4,tier:'small'},{name:'A hardcover',cost:8,tier:'mid'},{name:'A signed edition',cost:18,tier:'big'}],
@@ -2217,6 +2069,7 @@ function renderShop(){
     const n=shop().length;
     h+=`<div class="onb-count">${n?`${n} item${n!==1?'s':''} in your shop — tweak any price below`:'Nothing yet — pick a few areas above, or add your own at the bottom'}</div>`;
   } else {
+    h+=`<div class="shop-nav"><button class="shop-back" id="shopClose">${IC.cl} Back</button></div>`;
     h+=`<div class="rs-head"><h2>Shop</h2><p class="tagline">Training earns tokens. Spend them here — and log it even when you dip under.</p></div>`;
     h+=`<div class="shop-bal ${bal<0?'neg':''}"><span class="shop-bal-n">${bal}</span><span class="shop-bal-l">token${bal===1?'':'s'} banked</span><button class="shop-edit" data-shopedit>${shopEdit?'Done':'Edit'}</button></div>`;
   }
@@ -2255,7 +2108,7 @@ function renderShop(){
     recent.forEach(x=>{ h+=`<div class="ledg-row"><span class="ledg-d">${x.date.slice(5)}</span><span class="ledg-t">${esc(x.name)}</span><span class="ledg-v">−${x.cost}</span><button class="ledg-x" data-unspend2="${x.sid}" aria-label="Undo">${IC.x}</button></div>`; });
     h+=`</div>`;
   }
-  h+=`<div class="sheet-actions">${shopOnboard?`<button class="btn primary" id="shopClose">Continue →</button>`:`<button class="btn primary" id="shopClose">Done</button>`}</div>`;
+  if(shopOnboard) h+=`<div class="sheet-actions"><button class="btn primary" id="shopClose">Continue →</button></div>`;
   rsetupBody.innerHTML=h;
 }
 rsetupEl.addEventListener('click',e=>{
@@ -2288,6 +2141,7 @@ function closeWelcome(start){ DB.onboarded=true; save(); document.getElementById
 document.getElementById('welcomeStart').onclick=()=>closeWelcome(true);
 document.getElementById('welcomeSkip').onclick=()=>closeWelcome(false);
 
+reconcileCap();   // after all declarations: touches num()/actMiles()
 render();
 if(!DB.onboarded) showWelcome();
 </script>
