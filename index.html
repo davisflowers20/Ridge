@@ -134,19 +134,6 @@
   .bar > i{display:block;height:100%;border-radius:999px;background:var(--ink);transition:width .4s ease}
   .quest.done .bar > i{background:var(--gold)}
 
-  .reward{margin-top:13px;border-top:1px solid var(--line);padding-top:13px}
-  .reward-lead{display:flex;align-items:center;gap:7px;font-family:'Space Grotesk';letter-spacing:.14em;text-transform:uppercase;font-size:11px;color:var(--gold-2);margin-bottom:10px}
-  .cats{display:flex;gap:6px;margin-bottom:11px;flex-wrap:wrap}
-  .cat{font-family:'Space Grotesk';font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:5px 9px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;transition:.15s}
-  .cat.active{border-color:var(--gold);color:var(--gold-2);background:rgba(232,164,76,.08)}
-  .prize{display:flex;align-items:center;gap:12px;background:var(--valley);border:1px solid var(--line);border-radius:12px;padding:12px}
-  .prize .info{flex:1;min-width:0}
-  .prize .name{font-family:'Space Grotesk';font-weight:500;font-size:15px;letter-spacing:.02em}
-  .prize .note{font-size:12px;color:var(--muted);margin-top:2px}
-  .prize .price{font-family:'Space Mono';font-weight:700;color:var(--gold-2);font-size:14px;white-space:nowrap}
-  .reroll{all:unset;cursor:pointer;flex:none;width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:var(--surface-2);color:var(--haze);transition:.2s}
-  .reroll:hover{color:var(--gold-2)}
-  .reroll:active{transform:rotate(180deg)}
   .locked{display:flex;align-items:center;gap:8px;margin-top:13px;font-size:12px;color:var(--muted);font-style:italic}
 
   /* ---- bottom nav ---- */
@@ -402,40 +389,7 @@
   .fp-sub{font-family:'Space Grotesk';font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#b9b7ae;margin-top:5px}
 
   /* ---- reward setup + quest edit + locked ---- */
-  .rsetup{position:fixed;inset:0;z-index:72;background:linear-gradient(180deg,#eef2f5,#dfe6ea);display:none;overflow-y:auto;-webkit-overflow-scrolling:touch}
-  .rsetup.show{display:block}
-  .rsetup-inner{max-width:var(--maxw);margin:0 auto;padding:calc(22px + env(safe-area-inset-top)) 18px calc(30px + env(safe-area-inset-bottom))}
-  .rs-head h2{font-family:'Space Grotesk';font-weight:600;font-size:24px;letter-spacing:.01em;margin:4px 0 3px}
-  .rs-head .tagline{font-size:14px;color:var(--ink-soft);line-height:1.5;margin:0}
-  .rs-int{margin:20px 0 4px}
-  .rs-step{font-family:'Space Mono';font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
-  .rs-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:8px}
-  .rs-tile{all:unset;cursor:pointer;display:flex;flex-direction:column;gap:3px;padding:13px;border:1px solid var(--line);border-radius:13px;background:var(--surface);touch-action:manipulation;transition:border-color .12s,box-shadow .12s}
-  .rs-tile.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
-  .rs-tile-l{font-family:'Space Grotesk';font-weight:600;font-size:15px;letter-spacing:.01em}
-  .rs-tile-s{font-size:11px;color:var(--muted);line-height:1.35}
-  .rs-tile.on .rs-tile-s{color:var(--ink-soft)}
-  .rs-sec{margin-top:16px}
-  .rs-sec-h{font-family:'Space Grotesk';font-weight:600;font-size:14px;letter-spacing:.02em;margin-bottom:9px}
-  .rs-chip.on{border-color:var(--ink);background:var(--ink);color:var(--surface)}
-  .rs-lbl{font-family:'Space Grotesk';font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
-  .rs-chips{display:flex;flex-wrap:wrap;gap:7px}
-  .rs-chip{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;color:var(--ink-soft);touch-action:manipulation}
-  .rs-chip:hover{border-color:var(--ink);color:var(--ink)}
-  .rs-chip .ic{width:12px;height:12px}
-  .rs-tier{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:14px}
-  .rs-tier-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:11px}
-  .rs-budget{width:80px;font-family:'Space Mono';font-size:14px;text-align:center;background:var(--valley);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:7px}
-  .rs-items{display:flex;flex-wrap:wrap;gap:7px;min-height:6px;margin-bottom:11px}
-  .rs-item{display:inline-flex;align-items:center;gap:4px;font-size:13px;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:6px 6px 6px 12px}
-  .rs-del{all:unset;cursor:pointer;color:var(--muted);width:22px;height:22px;display:grid;place-items:center}
-  .rs-del:hover{color:#b03b22}
-  .rs-del .ic{width:13px;height:13px}
-  .rs-empty{font-size:12px;color:var(--muted);font-style:italic}
-  .rs-add{display:flex;gap:8px}
   .rs-input{flex:1;min-width:0;font-size:15px;background:var(--valley);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
-  .rs-addbtn{all:unset;cursor:pointer;font-family:'Space Grotesk';font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:0 16px;display:grid;place-items:center;border:1px solid var(--ink);border-radius:10px;color:var(--ink);touch-action:manipulation}
-  .rs-addbtn:hover{background:var(--ink);color:var(--surface)}
   .qedit{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
   .qedit-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
   .q-readout{display:flex;align-items:center;justify-content:space-between;margin:13px 0 11px;font-family:'Space Mono';font-size:14px;color:var(--ink)}
@@ -447,15 +401,7 @@
   .wo-delete{all:unset;cursor:pointer;display:block;text-align:center;margin:4px auto 8px;font-family:'Space Grotesk';font-size:12px;letter-spacing:.04em;color:var(--muted);padding:11px}
   .wo-delete:hover{color:#b03b22}
   .wo-delete.arm{color:#fff;background:#b03b22;border-radius:10px}
-  .rs-mic{all:unset;cursor:pointer;width:46px;display:grid;place-items:center;border:1px solid var(--line);border-radius:10px;color:var(--ink);touch-action:manipulation}
-  .rs-mic .ic{width:18px;height:18px}
-  .rs-mic[disabled]{opacity:.4}
-  .rs-mic.listening{background:#b03b22;border-color:#b03b22;color:#fff;animation:micpulse 1s ease-in-out infinite}
   @keyframes micpulse{0%,100%{opacity:1}50%{opacity:.5}}
-  .rs-foot{display:flex;justify-content:space-between;align-items:center;margin-top:9px}
-  .rs-clear{all:unset;cursor:pointer;font-family:'Space Grotesk';font-size:11px;letter-spacing:.04em;color:var(--muted)}
-  .rs-clear:hover{color:#b03b22}
-  .rs-count{font-family:'Space Mono';font-size:11px;color:var(--muted);text-align:right}
   .bp-sec{margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
   .bp-h{font-family:'Space Grotesk';font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--haze);margin-bottom:14px}
   .bp-row{margin-bottom:14px}
@@ -540,13 +486,6 @@
   .td-body b{color:#fff}
   .td-go{all:unset;cursor:pointer;flex:none;font-family:'Space Grotesk';font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:#fff;color:var(--ink);padding:11px 16px;border-radius:999px;touch-action:manipulation}
   .td-go.ghost{background:rgba(255,255,255,.14);color:#fff}
-  .claim-btn{all:unset;cursor:pointer;font-family:'Space Grotesk';font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:var(--gold);color:#fff;padding:10px 15px;border-radius:999px;margin-left:8px;flex:none;touch-action:manipulation}
-  .claimed-r .reward-lead{color:var(--gold)}
-  .claimed-name{text-decoration:line-through;text-decoration-thickness:1.5px;text-decoration-color:var(--gold)}
-  .claim-row{display:flex;align-items:center;gap:9px;padding:9px 2px;border-bottom:1px solid var(--line);font-size:13px}
-  .claim-star{color:var(--gold);font-weight:700}
-  .claim-name{flex:1;min-width:0}
-  .claim-meta{font-family:'Space Mono';font-size:11px;color:var(--muted)}
   .peak-dots i.hollow{background:transparent;border:1.5px solid var(--gold)}
   .peak.graced .peak-label{color:var(--gold)}
   /* ---- design pass: hierarchy, grammar, identity, motion ---- */
@@ -610,90 +549,12 @@
   .bp-status.high{color:var(--gold);font-weight:700}
   .bp-sets.ok{color:var(--pine)}
   /* ---- tokens: bank, chips, ledger, shop ---- */
-  .bank{background-color:var(--ink);color:#fff;border-radius:var(--radius);padding:16px;margin-bottom:12px;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='150' viewBox='0 0 300 150'><g fill='none' stroke='%23ffffff' stroke-opacity='.07' stroke-width='1'><ellipse cx='232' cy='70' rx='74' ry='36' transform='rotate(-14 232 70)'/><ellipse cx='232' cy='70' rx='50' ry='24' transform='rotate(-14 232 70)'/><ellipse cx='232' cy='70' rx='26' ry='12' transform='rotate(-14 232 70)'/></g></svg>");background-repeat:no-repeat;background-position:right -10px center}
-  .bank-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
-  .bank-lbl{font-family:'Space Grotesk';font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.55)}
-  .bank-n{font-family:'Space Mono';font-weight:700;font-size:40px;line-height:1;margin-top:5px;letter-spacing:-.02em}
-  .bank-n small{font-size:12px;color:rgba(255,255,255,.6);font-weight:400;margin-left:7px;letter-spacing:0}
-  .bank.neg .bank-n{color:#f0a58e}
-  .bank-shop{all:unset;cursor:pointer;flex:none;display:inline-flex;align-items:center;gap:5px;font-family:'Space Grotesk';font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:#fff;color:var(--ink);padding:10px 15px;border-radius:999px;touch-action:manipulation}
-  .bank-shop .ic{width:13px;height:13px}
-  .bank-flow{font-family:'Space Mono';font-size:10.5px;color:rgba(255,255,255,.6);margin-top:12px;padding-top:11px;border-top:1px solid rgba(255,255,255,.14)}
-  .bank-flow b{color:#fff}
   .pin{margin-top:13px;padding-top:12px;border-top:1px solid rgba(255,255,255,.14)}
-  .pin-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
-  .pin-n{font-family:'Space Grotesk';font-weight:600;font-size:13.5px}
-  .pin-c{font-family:'Space Mono';font-size:12px;color:var(--gold-2)}
-  .pin-bar{height:6px;background:rgba(255,255,255,.14);border-radius:99px;overflow:hidden;margin:7px 0 5px}
-  .pin-bar i{display:block;height:100%;background:var(--gold-2);border-radius:99px;transition:width .4s ease}
-  .pin-l{font-family:'Space Mono';font-size:10.5px;color:rgba(255,255,255,.6)}
-  .chips{display:flex;gap:7px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px;scrollbar-width:none}
-  .chips::-webkit-scrollbar{display:none}
-  .chip{all:unset;cursor:pointer;flex:none;display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:9px 13px;font-size:12.5px;white-space:nowrap;touch-action:manipulation}
-  .chip b{font-family:'Space Mono';font-size:11.5px;color:var(--gold)}
-  .chip.off{opacity:.45}
-  .chip.arm{border-color:#b03b22;color:#b03b22}
-  .ledg{margin-top:12px}
-  .ledg-row{display:flex;align-items:center;gap:9px;padding:8px 2px;border-bottom:1px solid var(--line);font-size:12.5px}
-  .ledg-d{font-family:'Space Mono';font-size:10.5px;color:var(--muted);width:40px;flex:none}
-  .ledg-t{flex:1;min-width:0;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .ledg-v{font-family:'Space Mono';font-size:12px;font-weight:700;color:var(--gold);flex:none}
-  .ledg-x{all:unset;cursor:pointer;color:var(--muted);width:26px;height:26px;display:grid;place-items:center;flex:none}
-  .ledg-x .ic{width:12px;height:12px}
-  .ledg-x.arm{background:#b03b22;color:#fff;border-radius:7px}
-  .shop-nav{position:sticky;top:0;z-index:4;margin:-8px -18px 6px;padding:10px 18px 8px;background:linear-gradient(180deg,#eef2f5 72%,rgba(238,242,245,0))}
-  .shop-back{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:'Space Grotesk';font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);padding:8px 4px;touch-action:manipulation}
-  .shop-back:hover{color:var(--ink)}
-  .shop-back .ic{width:15px;height:15px}
-  .shop-bal{display:flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:13px 14px;margin:16px 0 4px}
-  .shop-bal-n{font-family:'Space Mono';font-weight:700;font-size:26px;color:var(--ink);line-height:1}
-  .shop-bal.neg .shop-bal-n{color:#b03b22}
-  .shop-bal-l{flex:1;font-family:'Space Grotesk';font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-  .shop-edit{all:unset;cursor:pointer;font-family:'Space Grotesk';font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:8px 14px;touch-action:manipulation}
-  .shop-grp{font-family:'Space Mono';font-size:10px;color:var(--muted);letter-spacing:.04em;margin:18px 0 8px}
-  .shop-item{all:unset;cursor:pointer;box-sizing:border-box;width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 13px;margin-bottom:7px;touch-action:manipulation}
-  .shop-item.locked{opacity:.5}
-  .shop-item.arm{border-color:#b03b22}
-  .shop-l{min-width:0}
-  .shop-n{display:block;font-family:'Space Grotesk';font-weight:600;font-size:13.5px;letter-spacing:.01em}
-  .shop-s{display:block;font-size:11px;color:var(--muted);margin-top:2px}
-  .shop-c{font-family:'Space Mono';font-weight:700;font-size:14px;color:var(--gold);flex:none}
-  .shop-item.locked .shop-c{color:var(--line-2)}
-  .pin-tag{font-style:normal;font-family:'Space Grotesk';font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);border-radius:999px;padding:1px 6px;margin-left:5px;vertical-align:1px}
-  .shop-item.edit{cursor:default}
   .stepper.mini{margin:0;gap:6px;flex:none}
   .stepper.mini .step{width:26px;height:26px;font-size:15px}
   .stepper.mini .step-val{font-size:14px;min-width:20px}
-  .shop-pin,.shop-del{all:unset;cursor:pointer;width:30px;height:30px;display:grid;place-items:center;border-radius:8px;color:var(--muted);flex:none}
-  .shop-pin.on{color:var(--gold)}
-  .shop-pin .ic-peak,.shop-del .ic{width:15px;height:15px}
-  .shop-del.arm{background:#b03b22;color:#fff}
   .q-intro{font-size:12px;color:var(--ink-soft);line-height:1.55;margin:-6px 2px 13px}
   .q-intro b{font-family:'Space Grotesk';font-weight:600}
-  .bank-btns{display:flex;align-items:center;gap:7px;flex:none}
-  .bank-info{all:unset;cursor:pointer;width:32px;height:32px;display:grid;place-items:center;border-radius:50%;border:1px solid rgba(255,255,255,.28);color:rgba(255,255,255,.8);font-family:'Space Grotesk';font-size:14px;font-weight:600;touch-action:manipulation}
-  .bank-info:hover{background:rgba(255,255,255,.14);color:#fff}
-  .tk-list{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
-  .tk-row{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line);border-radius:12px;padding:12px 13px}
-  .tk-l b{display:block;font-family:'Space Grotesk';font-size:14px;letter-spacing:.01em}
-  .tk-l span{display:block;font-size:11.5px;color:var(--muted);margin-top:2px}
-  .tk-r{font-family:'Space Mono';font-weight:700;font-size:15px;color:var(--ink);flex:none;white-space:nowrap}
-  .tk-r small{font-size:11px;color:var(--muted);font-weight:400;margin-left:5px}
-  .tk-bonus{display:flex;gap:9px;align-items:flex-start;background:var(--surface-2);border-radius:12px;padding:12px 13px;font-size:12.5px;line-height:1.5;color:var(--ink-soft)}
-  .tk-bonus .ic-peak{color:var(--gold);flex:none;margin-top:2px}
-  .tk-bonus b{color:var(--gold)}
-  .tk-notes{margin-top:14px;display:flex;flex-direction:column;gap:9px;font-size:12px;color:var(--muted);line-height:1.5}
-  .tk-notes b{color:var(--ink-soft)}
-  .tk-now{display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding-top:13px;border-top:1px solid var(--line);font-family:'Space Grotesk';font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-  .tk-now b{font-family:'Space Mono';font-size:22px;color:var(--ink);letter-spacing:0}
-  .onb-count{font-family:'Space Mono';font-size:11px;color:var(--muted);margin:16px 0 -4px;line-height:1.5}
-  .bonus{display:flex;align-items:center;gap:7px;margin-top:9px;font-family:'Space Mono';font-size:10.5px;color:rgba(255,255,255,.6)}
-  .bonus b{color:#fff}
-  .bonus .ic-peak{width:13px;height:13px;flex:none;color:rgba(255,255,255,.45)}
-  .bonus.won{color:var(--gold-2)}
-  .bonus.won b{color:var(--gold-2)}
-  .bonus.won .ic-peak{color:var(--gold-2)}
-  .bonus-n{margin-left:auto;color:rgba(255,255,255,.45);flex:none}
   button:focus-visible,select:focus-visible,input:focus-visible,.check:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
   @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -752,13 +613,12 @@
   <div class="wsteps">
     <div class="wstep"><span class="wn">1</span><div><b>Plan</b><span>Set each day — run, lift, rest.</span></div></div>
     <div class="wstep"><span class="wn">2</span><div><b>Log</b><span>Track every set, run, and sprint.</span></div></div>
-    <div class="wstep"><span class="wn">3</span><div><b>Earn</b><span>Bank tokens, spend them on what you actually want.</span></div></div>
+    <div class="wstep"><span class="wn">3</span><div><b>Climb</b><span>Clear your goals — Basecamp, Ridgeline, Summit.</span></div></div>
   </div>
   <button class="btn primary" id="welcomeStart">Set your first week</button>
   <button class="link-btn" id="welcomeSkip">Skip for now</button>
 </div></div>
 
-<div class="rsetup" id="rsetup"><div class="rsetup-inner" id="rsetupBody"></div></div>
 
 <script>
 "use strict";
@@ -1151,7 +1011,7 @@ function questsHTML(){
     <div class="ascent-cap"><span class="t">${doneCount?milestoneName(doneCount):ascentPhase(alt)}</span><span class="n">${doneCount}/3 cleared</span></div>
   </div>`;
   h+=`<div class="eyebrow">This week's quests</div>`;
-  h+=`<div class="q-intro">Three goals, any order. Clear <b>one</b> and you reach Basecamp, <b>two</b> the Ridgeline, <b>all three</b> the Summit — worth <b>+${PERFECT_WEEK_BONUS}</b> tokens.</div>`;
+  h+=`<div class="q-intro">Three goals, any order. Clear <b>one</b> and you reach Basecamp, <b>two</b> the Ridgeline, <b>all three</b> the Summit.</div>`;
   if(w.locked) h+=`<div class="lock-note">${IC.lock} Locked for the week — re-run “Set the week” to change.</div>`;
   states.forEach((s,i)=>{
     const kind=questKind(s.q), kl=KIND_LABEL[kind];
@@ -1184,39 +1044,7 @@ function questsHTML(){
     }
     h+=`</div>`;
   });
-  h+=bankHTML();
   h+=summitLogHTML();
-  return h;
-}
-
-function bankHTML(){
-  const bal=tokenBalance(), pin=pinnedItem();
-  let h=`<div class="eyebrow">Banked</div>`;
-  h+=`<div class="bank ${bal<0?'neg':''}">
-    <div class="bank-top">
-      <div><div class="bank-lbl">Balance</div><div class="bank-n">${bal}<small>token${bal===1?'':'s'}</small></div></div>
-      <div class="bank-btns"><button class="bank-info" data-tokeninfo aria-label="How tokens work">?</button><button class="bank-shop" data-openshop>Shop ${IC.cr}</button></div>
-    </div>`;
-  if(pin){
-    const pct=Math.max(0,Math.min(100,Math.round(bal/pin.cost*100)));
-    const left=Math.max(0,pin.cost-bal);
-    h+=`<div class="pin">
-      <div class="pin-top"><span class="pin-n">${esc(pin.name)}</span><span class="pin-c">${Math.max(0,bal)}/${pin.cost}</span></div>
-      <div class="pin-bar"><i style="width:${pct}%"></i></div>
-      <div class="pin-l">${left>0?`${left} more to go`:'Ready — claim it in the shop'}</div>
-    </div>`;
-  }
-  const pw=perfectWeeks(), perfect=weekIsPerfect();
-  h+=`<div class="bank-flow">${bal>=TOKEN_CAP?'<b>At cap</b> — spend some before it stops counting':`<b>${SETS_PER_TOKEN} sets</b> · <b>${MILES_PER_TOKEN} miles</b> · <b>${SPRINTSETS_PER_TOKEN} sprint sets</b> = 1 token`}</div>`;
-  h+=`<div class="bonus ${perfect?'won':''}">${perfect?`${IC.peak} All three camps — <b>+${PERFECT_WEEK_BONUS}</b> banked this week`:`${IC.peak} Clear all three camps for <b>+${PERFECT_WEEK_BONUS}</b>`}${pw?`<span class="bonus-n">${pw} perfect wk${pw!==1?'s':''}</span>`:''}</div></div>`;
-  const quick=shop().filter(x=>x.tier==='small').slice(0,6);
-  h+=`<div class="chips">${quick.map(x=>`<button class="chip ${bal<x.cost?'off':''}" data-spend="${x.id}">${esc(x.name)} <b>${x.cost}</b></button>`).join('')}</div>`;
-  const recent=(DB.spends||[]).slice(-3).reverse();
-  if(recent.length){
-    h+=`<div class="ledg">`;
-    recent.forEach(x=>{ h+=`<div class="ledg-row"><span class="ledg-d">${x.date.slice(5)}</span><span class="ledg-t">${esc(x.name)}</span><span class="ledg-v">−${x.cost}</span><button class="ledg-x" data-unspend="${x.sid}" aria-label="Undo">${IC.x}</button></div>`; });
-    h+=`</div>`;
-  }
   return h;
 }
 
@@ -1292,57 +1120,8 @@ function ascentSVG(states){
 function defaultRewards(){ return {basecamp:[],ridgeline:[],summit:[]}; }
 
 /* ================= TOKENS: earn by volume, spend in the shop ================= */
-const SETS_PER_TOKEN=6, MILES_PER_TOKEN=3, SPRINTSETS_PER_TOKEN=5, TOKEN_CAP=40, PERFECT_WEEK_BONUS=5;
-const SHOP_DEFAULT=[
-  {id:'coffee',   name:'Coffee out',                    cost:1,  tier:'small'},
-  {id:'pour',     name:'A pour of the good whiskey',    cost:3,  tier:'small'},
-  {id:'takeout',  name:'Takeout night',                 cost:3,  tier:'small'},
-  {id:'noemail',  name:'A no-email evening',            cost:3,  tier:'small'},
-  {id:'pack',     name:'MTG booster pack',              cost:4,  tier:'small'},
-  {id:'gaming',   name:'An hour of gaming',             cost:4,  tier:'small'},
-  {id:'slowmorn', name:'Slow morning / sleep in',       cost:4,  tier:'small'},
-  {id:'vinyl',    name:'A vinyl record or album',       cost:6,  tier:'mid'},
-  {id:'dinner',   name:'Dinner out',                    cost:8,  tier:'mid'},
-  {id:'mtgacc',   name:'MTG accessories',               cost:8,  tier:'mid'},
-  {id:'gamebook', name:'A game or a book',              cost:12, tier:'mid'},
-  {id:'mtgdeck',  name:'MTG deck / precon',             cost:15, tier:'big'},
-  {id:'cart',     name:"Something you've had in a cart",cost:18, tier:'big'},
-  {id:'denim',    name:'Denim or a jacket',             cost:20, tier:'big'},
-  {id:'bottle',   name:'The good bottle',               cost:25, tier:'big'}
-];
-const TIER_ORDER=['small','mid','big'];
-const TIER_NAME={small:'Small · everyday',mid:'Medium · weekly',big:'Big · save up'};
-function shop(){ if(!Array.isArray(DB.shop)||!DB.shop.length){ DB.shop=SHOP_DEFAULT.map(x=>Object.assign({},x)); save(); } return DB.shop; }
-function shopItem(id){ return shop().find(x=>x.id===id)||null; }
-function tokensEarned(){ return memo('tokensEarned',_tokensEarned); }
-function _tokensEarned(){
-  let sets=0, miles=0, sprintSets=0;
-  Object.values(DB.exHistory||{}).forEach(h=>Object.values(h.sessions||{}).forEach(ss=>{ sets+=(ss.sets?ss.sets.length:0); }));
-  Object.values(DB.weeks||{}).forEach(wk=>{ if(!wk||!wk.acts)return; DAYS.forEach(d=>(wk.acts[d]||[]).forEach(a=>{
-    if(!a.done) return;
-    if(isSprint(a)) sprintSets+=num(a.data&&a.data.reps); else miles+=actMiles(a);
-  })); });
-  return Math.floor(sets/SETS_PER_TOKEN)+Math.floor(miles/MILES_PER_TOKEN)+Math.floor(sprintSets/SPRINTSETS_PER_TOKEN)+perfectWeeks()*PERFECT_WEEK_BONUS;
-}
-function perfectWeeks(){ return memo('perfectWeeks',()=>{ let n=0; Object.values(DB.weeks||{}).forEach(wk=>{ if(weekCamps(wk)>=3) n++; }); return n; }); }
-function weekIsPerfect(){ return weekCamps(week())>=3; }
-function tokensSpent(){ return (DB.spends||[]).reduce((a,x)=>a+num(x.cost),0); }
-function tokenBalance(){ return Math.min(TOKEN_CAP, tokensEarned()-tokensSpent()-num(DB.tokenForfeit)); }
 /* the cap is use-it-or-lose-it, so overflow is banked away — but only at real
    state changes, never from a render path (rendering must not mutate). */
-function reconcileCap(){
-  const raw=tokensEarned()-tokensSpent()-num(DB.tokenForfeit);
-  if(raw>TOKEN_CAP){ DB.tokenForfeit=num(DB.tokenForfeit)+(raw-TOKEN_CAP); save(); }
-}
-function spendToken(id){
-  const it=shopItem(id); if(!it) return;
-  DB.spends=DB.spends||[];
-  DB.spends.push({sid:'s'+Date.now().toString(36),id:it.id,name:it.name,cost:it.cost,date:iso(new Date())});
-  save(); reconcileCap(); flash(it.name+' — '+it.cost+' token'+(it.cost!==1?'s':''));
-}
-function undoSpend(sid){ DB.spends=(DB.spends||[]).filter(x=>x.sid!==sid); save(); flash('Spend removed'); }
-function pinnedItem(){ return DB.pinned?shopItem(DB.pinned):null; }
-
 /* ---------- sheet (add/edit activity) ---------- */
 const scrim=document.getElementById('scrim'), sheet=document.getElementById('sheet'), sheetBody=document.getElementById('sheetBody');
 let editing=null; // {day, id|null, type}
@@ -1416,16 +1195,10 @@ document.getElementById('nextWk').onclick=()=>{curMon=addDays(curMon,7);openDays
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;render();});
 
 view.addEventListener('click',e=>{
-  const t=e.target.closest('[data-openplanner],[data-toggle],[data-edit],[data-del],[data-add],[data-qstep],[data-qkind],[data-loadweek],[data-histex],[data-bpwin],[data-bkup],[data-bkx],[data-startlifttoday],[data-calnav],[data-spend],[data-unspend],[data-openshop],[data-tokeninfo]');
+  const t=e.target.closest('[data-openplanner],[data-toggle],[data-edit],[data-del],[data-add],[data-qstep],[data-qkind],[data-loadweek],[data-histex],[data-bpwin],[data-bkup],[data-bkx],[data-startlifttoday],[data-calnav]');
   if(!t) return;
   if(t.dataset.calnav){ if(!calMon){const n=new Date();calMon=new Date(n.getFullYear(),n.getMonth(),1);} calMon=new Date(calMon.getFullYear(),calMon.getMonth()+(+t.dataset.calnav),1); render(); return; }
   if(t.dataset.startlifttoday!==undefined){ const d=DAYS[(new Date().getDay()+6)%7]; startLift(d,null); return; }
-  if(t.dataset.openshop!==undefined){ openShop(); return; }
-  if(t.dataset.tokeninfo!==undefined){ openTokenInfo(); return; }
-  if(t.dataset.unspend){ undoSpend(t.dataset.unspend); render(); return; }
-  if(t.dataset.spend){ const it=shopItem(t.dataset.spend); if(!it) return;
-    if(tokenBalance()<it.cost){ armDelete('ovr:'+it.id,t,()=>{spendToken(it.id);render();}); return; }
-    spendToken(it.id); render(); return; }
   if(t.dataset.bkup!==undefined){ exportData(); return; }
   if(t.dataset.bkx!==undefined){ DB.bkDismiss=Date.now(); save(); render(); return; }
   if(t.dataset.histex){ histEx=t.dataset.histex; render(); return; }
@@ -1670,7 +1443,7 @@ function finishWorkout(){
   const vol=workoutVolume(act);
   if(!act.done && act.data.startedAt) act.data.duration=Math.max(1,Math.round((Date.now()-act.data.startedAt)/1000));
   const dur=act.data.duration||0;
-  act.done=true; commitHistory(act,woDateISO()); save(); reconcileCap(); closeWorkout(); celebrate(vol,prs,dur);
+  act.done=true; commitHistory(act,woDateISO()); save(); closeWorkout(); celebrate(vol,prs,dur);
 }
 function discardWorkout(){
   stopWoTimer(); skipRest();
@@ -1818,8 +1591,6 @@ function openRoutineManager(){
 scrim2El.onclick=closeSheet2;
 sheet2El.addEventListener('click',e=>{
   if(e.target.id==='pickerDone'||e.target.id==='sheet2Cancel')return closeSheet2();
-  if(e.target.closest('#tokenInfoBtn')){ openTokenInfo(); return; }
-  if(e.target.closest('#rewardsBtn')){ closeSheet2(); openShop(); return; }
   if(e.target.closest('#exportBtn'))return exportData();
   if(e.target.closest('#importBtn'))return document.getElementById('importFile').click();
   if(e.target.closest('#introBtn')){closeSheet2();DB.onboarded=false;save();showWelcome();return;}
@@ -1971,32 +1742,10 @@ function summitLogHTML(){
 }
 
 /* ================= HOW TOKENS WORK ================= */
-function openTokenInfo(){
-  const rows=[
-    ['Working sets',SETS_PER_TOKEN+' sets','Any logged set that isn\u2019t a warm-up'],
-    ['Cardio miles',MILES_PER_TOKEN+' miles','Run and walk at full; bike counts half'],
-    ['Sprint sets',SPRINTSETS_PER_TOKEN+' sets','Reps logged on a sprint session']
-  ];
-  sheet2Body.innerHTML=`<h3>How you earn</h3>
-    <div class="plan-note">Every token comes from work you logged. Nothing else pays.</div>
-    <div class="tk-list">${rows.map(r=>`<div class="tk-row"><div class="tk-l"><b>${r[0]}</b><span>${r[2]}</span></div><span class="tk-r">${r[1]}<small>= 1</small></span></div>`).join('')}</div>
-    <div class="tk-bonus">${IC.peak} <span><b>+${PERFECT_WEEK_BONUS} tokens</b> for clearing all three goals in a week. One cleared is Basecamp, two the Ridgeline, all three the Summit.</span></div>
-    <div class="tk-notes">
-      <div><b>Balance caps at ${TOKEN_CAP}.</b> Past that, new tokens stop counting — spend some.</div>
-      <div><b>It can go negative.</b> Take something you haven\u2019t earned and log it anyway; the number tells the truth.</div>
-      <div><b>Cardio and lifts both count.</b> Session length doesn\u2019t matter — only sets, miles, and sprint sets.</div>
-    </div>
-    <div class="tk-now"><span>Banked now</span><b>${tokenBalance()}</b></div>
-    <button class="btn primary" id="sheet2Cancel" style="margin-top:16px">Close</button>`;
-  scrim2El.classList.add('show'); sheet2El.classList.add('show');
-}
-
 /* ================= SETTINGS / DATA ================= */
 function openSettings(){
   sheet2Body.innerHTML=`<h3>Settings</h3>
     <div class="set-list">
-      <button class="set-row2" id="tokenInfoBtn"><div><b>How you earn</b><span>What banks a token</span></div>${IC.cr}</button>
-      <button class="set-row2" id="rewardsBtn"><div><b>Reward shop</b><span>Spend tokens, edit the menu</span></div>${IC.cr}</button>
       <button class="set-row2" id="exportBtn"><div><b>Export data</b><span>Download a backup (.json)</span></div>${IC.cr}</button>
       <button class="set-row2" id="importBtn"><div><b>Import data</b><span>Restore from a backup file</span></div>${IC.cr}</button>
       <div class="set-row2"><div><b>Rest timer</b><span>Same for every workout</span></div><div class="stepper rest-step"><button class="step" data-rest-set="-15" aria-label="Less">−</button><span class="step-val">${fmtDur(DB.restDefault||120)}</span><button class="step" data-rest-set="15" aria-label="More">+</button></div></div>
@@ -2024,124 +1773,16 @@ function handleImport(file){
 function resetAll(){ DB={weeks:{},onboarded:true,unit:unit(),rewards:defaultRewards(),budgets:{basecamp:'~$20',ridgeline:'~$50',summit:'~$100'}}; save(); curMon=mondayOf(new Date()); closeSheet2(); render(); flash('All data reset'); }
 
 /* ================= SHOP: spend tokens, edit the menu, pin a goal ================= */
-const SHOP_SEEDS={
-  'Gaming':[{name:'An hour of gaming',cost:4,tier:'small'},{name:'In-game pass',cost:3,tier:'small'},{name:'An indie game',cost:8,tier:'mid'},{name:'A new release',cost:15,tier:'big'}],
-  'MTG & cards':[{name:'MTG booster pack',cost:4,tier:'small'},{name:'MTG accessories',cost:8,tier:'mid'},{name:'MTG deck / precon',cost:15,tier:'big'},{name:'A booster box',cost:25,tier:'big'}],
-  'Coffee & food':[{name:'Coffee out',cost:1,tier:'small'},{name:'Takeout night',cost:3,tier:'small'},{name:'Dinner out',cost:8,tier:'mid'},{name:'A tasting menu',cost:20,tier:'big'}],
-  'Drinks':[{name:'A pour of the good whiskey',cost:3,tier:'small'},{name:'A craft six-pack',cost:3,tier:'small'},{name:'A nice bottle of wine',cost:8,tier:'mid'},{name:'The good bottle',cost:25,tier:'big'}],
-  'Time & rest':[{name:'A no-email evening',cost:3,tier:'small'},{name:'Slow morning / sleep in',cost:4,tier:'small'},{name:'A guilt-free rest day',cost:4,tier:'small'},{name:'A day off the grid',cost:15,tier:'big'}],
-  'Music':[{name:'An album',cost:3,tier:'small'},{name:'A vinyl record',cost:6,tier:'mid'},{name:'A pedal or accessory',cost:12,tier:'mid'},{name:'Concert tickets',cost:20,tier:'big'}],
-  'Books':[{name:'A paperback',cost:4,tier:'small'},{name:'A hardcover',cost:8,tier:'mid'},{name:'A signed edition',cost:18,tier:'big'}],
-  'Style':[{name:'Good socks',cost:2,tier:'small'},{name:'A tee',cost:4,tier:'small'},{name:'A flannel',cost:10,tier:'mid'},{name:'Denim or a jacket',cost:20,tier:'big'}],
-  'Outdoors':[{name:'Trail snacks',cost:2,tier:'small'},{name:'A water bottle',cost:4,tier:'small'},{name:'A daypack',cost:12,tier:'mid'},{name:'Boots or a tent',cost:25,tier:'big'}],
-  'Tech':[{name:'An accessory',cost:4,tier:'small'},{name:'A peripheral',cost:12,tier:'mid'},{name:'A device upgrade',cost:25,tier:'big'}],
-  'Home':[{name:'A candle',cost:2,tier:'small'},{name:'A plant',cost:3,tier:'small'},{name:'Glassware or a bar tool',cost:8,tier:'mid'},{name:'A rug or a chair',cost:25,tier:'big'}],
-  'Self-care':[{name:'Skincare',cost:6,tier:'mid'},{name:'A massage',cost:12,tier:'mid'},{name:'A spa session',cost:20,tier:'big'}]
-};
-let shopEdit=false, newItemName='', newItemTier='small', shopOnboard=false, seedPicked=[];
-const rsetupEl=document.getElementById('rsetup'), rsetupBody=document.getElementById('rsetupBody');
-function openShop(onboard){
-  shopOnboard=!!onboard; shopEdit=false; seedPicked=[];
-  if(shopOnboard){ DB.shop=[]; save(); }
-  renderShop(); rsetupEl.classList.add('show'); document.body.style.overflow='hidden';
-}
-function closeShop(){
-  if(shopOnboard && !(DB.shop||[]).length){ DB.shop=SHOP_DEFAULT.map(x=>Object.assign({},x)); save(); }
-  rsetupEl.classList.remove('show'); document.body.style.overflow='';
-  const wasOnboard=shopOnboard; shopOnboard=false;
-  if(wasOnboard) openPlanner(); else render();
-}
-function seedShop(area){
-  const items=SHOP_SEEDS[area]||[]; const cur=shop();
-  const i=seedPicked.indexOf(area);
-  if(i>=0){ seedPicked.splice(i,1); items.forEach(it=>{ const id='it_'+slug(it.name); DB.shop=shop().filter(x=>x.id!==id); if(DB.pinned===id)DB.pinned=null; }); }
-  else { seedPicked.push(area); items.forEach(it=>{ const id='it_'+slug(it.name); if(!cur.some(x=>x.id===id)) cur.push({id,name:it.name,cost:it.cost,tier:it.tier}); }); }
-  save(); renderShop();
-}
-function renderShop(){
-  const bal=tokenBalance();
-  let h='';
-  if(shopOnboard){
-    h+=`<div class="rs-head"><h2>What are you working for?</h2><p class="tagline">Training banks <b>tokens</b> — <b>${SETS_PER_TOKEN}</b> working sets, <b>${MILES_PER_TOKEN}</b> miles, or <b>${SPRINTSETS_PER_TOKEN}</b> sprint sets each. Clear all three camps in a week for <b>+${PERFECT_WEEK_BONUS}</b>. Spend them on this.</p></div>`;
-    h+=`<div class="rs-int"><div class="rs-lbl">Tap what you'd actually want</div><div class="rs-chips">`;
-    Object.keys(SHOP_SEEDS).forEach(k=>{ const on=seedPicked.includes(k); h+=`<button class="rs-chip ${on?'on':''}" data-seed="${escAttr(k)}">${on?'':IC.plus} ${esc(k)}</button>`; });
-    h+=`</div></div>`;
-    const n=shop().length;
-    h+=`<div class="onb-count">${n?`${n} item${n!==1?'s':''} in your shop — tweak any price below`:'Nothing yet — pick a few areas above, or add your own at the bottom'}</div>`;
-  } else {
-    h+=`<div class="shop-nav"><button class="shop-back" id="shopClose">${IC.cl} Back</button></div>`;
-    h+=`<div class="rs-head"><h2>Shop</h2><p class="tagline">Training earns tokens. Spend them here — and log it even when you dip under.</p></div>`;
-    h+=`<div class="shop-bal ${bal<0?'neg':''}"><span class="shop-bal-n">${bal}</span><span class="shop-bal-l">token${bal===1?'':'s'} banked</span><button class="shop-edit" data-shopedit>${shopEdit?'Done':'Edit'}</button></div>`;
-  }
-  TIER_ORDER.forEach(tr=>{
-    const items=shop().filter(x=>x.tier===tr).sort((a,b)=>a.cost-b.cost);
-    if(!items.length) return;
-    h+=`<div class="shop-grp">${TIER_NAME[tr]}</div>`;
-    items.forEach(x=>{
-      const afford=bal>=x.cost, pinned=DB.pinned===x.id;
-      if(shopEdit||shopOnboard){
-        h+=`<div class="shop-item edit">
-          <span class="shop-n">${esc(x.name)}</span>
-          <span class="stepper mini"><button class="step" data-costadj="${x.id}:-1" aria-label="Cheaper">−</button><span class="step-val">${x.cost}</span><button class="step" data-costadj="${x.id}:1" aria-label="Dearer">+</button></span>
-          <button class="shop-pin ${pinned?'on':''}" data-pin="${x.id}" aria-label="Pin as goal">${IC.peak}</button>
-          <button class="shop-del" data-itemdel="${x.id}" aria-label="Remove">${IC.x}</button>
-        </div>`;
-      } else {
-        h+=`<button class="shop-item ${afford?'':'locked'}" data-buy="${x.id}">
-          <span class="shop-l"><span class="shop-n">${esc(x.name)}${pinned?' <i class="pin-tag">goal</i>':''}</span>${afford?'':`<span class="shop-s">${x.cost-bal} more to unlock</span>`}</span>
-          <span class="shop-c">${x.cost}</span>
-        </button>`;
-      }
-    });
-  });
-  if(shopEdit||shopOnboard){
-    h+=`<div class="newex">
-      <div class="newex-h">Add an item</div>
-      <input class="rs-input" id="newItemName" value="${escAttr(newItemName)}" placeholder="Reward name">
-      <div class="newex-groups">${TIER_ORDER.map(t=>`<button class="qsegb ${newItemTier===t?'on':''}" data-itemtier="${t}">${TIER_NAME[t].split(' ·')[0]}</button>`).join('')}</div>
-      <button class="btn primary" id="newItemAdd">${IC.plus} Add to shop</button>
-    </div>`;
-  }
-  const recent=(DB.spends||[]).slice(-6).reverse();
-  if(recent.length && !shopEdit && !shopOnboard){
-    h+=`<div class="eyebrow" style="margin-top:22px">Recently spent</div><div class="ledg">`;
-    recent.forEach(x=>{ h+=`<div class="ledg-row"><span class="ledg-d">${x.date.slice(5)}</span><span class="ledg-t">${esc(x.name)}</span><span class="ledg-v">−${x.cost}</span><button class="ledg-x" data-unspend2="${x.sid}" aria-label="Undo">${IC.x}</button></div>`; });
-    h+=`</div>`;
-  }
-  if(shopOnboard) h+=`<div class="sheet-actions"><button class="btn primary" id="shopClose">Continue →</button></div>`;
-  rsetupBody.innerHTML=h;
-}
-rsetupEl.addEventListener('click',e=>{
-  if(e.target.closest('#shopClose')) return closeShop();
-  const sd=e.target.closest('[data-seed]'); if(sd){ seedShop(sd.dataset.seed); return; }
-  if(e.target.closest('[data-shopedit]')){ const inp=document.getElementById('newItemName'); if(inp)newItemName=inp.value; shopEdit=!shopEdit; renderShop(); return; }
-  const b=e.target.closest('[data-buy]'); if(b){ const it=shopItem(b.dataset.buy); if(!it)return;
-    if(tokenBalance()<it.cost){ armDelete('shopovr:'+it.id,b,()=>{spendToken(it.id);renderShop();}); return; }
-    spendToken(it.id); renderShop(); return; }
-  const ca=e.target.closest('[data-costadj]'); if(ca){ const [id,d]=ca.dataset.costadj.split(':'); const it=shopItem(id); if(it){ it.cost=Math.max(1,Math.min(99,it.cost+(+d))); save(); renderShop(); } return; }
-  const pn=e.target.closest('[data-pin]'); if(pn){ DB.pinned = DB.pinned===pn.dataset.pin?null:pn.dataset.pin; save(); renderShop(); return; }
-  const dl=e.target.closest('[data-itemdel]'); if(dl){ armDelete('item:'+dl.dataset.itemdel, dl, ()=>{ const id=dl.dataset.itemdel; DB.shop=shop().filter(x=>x.id!==id); if(DB.pinned===id)DB.pinned=null; save(); renderShop(); }); return; }
-  const us=e.target.closest('[data-unspend2]'); if(us){ undoSpend(us.dataset.unspend2); renderShop(); return; }
-  const tt=e.target.closest('[data-itemtier]'); if(tt){ const inp=document.getElementById('newItemName'); if(inp)newItemName=inp.value; newItemTier=tt.dataset.itemtier; renderShop(); return; }
-  if(e.target.closest('#newItemAdd')){
-    const inp=document.getElementById('newItemName'); const nm=(inp?inp.value:newItemName).trim();
-    if(!nm){flash('Name it first');return;}
-    shop().push({id:'it_'+slug(nm),name:nm,cost:newItemTier==='big'?15:newItemTier==='mid'?8:3,tier:newItemTier});
-    newItemName=''; save(); renderShop(); flash(nm+' added'); return;
-  }
-});
-rsetupEl.addEventListener('input',e=>{ if(e.target.id==='newItemName') newItemName=e.target.value; });
 
 document.getElementById('gearBtn').onclick=openSettings;
 document.getElementById('wkBtn').onclick=()=>{ curMon=mondayOf(new Date()); render(); };
 
 /* ================= FIRST RUN ================= */
 function showWelcome(){ document.getElementById('welcome').classList.add('show'); }
-function closeWelcome(start){ DB.onboarded=true; save(); document.getElementById('welcome').classList.remove('show'); if(start) openShop(true); }
+function closeWelcome(start){ DB.onboarded=true; save(); document.getElementById('welcome').classList.remove('show'); if(start) openPlanner(); }
 document.getElementById('welcomeStart').onclick=()=>closeWelcome(true);
 document.getElementById('welcomeSkip').onclick=()=>closeWelcome(false);
 
-reconcileCap();   // after all declarations: touches num()/actMiles()
 render();
 if(!DB.onboarded) showWelcome();
 </script>
