@@ -80,15 +80,7 @@
   /* ---- day cards ---- */
   .day{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:10px;overflow:hidden}
   .day.today{border-color:var(--ink);box-shadow:0 0 0 1px rgba(35,36,31,.12)}
-  .day-head{display:flex;align-items:center;gap:12px;padding:13px 15px;cursor:pointer;user-select:none}
-  .day-name{font-family:'Space Grotesk';font-weight:600;font-size:16px;letter-spacing:.12em;text-transform:uppercase}
-  .day-date{font-family:'Space Mono';font-size:11px;color:var(--muted)}
-  .today-tag{font-family:'Space Grotesk';font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--surface);background:var(--ink);padding:2px 7px;border-radius:999px;font-weight:600}
-  .day-meta{margin-left:auto;display:flex;align-items:center;gap:10px}
-  .day-count{font-family:'Space Mono';font-size:11px;color:var(--haze)}
-  .chev{color:var(--muted);transition:transform .2s;font-size:13px}
   .day.open .chev{transform:rotate(90deg)}
-  .day-body{display:none;padding:0 15px 13px}
   .day.open .day-body{display:block}
 
   .act{display:flex;align-items:center;gap:11px;padding:10px 0;border-top:1px solid var(--line)}
@@ -109,26 +101,12 @@
   .empty{font-size:13px;color:var(--muted);padding:4px 0 2px;border-top:1px solid var(--line);font-style:italic}
 
   /* ---- quests / ascent ---- */
-  .ascent{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:0;overflow:hidden;margin-bottom:16px;position:relative}
-  .ascent svg{display:block;width:100%;height:auto}
-  .ascent-cap{display:flex;justify-content:space-between;align-items:baseline;padding:12px 15px 4px}
-  .ascent-cap .t{font-family:'Space Grotesk';letter-spacing:.16em;text-transform:uppercase;font-size:12px}
-  .ascent-cap .n{font-family:'Space Mono';font-size:11px;color:var(--gold-2)}
 
   .quest{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:15px;margin-bottom:12px;transition:.2s}
   .quest.done{border-color:var(--gold);box-shadow:0 0 0 1px rgba(168,86,56,.18);background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='170' height='130' viewBox='0 0 170 130'><g fill='none' stroke='%23a85638' stroke-width='1.2' opacity='0.16'><ellipse cx='130' cy='100' rx='18' ry='13'/><ellipse cx='130' cy='100' rx='34' ry='25'/><ellipse cx='130' cy='100' rx='52' ry='38'/><ellipse cx='130' cy='100' rx='72' ry='52'/></g></svg>");background-repeat:no-repeat;background-position:right -6px bottom -8px}
-  .q-top{display:flex;align-items:center;gap:10px}
-  .q-icon{flex:none;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--surface-2);color:var(--haze)}
   .quest.done .q-icon{background:var(--gold);color:var(--valley)}
-  .q-tier{font-family:'Space Grotesk';font-weight:600;letter-spacing:.16em;text-transform:uppercase;font-size:14px}
-  .q-budget{font-family:'Space Mono';font-size:11px;color:var(--muted)}
-  .q-prog-num{margin-left:auto;font-family:'Space Mono';font-size:13px;color:var(--mist)}
   .quest.done .q-prog-num{color:var(--gold-2)}
 
-  .q-config{display:flex;align-items:center;gap:8px;margin:13px 0 11px;font-family:'Space Mono';font-size:12px;color:var(--muted);flex-wrap:wrap}
-  .q-config select,.q-config input{font-family:'Space Mono';font-size:13px;background:var(--valley);color:var(--mist);border:1px solid var(--line);border-radius:8px;padding:6px 8px}
-  .q-config input{width:54px;text-align:center}
-  .q-config select{cursor:pointer}
 
   .bar{height:8px;border-radius:999px;background:var(--valley);overflow:hidden;border:1px solid var(--line)}
   .bar > i{display:block;height:100%;border-radius:999px;background:var(--ink);transition:width .4s ease}
@@ -253,7 +231,6 @@
   .newex-groups{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:11px}
   .newex .btn{width:100%;box-sizing:border-box}
   .ex-check{color:var(--gold);font-weight:700;font-size:12px;letter-spacing:.04em}
-  .custom-add{all:unset;cursor:pointer;display:block;text-align:center;padding:11px;border:1px dashed var(--gold);border-radius:11px;color:var(--gold-2);font-size:13px;margin:6px 0}
   .rt-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)}
   .rt-row b{font-family:'Space Grotesk';font-size:14px}
   .rt-row i{display:block;font-style:normal;font-family:'Space Mono';font-size:11px;color:var(--muted);margin-top:2px}
@@ -308,27 +285,13 @@
     .plan-col .plan-chips,.plan-col .plan-empty{margin-top:0}
     .hero-num{font-size:40px}
   }
-  .q-config2{margin:13px 0 11px}
   .stepper{display:flex;align-items:center;gap:10px;margin-bottom:10px}
   .stepper .step{all:unset;cursor:pointer;width:30px;height:30px;display:grid;place-items:center;border:1px solid var(--line);border-radius:9px;font-size:18px;color:var(--ink)}
   .stepper .step:hover{border-color:var(--ink)}
   .step-val{font-family:'Space Mono';font-weight:700;font-size:18px;min-width:24px;text-align:center}
-  .step-lbl{font-family:'Space Grotesk';font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-  .qseg{display:flex;flex-wrap:wrap;gap:5px}
-  .qsegb{all:unset;cursor:pointer;font-family:'Space Grotesk';font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:7px 11px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
-  .qsegb.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
-  .streak{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-soft);margin:4px 2px 14px}
-  .streak svg{flex:none}
-  .streak b{font-family:'Space Mono';font-weight:700;color:var(--ink);font-size:15px}
-  .peaks{display:flex;flex-direction:column;gap:8px}
   .peak{all:unset;cursor:pointer;display:flex;align-items:center;gap:12px;padding:11px 13px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
   .peak:hover{border-color:var(--haze)}
   .peak.cur{border-color:var(--ink)}
-  .peak-range{font-family:'Space Mono';font-size:13px;color:var(--ink);flex:1}
-  .peak-dots{display:flex;gap:5px}
-  .peak-dots i{width:8px;height:8px;border-radius:50%;border:1.4px solid var(--ridge-2);display:block}
-  .peak-dots i.on{background:var(--gold);border-color:var(--gold)}
-  .peak-label{font-family:'Space Grotesk';font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);width:52px;text-align:right}
   .toast{display:flex;align-items:center;gap:14px}
   .toast.show{pointer-events:auto}
   .toast-undo{all:unset;cursor:pointer;font-family:'Space Grotesk';font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);font-weight:600}
@@ -366,9 +329,6 @@
   .gear{all:unset;cursor:pointer;width:38px;height:38px;display:grid;place-items:center;border-radius:50%;color:var(--haze);font-size:20px}
   .gear:hover{background:var(--surface-2);color:var(--ink)}
   .wk{cursor:pointer}
-  .streak-top{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:13px 15px;margin-bottom:14px;font-size:14px;color:var(--ink-soft)}
-  .streak-top svg{flex:none}
-  .streak-top b{font-family:'Space Mono';font-weight:700;color:var(--ink);font-size:17px}
   .set-list{display:flex;flex-direction:column;gap:9px;margin-top:4px}
   .set-row2{all:unset;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px;border:1px solid var(--line);border-radius:12px}
   .set-row2:hover{border-color:var(--haze)}
@@ -390,13 +350,6 @@
 
   /* ---- reward setup + quest edit + locked ---- */
   .rs-input{flex:1;min-width:0;font-size:15px;background:var(--valley);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
-  .qedit{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
-  .qedit-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-  .q-readout{display:flex;align-items:center;justify-content:space-between;margin:13px 0 11px;font-family:'Space Mono';font-size:14px;color:var(--ink)}
-  .q-lock{display:inline-flex;align-items:center;gap:5px;font-family:'Space Grotesk';font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-  .q-lock .ic{width:13px;height:13px}
-  .lock-note{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin:-6px 2px 12px}
-  .lock-note .ic{width:13px;height:13px;flex:none}
 
   .wo-delete{all:unset;cursor:pointer;display:block;text-align:center;margin:4px auto 8px;font-family:'Space Grotesk';font-size:12px;letter-spacing:.04em;color:var(--muted);padding:11px}
   .wo-delete:hover{color:#b03b22}
@@ -407,8 +360,6 @@
   .bp-row{margin-bottom:14px}
   .bp-top{display:flex;align-items:baseline;justify-content:space-between}
   .bp-name{font-family:'Space Grotesk';font-weight:600;font-size:14px;letter-spacing:.01em}
-  .bp-times{font-family:'Space Mono';font-weight:700;font-size:16px;color:var(--ink)}
-  .bp-times small{font-size:11px;color:var(--muted);margin-left:1px}
   .bp-bar{height:6px;background:var(--surface-2);border:1px solid var(--line);border-radius:99px;overflow:hidden;margin:6px 0 5px}
   .bp-bar i{display:block;height:100%;background:var(--ink);border-radius:99px;transition:width .3s ease}
   .bp-meta{font-family:'Space Mono';font-size:11px;color:var(--muted)}
@@ -420,50 +371,13 @@
   .hstat b{display:block;font-family:'Space Mono';font-weight:700;font-size:20px;color:var(--ink);line-height:1.1}
   .hstat span{font-family:'Space Grotesk';font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:4px;display:block}
   .hist-empty{display:flex;flex-direction:column;align-items:center;gap:15px;text-align:center;color:var(--muted);font-size:14px;line-height:1.55;padding:48px 22px}
-  .hsec{margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
-  .hsec-h{font-family:'Space Grotesk';font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--haze);margin-bottom:13px}
   .hsec-meta{font-family:'Space Mono';font-size:11px;color:var(--muted);margin-top:9px}
   .hsec-meta b{color:var(--ink)}
-  .vchart{width:100%;height:auto;display:block}
-  .lchart{width:100%;height:auto;display:block}
-  .hchips{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px;margin-bottom:4px;scrollbar-width:none}
-  .hchips::-webkit-scrollbar{display:none}
-  .hchip{all:unset;cursor:pointer;white-space:nowrap;font-size:12px;padding:7px 12px;border:1px solid var(--line);border-radius:999px;color:var(--ink-soft);flex:none;touch-action:manipulation}
-  .hchip.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
-  .heatmap{display:grid;grid-template-rows:repeat(7,1fr);grid-auto-flow:column;grid-auto-columns:1fr;gap:3px}
-  .hm-cell{aspect-ratio:1;border-radius:3px;background:var(--surface-2);border:1px solid var(--line)}
-  .hm-cell.lv1{background:#b7c5cf;border-color:#b7c5cf}
-  .hm-cell.lv2{background:#6f8a98;border-color:#6f8a98}
-  .hm-cell.lv3{background:var(--ink);border-color:var(--ink)}
-  .hm-cell.fut{opacity:.35}
-  .hm-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:11px;flex-wrap:wrap}
-  .hm-legend{display:inline-flex;align-items:center;gap:4px;font-family:'Space Mono';font-size:10px;color:var(--muted)}
-  .hm-legend .hm-cell{width:11px;height:11px;aspect-ratio:auto;display:inline-block}
-  .hm-streak{font-family:'Space Mono';font-size:11px;color:var(--muted)}
-  .hm-streak b{color:var(--ink)}
-  .ms-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:15px;margin-bottom:12px}
-  .ms-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
-  .ms-lbl{font-family:'Space Grotesk';font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-  .ms-val{font-family:'Space Mono';font-weight:700;font-size:22px;color:var(--ink)}
-  .ms-val small{font-size:12px;color:var(--muted);margin-left:3px;font-weight:400}
-  .ms-tier{font-family:'Space Grotesk';font-weight:600;font-size:14px;color:var(--gold);margin:8px 0 9px}
-  .ms-next{font-family:'Space Mono';font-size:11px;color:var(--muted);margin-top:7px}
-  .ms-badges{display:flex;gap:9px;margin-top:11px}
   .mb{font-size:14px;color:var(--line-2)}
   .mb.on{color:var(--gold)}
-  .hsel-wrap{position:relative;margin-bottom:6px}
-  .hsel{-webkit-appearance:none;appearance:none;width:100%;font-family:'Space Grotesk';font-size:14px;font-weight:600;letter-spacing:.01em;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:12px 38px 12px 14px}
-  .hsel-ar{position:absolute;right:13px;top:50%;transform:translateY(-50%) rotate(90deg);pointer-events:none;color:var(--muted);display:inline-flex}
-  .hsel-ar .ic{width:16px;height:16px}
-  .hbig{font-family:'Space Mono';font-weight:700;font-size:30px;color:var(--ink);line-height:1;margin:2px 0 13px}
-  .hbig small{font-family:'Space Grotesk';font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-left:7px}
   .bp-seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;margin-bottom:16px;background:var(--surface)}
   .bp-seg-b{all:unset;cursor:pointer;font-family:'Space Grotesk';font-size:11px;letter-spacing:.03em;padding:6px 13px;border-radius:999px;color:var(--muted);touch-action:manipulation}
   .bp-seg-b.on{background:var(--ink);color:var(--surface)}
-  .mmap{margin:6px 0 16px}
-  .mmap-svg{width:100%;max-width:320px;height:auto;display:block;margin:2px auto 0}
-  .mm-cap{font-family:'Space Grotesk';font-size:9px;letter-spacing:.14em;text-transform:uppercase;fill:var(--muted);text-anchor:middle}
-  .mm-note{text-align:center;font-family:'Space Mono';font-size:10px;color:var(--muted);margin-top:7px}
   .restbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom));z-index:60;display:none;align-items:center;gap:8px;background:var(--ink);color:#fff;border-radius:999px;padding:8px 10px;box-shadow:0 10px 30px rgba(28,44,59,.35);max-width:calc(100% - 28px)}
   .restbar.show{display:flex}
   .restbar.done{background:var(--gold)}
@@ -486,7 +400,6 @@
   .td-body b{color:#fff}
   .td-go{all:unset;cursor:pointer;flex:none;font-family:'Space Grotesk';font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:#fff;color:var(--ink);padding:11px 16px;border-radius:999px;touch-action:manipulation}
   .td-go.ghost{background:rgba(255,255,255,.14);color:#fff}
-  .peak-dots i.hollow{background:transparent;border:1.5px solid var(--gold)}
   .peak.graced .peak-label{color:var(--gold)}
   /* ---- design pass: hierarchy, grammar, identity, motion ---- */
   .today-card{display:block;padding:16px;margin-bottom:16px;background-color:var(--ink);background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='160' viewBox='0 0 300 160'><g fill='none' stroke='%23ffffff' stroke-opacity='.06' stroke-width='1'><path d='M-10,40 C50,10 110,64 170,36 C230,8 280,58 310,34'/><path d='M-10,84 C55,54 115,108 175,80 C235,52 285,102 310,78'/><path d='M-10,128 C50,98 110,152 170,124 C230,96 285,146 310,122'/><ellipse cx='236' cy='44' rx='34' ry='15' transform='rotate(-16 236 44)'/><ellipse cx='236' cy='44' rx='16' ry='7' transform='rotate(-16 236 44)'/></g></svg>");background-size:300px 160px}
@@ -512,11 +425,9 @@
   .set-check.on{animation:ckpop .22s ease}
   .check.done{animation:ckpop .22s ease}
   @keyframes ascin{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
-  .ascent svg{animation:ascin .45s ease}
   .quest,.day2,.rs-tier{transition:border-color .15s}
   .mode-seg{margin-bottom:13px}
   .mode-seg button.active{background:var(--ink);color:var(--surface);border-color:var(--ink)}
-  .q-unit{font-size:10px;color:var(--muted);font-weight:400}
   .cal{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:16px}
   .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
   .cal-title{font-family:'Space Grotesk';font-weight:600;font-size:14px;letter-spacing:.02em}
@@ -553,8 +464,77 @@
   .stepper.mini{margin:0;gap:6px;flex:none}
   .stepper.mini .step{width:26px;height:26px;font-size:15px}
   .stepper.mini .step-val{font-size:14px;min-width:20px}
-  .q-intro{font-size:12px;color:var(--ink-soft);line-height:1.55;margin:-6px 2px 13px}
-  .q-intro b{font-family:'Space Grotesk';font-weight:600}
+  .climb{background-color:var(--ink);color:#fff;border-radius:var(--radius);padding:17px;margin-bottom:16px;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='150' viewBox='0 0 320 150'><g fill='none' stroke='%23ffffff' stroke-opacity='.08' stroke-width='1'><path d='M-10,120 C60,96 130,132 200,104 C260,80 300,110 330,92'/><path d='M-10,96 C60,72 130,108 200,80 C260,56 300,86 330,68'/><path d='M-10,72 C60,48 130,84 200,56 C260,32 300,62 330,44'/></g></svg>");background-repeat:no-repeat;background-position:right bottom}
+  .climb.topped{background-color:#2b3d33}
+  .climb-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+  .climb-k{display:block;font-family:'Space Grotesk';font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+  .climb-n{display:block;font-family:'Space Grotesk';font-weight:600;font-size:20px;letter-spacing:.01em;margin-top:4px}
+  .climb-note{display:block;font-size:11.5px;color:rgba(255,255,255,.55);margin-top:3px}
+  .climb-el{font-family:'Space Mono';font-weight:700;font-size:19px;color:var(--gold-2);flex:none}
+  .climb-el small{font-size:11px;color:rgba(255,255,255,.5);margin-left:3px}
+  .climb-bar{height:8px;background:rgba(255,255,255,.14);border-radius:99px;overflow:hidden;margin:14px 0 8px}
+  .climb-bar i{display:block;height:100%;background:var(--gold-2);border-radius:99px;transition:width .5s ease}
+  .climb-foot{font-family:'Space Mono';font-size:11.5px;color:rgba(255,255,255,.65)}
+  .climb-foot b{color:#fff}
+  .blkline{font-size:12.5px;color:var(--ink-soft);margin:-6px 2px 13px;line-height:1.5}
+  .blkline b{font-family:'Space Grotesk'}
+  .stages{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:6px}
+  .stage{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:10px 8px;text-align:center}
+  .stage.now{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+  .stage.future{opacity:.5}
+  .stage-w{display:block;font-family:'Space Grotesk';font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .stage-f{display:block;font-family:'Space Mono';font-weight:700;font-size:13px;margin-top:4px}
+  .stage-a{display:block;font-family:'Space Mono';font-size:10px;color:var(--muted);margin-top:2px}
+  .wkbox{display:flex;gap:10px}
+  .wkbox-l,.wkbox-r{flex:1;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:13px}
+  .wkbox-n{display:block;font-family:'Space Mono';font-weight:700;font-size:22px;color:var(--ink);line-height:1}
+  .wkbox-n small{font-size:12px;color:var(--muted);font-weight:400;margin-left:2px}
+  .wkbox-k{display:block;font-family:'Space Grotesk';font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:5px}
+  .rate{font-family:'Space Mono';font-size:10.5px;color:var(--muted);line-height:1.6;margin-top:10px}
+  .rate b{color:var(--ink-soft)}
+  .rs-add{display:flex;gap:8px}
+  .rs-addbtn{all:unset;cursor:pointer;font-family:'Space Grotesk';font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:0 16px;display:grid;place-items:center;border:1px solid var(--ink);border-radius:10px;color:var(--ink);touch-action:manipulation}
+  .rs-addbtn:hover{background:var(--ink);color:var(--surface)}
+  .qsegb{all:unset;cursor:pointer;font-family:'Space Grotesk';font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:7px 11px;border-radius:999px;border:1px solid var(--line);color:var(--muted);touch-action:manipulation}
+  .qsegb.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+  .prize-set{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:13px}
+  .prize-set .rs-add{flex:1}
+  .prize-empty{font-size:12.5px;color:var(--muted);line-height:1.5;margin-bottom:10px}
+  .prize-set>div:first-child{flex:1;min-width:0}
+  .prize-locked{flex:1;min-width:0}
+  .prize-nm{display:block;font-family:'Space Grotesk';font-weight:600;font-size:14.5px}
+  .prize-st{display:block;font-size:11.5px;color:var(--muted);margin-top:2px}
+  .prize-x{all:unset;cursor:pointer;color:var(--muted);width:30px;height:30px;display:grid;place-items:center;flex:none}
+  .prize-x.arm{background:#b03b22;color:#fff;border-radius:8px}
+  .prize-won{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--gold);border-radius:12px;padding:13px}
+  .prize-won .prize-st{color:var(--gold)}
+  .prize-won.claimed{border-color:var(--line)}
+  .prize-won.claimed .prize-nm{text-decoration:line-through;text-decoration-color:var(--gold)}
+  .prize-won.claimed .prize-st{color:var(--muted)}
+  .prize-go{all:unset;cursor:pointer;flex:none;font-family:'Space Grotesk';font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;background:var(--gold);color:#fff;padding:10px 15px;border-radius:999px}
+  .peaklog{display:flex;flex-direction:column;gap:7px}
+  .peakrow{display:flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:11px 13px;font-size:13px}
+  .peak-i{color:var(--gold);flex:none;display:inline-flex}
+  .peak-nm{flex:1;font-family:'Space Grotesk';font-weight:600}
+  .peak-ft{font-family:'Space Mono';font-size:11.5px;color:var(--gold)}
+  .peak-dt{font-family:'Space Mono';font-size:10.5px;color:var(--muted)}
+  .blk{background:var(--ink);color:#fff;border-radius:12px;padding:12px 13px;margin:0 0 14px}
+  .blk-w{display:block;font-family:'Space Grotesk';font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+  .blk-w b{color:#fff}
+  .blk-n{display:block;font-size:12px;color:rgba(255,255,255,.75);margin-top:4px;line-height:1.45}
+  .rx{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:11px 0;border-top:1px solid var(--line)}
+  .log-col .rx:first-child{border-top:none}
+  .rx-l{min-width:0;flex:1}
+  .rx-k{display:block;font-family:'Space Grotesk';font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  .rx-l b{display:block;font-family:'Space Grotesk';font-weight:600;font-size:14px;letter-spacing:.01em;margin-top:3px}
+  .rx-d{display:block;font-size:11.5px;color:var(--muted);margin-top:2px}
+  .rx-ex{margin-top:6px;display:flex;flex-direction:column;gap:3px}
+  .rx-ex i{font-style:normal;font-family:'Space Mono';font-size:11px;color:var(--muted);margin-left:4px}
+  .rx-ex{font-size:12px;color:var(--ink-soft);line-height:1.5}
+  .rx-go{all:unset;cursor:pointer;flex:none;font-family:'Space Grotesk';font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;background:var(--ink);color:var(--surface);padding:9px 14px;border-radius:999px;touch-action:manipulation}
+  .rx-cardio .rx-go{background:transparent;color:var(--ink);border:1px solid var(--line)}
+  .pday-k{display:block;font-style:normal;font-family:'Space Grotesk';font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:400;margin-top:2px}
+  .pchip.ghost{border-style:dashed;color:var(--muted);border-color:var(--line-2)}
   button:focus-visible,select:focus-visible,input:focus-visible,.check:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
   @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -609,11 +589,11 @@
 <div class="workout" id="workout"><div id="workoutBody"></div></div>
 <div class="welcome" id="welcome"><div class="welcome-inner">  <svg width="46" height="46" viewBox="0 0 30 30" aria-hidden="true"><circle cx="6.6" cy="6" r="2" fill="#c25b3c"/><path d="M3 24 L10.5 11.5 L14 17 L19.5 8 L27 24" fill="none" stroke="#1e2c35" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg>
   <h2>RIDGE</h2>
-  <p class="tagline">Plan your week. Climb it.</p>
+  <p class="tagline">A plan that writes itself. Then climb.</p>
   <div class="wsteps">
-    <div class="wstep"><span class="wn">1</span><div><b>Plan</b><span>Set each day — run, lift, rest.</span></div></div>
-    <div class="wstep"><span class="wn">2</span><div><b>Log</b><span>Track every set, run, and sprint.</span></div></div>
-    <div class="wstep"><span class="wn">3</span><div><b>Climb</b><span>Clear your goals — Basecamp, Ridgeline, Summit.</span></div></div>
+    <div class="wstep"><span class="wn">1</span><div><b>Set the week</b><span>Say where you'll be — home, trainer, travel.</span></div></div>
+    <div class="wstep"><span class="wn">2</span><div><b>Log</b><span>Sessions come pre-filled. Confirm the work.</span></div></div>
+    <div class="wstep"><span class="wn">3</span><div><b>Climb</b><span>Every set is elevation. Four weeks tops a peak.</span></div></div>
   </div>
   <button class="btn primary" id="welcomeStart">Set your first week</button>
   <button class="link-btn" id="welcomeSkip">Skip for now</button>
@@ -654,11 +634,6 @@ const IC={
   clock:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2"/></svg>'
 };
 function unit(){ return (DB&&DB.unit)?DB.unit:'lb'; }
-const TIERS = [
-  {key:'basecamp',  name:'Basecamp',  budget:'~$20',  band:'t20'},
-  {key:'ridgeline', name:'Ridgeline', budget:'~$50',  band:'t50'},
-  {key:'summit',    name:'Summit',    budget:'~$100', band:'t100'}
-];
 function defaultQuests(){
   return [
     {tier:'basecamp',  kind:'lifts', target:4,  reward:null},
@@ -666,11 +641,7 @@ function defaultQuests(){
     {tier:'summit',    kind:'miles', target:10, reward:null}
   ];
 }
-const KIND_LABEL={sets:'working sets',lifts:'lifts',miles:'miles',reps:'sprint sets',sessions:'sessions'};
-const KIND_TITLE={sets:'Working sets',lifts:'Lifts',miles:'Cardio miles',reps:'Sprint sets',sessions:'Sessions'};
 const MILESTONES=['Basecamp','Ridgeline','Summit'];
-function milestoneName(n){ return n>=3?'Summit':n>=1?MILESTONES[n-1]:''; }
-const KIND_OPTS=[['sets','Sets'],['miles','Miles'],['reps','Sprint sets'],['lifts','Lifts'],['sessions','Sessions']];
 function questKind(q){ return q.kind || (q.tier==='basecamp'?'lifts':q.tier==='ridgeline'?'reps':'miles'); }
 function isSprint(a){ return (a.type==='cardio'||a.type==='sprint') && (((a.data&&a.data.mode)||(a.type==='sprint'?'sprint':'run'))==='sprint'); }
 function actWorkingSets(a){
@@ -700,8 +671,6 @@ function questProgressIn(wk,q){
   }));
   return kind==='miles'?Math.round(v*10)/10:v;
 }
-function fmtProg(v,kind){ return kind==='miles'?(Math.round(v*10)/10).toLocaleString():String(v); }
-
 /* ---------- dates ---------- */
 function mondayOf(d){ const x=new Date(d); const day=(x.getDay()+6)%7; x.setHours(0,0,0,0); x.setDate(x.getDate()-day); return x; }
 function iso(d){ const x=new Date(d); return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0'); }
@@ -803,8 +772,6 @@ function uid(){ return Math.random().toString(36).slice(2,9); }
 
 /* ---------- quest math ---------- */
 function progress(q){ return questProgressIn(week(),q); }
-function tierOf(key){ return TIERS.find(t=>t.key===key); }
-
 /* ---------- summary text ---------- */
 function summary(a){
   const d=a.data||{};
@@ -967,10 +934,12 @@ function workoutsHTML(){
     h+=`<div class="day2 ${isToday?'today':''}">
       <div class="plan-col" data-openplanner>
         <div class="plan-head"><span class="d-name ${isToday?'d-today':''}">${isToday?`<span class="d-badge">${date.getDate()}</span>`:''}${d}${isToday?'':`<span class="d-date">${date.getMonth()+1}/${date.getDate()}</span>`}</span></div>
-        ${planChipsHTML(plan)}
+        ${planChipsHTML(plan,d)}
       </div>
       <div class="log-col">`;
-    if(!acts.length){
+    const rxHTML=acts.length?'':rxCardHTML(d);
+    if(rxHTML){ h+=rxHTML; }
+    else if(!acts.length){
       const planRest = plan.length===1 && plan[0]==='rest';
       h+= planRest
         ? `<div class="empty2"><svg width="22" height="8" viewBox="0 0 22 8" fill="none" stroke="#93a6b2" stroke-width="1.4" stroke-linecap="round"><path d="M2 4 H20"/></svg>Rest day</div>`
@@ -994,129 +963,96 @@ function workoutsHTML(){
   });
   return h;
 }
-function planChipsHTML(plan){
-  if(!plan.length) return `<div class="plan-empty"><svg width="20" height="11" viewBox="0 0 20 11" fill="none" stroke="#93a6b2" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="2 2"><path d="M1 10 L7 3 L11 7 L15 2 L19 10"/></svg>Plan</div>`;
-  if(plan.length===1 && plan[0]==='rest') return `<div class="plan-chips"><span class="pchip rest">Rest</span></div>`;
-  return `<div class="plan-chips">${plan.filter(t=>t!=='rest').map(t=>`<span class="pchip">${TYPES[t]?TYPES[t].label:t}</span>`).join('')}</div>`;
+function planChipsHTML(plan,day){
+  const loc=(plan&&plan[0])||'';
+  if(!loc) return `<div class="plan-empty"><svg width="20" height="11" viewBox="0 0 20 11" fill="none" stroke="#93a6b2" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="2 2"><path d="M1 10 L7 3 L11 7 L15 2 L19 10"/></svg>Plan</div>`;
+  if(loc==='off') return `<div class="plan-chips"><span class="pchip rest">Off</span></div>`;
+  const kind=SCHEDULE[day]==='lift'?'Lift':'Cardio';
+  return `<div class="plan-chips"><span class="pchip">${kind}</span><span class="pchip ghost">${LOC_LABEL[loc]||loc}</span></div>`;
 }
 
-function questsHTML(){
-  const w=week();
-  const states = w.quests.map(q=>({q,prog:progress(q),done:progress(q)>=q.target && q.target>0}));
-  const doneCount = states.filter(s=>s.done).length;
-  const alt=ascentAlt(states);
-  const streak=currentStreak();
-  let h = streak>0 ? `<div class="streak-top">${streakGlyph()}<span><b>${streak}</b> week${streak!==1?'s':''} climbed in a row</span></div>` : '';
-  h+=`<div class="ascent">${ascentSVG(states)}
-    <div class="ascent-cap"><span class="t">${doneCount?milestoneName(doneCount):ascentPhase(alt)}</span><span class="n">${doneCount}/3 cleared</span></div>
-  </div>`;
-  h+=`<div class="eyebrow">This week's quests</div>`;
-  h+=`<div class="q-intro">Three goals, any order. Clear <b>one</b> and you reach Basecamp, <b>two</b> the Ridgeline, <b>all three</b> the Summit.</div>`;
-  if(w.locked) h+=`<div class="lock-note">${IC.lock} Locked for the week — re-run “Set the week” to change.</div>`;
-  states.forEach((s,i)=>{
-    const kind=questKind(s.q), kl=KIND_LABEL[kind];
-    const pct=Math.min(100, s.q.target>0 ? Math.round(s.prog/s.q.target*100):0);
-    h+=`<div class="quest ${s.done?'done':''}">
-      <div class="q-top">
-        <span class="q-icon">${questIcon(kind)}</span>
-        <div><div class="q-tier">${KIND_TITLE[kind]||'Goal'}</div><div class="q-budget">${s.done?'Cleared':`Target ${s.q.target} ${kl}`}</div></div>
-        <span class="q-prog-num">${fmtProg(s.prog,kind)}/${s.q.target}<small class="q-unit">${kind==='miles'?' mi':kind==='reps'?' sets':kind==='sets'?' sets':''}</small></span>
-      </div>`;
-    if(w.locked){
-      h+=`<div class="q-readout"><span>${s.q.target} ${kl}</span><span class="q-lock">${IC.lock} locked</span></div>`;
+function rxCardHTML(day){
+  const r=rxFor(day); if(!r) return '';
+  let h='';
+  if(r.cardio){
+    const c=r.cardio;
+    const target=c.mode==='sprint'?`${c.reps} sets`:`${c.distance} ${c.unit||'mi'}`;
+    h+=`<div class="rx rx-cardio"><div class="rx-l"><span class="rx-k">${c.morning?'Morning':'Cardio'}</span><b>${c.label} · ${target}</b><span class="rx-d">${c.detail}</span></div><button class="rx-go" data-add="${day}">Log</button></div>`;
+  }
+  if(r.lift){
+    if(r.lift.trainer){
+      h+=`<div class="rx"><div class="rx-l"><span class="rx-k">Session</span><b>Trainer</b><span class="rx-d">Log what he gives you</span></div><button class="rx-go" data-rxstart="${day}">Start</button></div>`;
     } else {
-      h+=`<div class="q-config2">
-        <div class="stepper">
-          <button class="step" data-qstep="${i}:-1" aria-label="Fewer">−</button>
-          <span class="step-val">${s.q.target}</span>
-          <button class="step" data-qstep="${i}:1" aria-label="More">+</button>
-          <span class="step-lbl">${kl}</span>
-        </div>
-        <div class="qseg">${KIND_OPTS.map(([v,l])=>`<button class="qsegb ${kind===v?'on':''}" data-qkind="${i}:${v}">${l}</button>`).join('')}</div>
-      </div>`;
+      const list=r.lift.ex.map(e=>`${esc(e.name)} <i>${e.sets}×${isTimedEx(e.exId)?e.reps+'s':e.reps}${e.weight?` @ ${e.weight}`:''}</i>`).join('');
+      h+=`<div class="rx"><div class="rx-l"><span class="rx-k">Workout ${r.lift.tplKey}</span><b>${esc(r.lift.name)}</b><div class="rx-ex">${list}</div></div><button class="rx-go" data-rxstart="${day}">Start</button></div>`;
     }
-    h+=`<div class="bar"><i style="width:${pct}%"></i></div>`;
-    if(!s.done){
-      const kindU = kind==='miles'?' mi':kind==='reps'?' sets':kind==='sets'?' sets':'';
-      const leftRaw = Math.max(0, s.q.target - s.prog);
-      const left = kind==='miles' ? Math.round(leftRaw*10)/10 : Math.ceil(leftRaw);
-      h+=`<div class="locked">${IC.peak} ${left}${kindU} to reach camp</div>`;
-    }
-    h+=`</div>`;
-  });
-  h+=summitLogHTML();
+  }
   return h;
 }
 
-function questIcon(kind){
-  if(kind==='lifts'||kind==='sets') return `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9v6M6.5 6.5v11M17.5 6.5v11M21 9v6M6.5 12h11"/></svg>`;
-  if(kind==='reps') return `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>`;
-  if(kind==='miles') return `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20 L9 4 M15 20 L20 4 M9 12h6"/></svg>`;
-  return `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4l9 2-2 4 2 4-9-2"/></svg>`;
-}
-/* ascent signature: climber rises through the 3 camps */
-function ascentAlt(states){
-  const done=states.filter(s=>s.done).length;
-  if(done>=3) return 3;
-  const rest=states.filter(s=>!s.done).map(s=>s.q.target>0?Math.min(1,s.prog/s.q.target):0);
-  return done+(rest.length?Math.max.apply(null,rest):0);
-}
-function ascentPhase(alt){
-  if(alt>=3) return 'Summit · golden hour';
-  if(alt>=2) return 'High on the ridge';
-  if(alt>=1) return 'On the trail';
-  if(alt>0)  return 'Leaving the valley';
-  return 'Dawn in the valley';
-}
-function lerpHex(a,b,t){
-  const p=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
-  const A=p(a),B=p(b);
-  return '#'+A.map((v,i)=>Math.round(v+(B[i]-v)*t).toString(16).padStart(2,'0')).join('');
-}
-function ascentSVG(states){
-  const W=520,H=190;
-  const start={x:26,y:166}, camps=[{x:152,y:124},{x:290,y:86},{x:452,y:40}];
-  const pts=[start,...camps];
-  const alt=ascentAlt(states), prog=alt/3;
-  const seg=Math.min(3,Math.floor(alt)), frac=alt-seg;
-  const A=pts[Math.min(seg,3)], B=pts[Math.min(seg+1,3)];
-  const cx=A.x+(B.x-A.x)*frac, cy=A.y+(B.y-A.y)*frac;
-  const ridge=`M0,182 L${start.x},${start.y} L${camps[0].x},${camps[0].y} L214,110 L${camps[1].x},${camps[1].y} L372,66 L${camps[2].x},${camps[2].y} L520,26`;
-  const trail=`M${start.x},${start.y} L${camps[0].x},${camps[0].y} L${camps[1].x},${camps[1].y} L${camps[2].x},${camps[2].y}`;
-  const trailDone=`M${start.x},${start.y} L${cx},${cy}`;
-  const sunX=466, sunY=58-prog*26, sunR=(10+prog*2).toFixed(1);
-  const sunFill=states[2].done?'#c25b3c':lerpHex('#aebfc9','#c25b3c',prog);
-  const glowA=(0.05+prog*0.5).toFixed(2), washA=(prog*0.14).toFixed(2);
-  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Ascent progress">
-    <defs>
-      <radialGradient id="ag-glow"><stop offset="0" stop-color="#c25b3c" stop-opacity="${glowA}"/><stop offset="100%" stop-color="#c25b3c" stop-opacity="0"/></radialGradient>
-      <linearGradient id="ag-wash" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c25b3c" stop-opacity="${washA}"/><stop offset="62%" stop-color="#c25b3c" stop-opacity="0"/></linearGradient>
-    </defs>
-    <rect width="${W}" height="${H}" fill="url(#ag-wash)"/>
-    <circle cx="${sunX}" cy="${sunY}" r="${40+prog*46}" fill="url(#ag-glow)"/>
-    <path d="M0,150 L100,120 L170,140 L260,104 L340,126 L440,92 L520,118" fill="none" stroke="#b9c6d0" stroke-width="1.2"/>
-    <path d="M0,168 L80,150 L170,166 L270,132 L360,158 L460,124 L520,148" fill="none" stroke="#9fb1bd" stroke-width="1.2"/>
-    <path d="${ridge} L520,190 L0,190 Z" fill="#e5ebef"/>
-    <g stroke="#cfd9e0" stroke-width="1" fill="none">
-      <path d="M30,176 C120,168 210,176 300,166 C390,158 460,166 520,158"/>
-      <path d="M70,185 C150,180 250,184 340,176 C420,170 480,176 520,170"/>
-    </g>
-    <path d="${ridge}" fill="none" stroke="#1e2c35" stroke-width="1.8" stroke-linejoin="round"/>
-    <circle cx="${sunX}" cy="${sunY}" r="${sunR}" fill="${sunFill}" ${states[2].done?'':'stroke="#9fb1bd" stroke-width="1"'}/>
-    <path d="${trail}" fill="none" stroke="#8ea0ac" stroke-width="1.4" stroke-dasharray="2 6" stroke-linecap="round"/>
-    <path d="${trailDone}" fill="none" stroke="#1e2c35" stroke-width="2" stroke-linecap="round"/>
-    ${camps.map((c,i)=>{
-      const reached=states.filter(x=>x.done).length>i;
-      return `<g>
-        <circle cx="${c.x}" cy="${c.y}" r="5" fill="${reached?'#c25b3c':'#ffffff'}" stroke="${reached?'#c25b3c':'#9fb1bd'}" stroke-width="1.6"/>
-        <text x="${c.x}" y="${c.y-12}" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-size="10" letter-spacing="1" fill="${reached?'#c25b3c':'#677781'}">${MILESTONES[i].toUpperCase()}</text>
-      </g>`;
-    }).join('')}
-    <circle cx="${cx}" cy="${cy}" r="5.5" fill="#ffffff" stroke="#1e2c35" stroke-width="1.6"/>
-    <circle cx="${cx}" cy="${cy}" r="2.2" fill="#1e2c35"/>
-  </svg>`;
+
+function questsHTML(){
+  const bn=blockNumber(), peak=currentPeak(), ft=blockFeet(bn), bw=blockWeek(), B=BLOCK[bw];
+  const pct=Math.min(100,Math.round(ft/peak.ft*100));
+  const left=Math.max(0,peak.ft-ft);
+  const summited=ft>=peak.ft;
+  const wk=week(), ad=weekAdherence(wk), thisWk=weekFeet(wk);
+  const mons=blockMondays(bn);
+
+  let h=`<div class="climb ${summited?'topped':''}">
+    <div class="climb-top"><div><span class="climb-k">Climbing</span><span class="climb-n">${peak.name}</span><span class="climb-note">${peak.note}</span></div>
+      <span class="climb-el">${peak.ft.toLocaleString()}<small>ft</small></span></div>
+    <div class="climb-bar"><i style="width:${pct}%"></i></div>
+    <div class="climb-foot"><b>${ft.toLocaleString()} ft</b> climbed${summited?' — summit reached':` · ${left.toLocaleString()} to go`}</div>
+  </div>`;
+
+  h+=`<div class="eyebrow">Block ${bn+1} · week ${bw+1} of 4</div>`;
+  h+=`<div class="blkline"><b>${B.name}</b> — ${B.note}</div>`;
+  h+=`<div class="stages">`;
+  mons.forEach((k,i)=>{
+    const w2=DB.weeks&&DB.weeks[k], f=weekFeet(w2), a=w2?weekAdherence(w2):{need:0,hit:0};
+    const state=i<bw?'past':i===bw?'now':'future';
+    h+=`<div class="stage ${state}">
+      <span class="stage-w">Wk ${i+1}</span>
+      <span class="stage-f">${f?f.toLocaleString()+' ft':'—'}</span>
+      <span class="stage-a">${a.need?`${a.hit}/${a.need}`:''}</span>
+    </div>`;
+  });
+  h+=`</div>`;
+
+  h+=`<div class="eyebrow">This week</div>`;
+  h+=`<div class="wkbox">
+    <div class="wkbox-l"><span class="wkbox-n">${thisWk.toLocaleString()}<small>ft</small></span><span class="wkbox-k">climbed so far</span></div>
+    <div class="wkbox-r"><span class="wkbox-n">${ad.hit}<small>/${ad.need||0}</small></span><span class="wkbox-k">sessions done</span></div>
+  </div>`;
+  h+=`<div class="rate">A main set <b>${FT_MAIN} ft</b> · other sets <b>${FT_OTHER}</b> · run <b>${FT_RUN_MI}/mi</b> · bike <b>${FT_BIKE_MI}/mi</b> · sprint set <b>${FT_SPRINT_SET}</b></div>`;
+
+  h+=prizeHTML(bn,summited);
+  h+=peaksLogHTML();
+  return h;
 }
 
+function prizeHTML(bn,summited){
+  const key='b'+bn, p=(DB.prizes||{})[key];
+  let h=`<div class="eyebrow">The prize</div>`;
+  if(!p){
+    return h+`<div class="prize-set" style="display:block"><div class="prize-empty">Name one thing you'll get for topping out. Pick it now, before the work.</div>
+      <div class="rs-add"><input class="rs-input" id="prizeIn" placeholder="e.g. the MTG deck"><button class="rs-addbtn" data-prizeset="${bn}">Set</button></div></div>`;
+  }
+  if(p.claimed) return h+`<div class="prize-won claimed"><span class="prize-nm">${esc(p.name)}</span><span class="prize-st">Claimed ${p.claimed.slice(5)}</span></div>`;
+  if(summited) return h+`<div class="prize-won"><span class="prize-nm">${esc(p.name)}</span><span class="prize-st">Earned — go get it</span><button class="prize-go" data-prizeclaim="${bn}">Claim</button></div>`;
+  return h+`<div class="prize-set"><div class="prize-locked"><span class="prize-nm">${esc(p.name)}</span><span class="prize-st">Waiting at the summit</span></div><button class="prize-x" data-prizeclear="${bn}">${IC.x}</button></div>`;
+}
+function peaksLogHTML(){
+  const done=summitedPeaks(); if(!done.length) return '';
+  let h=`<div class="eyebrow">Peaks bagged</div><div class="peaklog">`;
+  done.slice().reverse().forEach(d=>{
+    h+=`<div class="peakrow"><span class="peak-i">${IC.peak}</span><span class="peak-nm">${d.peak.name}</span><span class="peak-ft">${d.ft.toLocaleString()} ft</span><span class="peak-dt">${d.end.slice(5)}</span></div>`;
+  });
+  return h+`</div>`;
+}
+
+/* ascent signature: climber rises through the 3 camps */
 function defaultRewards(){ return {basecamp:[],ridgeline:[],summit:[]}; }
 
 /* ================= TOKENS: earn by volume, spend in the shop ================= */
@@ -1195,10 +1131,15 @@ document.getElementById('nextWk').onclick=()=>{curMon=addDays(curMon,7);openDays
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;render();});
 
 view.addEventListener('click',e=>{
-  const t=e.target.closest('[data-openplanner],[data-toggle],[data-edit],[data-del],[data-add],[data-qstep],[data-qkind],[data-loadweek],[data-histex],[data-bpwin],[data-bkup],[data-bkx],[data-startlifttoday],[data-calnav]');
+  const t=e.target.closest('[data-openplanner],[data-toggle],[data-edit],[data-del],[data-add],[data-qstep],[data-qkind],[data-loadweek],[data-histex],[data-bpwin],[data-bkup],[data-bkx],[data-startlifttoday],[data-rxstart],[data-prizeset],[data-prizeclaim],[data-prizeclear],[data-calnav]');
   if(!t) return;
   if(t.dataset.calnav){ if(!calMon){const n=new Date();calMon=new Date(n.getFullYear(),n.getMonth(),1);} calMon=new Date(calMon.getFullYear(),calMon.getMonth()+(+t.dataset.calnav),1); render(); return; }
   if(t.dataset.startlifttoday!==undefined){ const d=DAYS[(new Date().getDay()+6)%7]; startLift(d,null); return; }
+  if(t.dataset.rxstart){ startPrescribed(t.dataset.rxstart); return; }
+  if(t.dataset.prizeset){ const el=document.getElementById('prizeIn'); const v=(el&&el.value||'').trim();
+    if(!v){flash('Name it first');return;} DB.prizes=DB.prizes||{}; DB.prizes['b'+t.dataset.prizeset]={name:v}; save(); render(); return; }
+  if(t.dataset.prizeclaim){ const k='b'+t.dataset.prizeclaim; if(DB.prizes&&DB.prizes[k]){ DB.prizes[k].claimed=iso(new Date()); save(); render(); flash('Earned it — enjoy'); } return; }
+  if(t.dataset.prizeclear){ const k='b'+t.dataset.prizeclear; armDelete('pz:'+k,t,()=>{ if(DB.prizes) delete DB.prizes[k]; save(); render(); }); return; }
   if(t.dataset.bkup!==undefined){ exportData(); return; }
   if(t.dataset.bkx!==undefined){ DB.bkDismiss=Date.now(); save(); render(); return; }
   if(t.dataset.histex){ histEx=t.dataset.histex; render(); return; }
@@ -1246,7 +1187,7 @@ const LIB_BASE={
   'Back':[{id:'deadlift',name:'Deadlift (Barbell)'},{id:'row_bb',name:'Bent-Over Row (Barbell)'},{id:'row_db',name:'Bent-Over Row (Dumbbell)'},{id:'pullup',name:'Pull-Up'},{id:'latpull',name:'Lat Pulldown (Cable)'},{id:'seatedrow',name:'Seated Row (Cable)'},{id:'deadhang',name:'Dead Hang'}],
   'Shoulders':[{id:'ohp',name:'Overhead Press (Barbell)'},{id:'shoulder_db',name:'Shoulder Press (Dumbbell)'},{id:'latraise',name:'Lateral Raise (Dumbbell)'},{id:'latraise_c',name:'Lateral Raise (Cable)'},{id:'frontraise',name:'Front Raise'}],
   'Legs':[{id:'squat_bb',name:'Back Squat (Barbell)'},{id:'rdl',name:'Romanian Deadlift (Barbell)'},{id:'bss',name:'Bulgarian Split Squat'},{id:'calfraise',name:'Calf Raise'}],
-  'Arms':[{id:'curl_bb',name:'Bicep Curl (Barbell)'},{id:'curl_db',name:'Bicep Curl (Dumbbell)'},{id:'hammer',name:'Hammer Curl'},{id:'pushdown',name:'Tricep Pushdown (Cable)'},{id:'skull',name:'Skullcrusher'}],
+  'Arms':[{id:'curl_bb',name:'Bicep Curl (Barbell)'},{id:'curl_db',name:'Bicep Curl (Dumbbell)'},{id:'hammer',name:'Hammer Curl'},{id:'kickback',name:'Tricep Kickback'},{id:'pushdown_band',name:'Tricep Pushdown (Band)'},{id:'pushdown',name:'Tricep Pushdown (Cable)'},{id:'skull',name:'Skullcrusher'}],
   'Core':[{id:'plank',name:'Plank'},{id:'hlr',name:'Hanging Leg Raise'},{id:'rtwist',name:'Russian Twist'},{id:'abwheel',name:'Ab Wheel'}]
 };
 const LIB_GROUPS=['Chest','Back','Shoulders','Legs','Arms','Core'];
@@ -1598,8 +1539,6 @@ sheet2El.addEventListener('click',e=>{
   const ub=e.target.closest('[data-unit]'); if(ub){DB.unit=ub.dataset.unit;save();render();openSettings();return;}
   const rb=e.target.closest('#resetBtn'); if(rb){armDelete('reset',rb,()=>resetAll());return;}
   const pt=e.target.closest('[data-plantoggle]'); if(pt){const[d,v]=pt.dataset.plantoggle.split(':');togglePlan(d,v);return;}
-  if(e.target.id==='planNext'){ questDraft=computeQuestDefaults(planDraft); planStep=2; renderPlanner(); return; }
-  if(e.target.id==='planBack'){ planStep=1; renderPlanner(); return; }
   if(e.target.id==='planLock')return lockWeek();
   const qds=e.target.closest('[data-qdstep]'); if(qds){const[i,d]=qds.dataset.qdstep.split(':');const qd=questDraft[+i];const step=qd.kind==='sets'?5:qd.kind==='reps'?2:1;qd.target=Math.max(1,Math.min(qd.kind==='miles'?200:qd.kind==='reps'?300:qd.kind==='sets'?200:60,qd.target+(+d)*step));renderPlanner();return;}
   const qdk=e.target.closest('[data-qdkind]'); if(qdk){const[i,v]=qdk.dataset.qdkind.split(':');const qd=questDraft[+i];if(qd.kind!==v){qd.kind=v;qd.target=v==='sets'?40:v==='miles'?10:v==='reps'?10:v==='lifts'?4:6;}renderPlanner();return;}
@@ -1623,70 +1562,240 @@ sheet2El.addEventListener('input',e=>{
   if(e.target.id==='exSearch'){pickerQuery=e.target.value;renderPicker();const s=document.getElementById('exSearch');if(s){s.focus();s.setSelectionRange(s.value.length,s.value.length);}}
 });
 
+
+/* ================= PROGRAM: fixed schedule, location-aware, 4-week block ================= */
+/* The week's shape is settled: lift Tue/Thu/Sat/Sun, cardio Mon/Wed/Fri.
+   The only weekly decision is where you'll be — that picks the template. */
+const SCHEDULE={Mon:'cardio',Tue:'lift',Wed:'cardio',Thu:'lift',Fri:'cardio',Sat:'lift',Sun:'lift'};
+const LOCS=[['home','Home'],['trainer','Trainer'],['travel','Travel'],['off','Off']];
+const LOC_LABEL={home:'Home',trainer:'Trainer',travel:'Travel',off:'Off'};
+
+/* roles: main = compound, iso = isolation, core = always last.
+   Home pool is limited to what he owns: barbell to 300, DBs 5-35, rack, bench, pull-up bar, ab wheel, bands. */
+const TEMPLATES={
+  home:[
+    {key:'A',name:'Squat · Bench · Pull',ex:[['squat_bb','main'],['bench_bb','main'],['pullup','main'],['curl_bb','iso'],['kickback','iso'],['abwheel','core']]},
+    {key:'B',name:'Split · Press · Row', ex:[['bss','main'],['ohp','main'],['row_bb','main'],['latraise','iso'],['hammer','iso'],['hlr','core']]},
+    {key:'C',name:'Hinge · Incline · Pull',ex:[['rdl','main'],['incline_db','main'],['pullup','main'],['pushdown_band','iso'],['curl_db','iso'],['plank','core']]}
+  ],
+  travel:[
+    {key:'T',name:'Dumbbell full body',ex:[['bss','main'],['bench_db','main'],['row_db','main'],['shoulder_db','iso'],['curl_db','iso'],['plank','core']]}
+  ]
+};
+const BLOCK=[
+  {name:'Build', note:'Groove the movement. Leave a rep in the tank.',   main:[4,6], iso:[3,12], core:[3,45], pct:0.90},
+  {name:'Load',  note:'Same movements, heavier.',                        main:[4,5], iso:[3,12], core:[3,50], pct:0.94},
+  {name:'Peak',  note:'Heaviest week. Warm up properly.',                main:[5,4], iso:[3,10], core:[3,60], pct:0.97},
+  {name:'Deload',note:'Back off on purpose — this is how you keep going.',main:[3,5],iso:[2,12], core:[2,45], pct:0.78}
+];
+/* cardio progresses across the block too — jog distance, sprint volume, Peloton miles */
+const CARDIO_PLAN={
+  bike:  {label:'Peloton', mode:'bike',   detail:'Steady effort, hold your cadence', v:[20,25,30,15], unit:'min', miPerMin:0.3},
+  sprint:{label:'Sprints', mode:'sprint', detail:'Hard efforts, full recovery',      v:[8,10,12,6]},
+  jog:   {label:'Jog',     mode:'run',    detail:'Conversational pace',              v:[3,3.5,4,2.5]}
+};
+const CARDIO_DAY={Mon:'bike',Wed:'sprint',Fri:'jog'};
+const BONUS_CARDIO={day:'Sat',type:'jog',v:[2,2,2.5,1.5]};   // the two-a-day
+
+function blockStart(){ if(!DB.blockStart){ DB.blockStart=iso(mondayOf(new Date())); save(); } return DB.blockStart; }
+function blockIndex(){
+  const st=new Date(blockStart()+'T00:00:00');
+  return Math.floor((mondayOf(curMon)-mondayOf(st))/(7*86400000));
+}
+function blockWeek(){ const n=blockIndex(); return ((n%4)+4)%4; }
+function blockInfo(){ return BLOCK[blockWeek()]; }
+
+function suggestWeight(exId,reps,pct){
+  if(isTimedEx(exId)) return '';
+  const best=bestE1RM(exId,null);
+  if(!best) return '';
+  return String(Math.max(5,Math.round(((best/(1+reps/30))*pct)/5)*5));
+}
+function exName(id){
+  const L=lib();
+  for(const g of Object.keys(L)){ const f=L[g].find(x=>x.id===id); if(f) return f.name; }
+  return id;
+}
+function buildLift(tpl,bwIdx){
+  const B=BLOCK[bwIdx];
+  return {tplKey:tpl.key,name:tpl.name,ex:tpl.ex.map(([id,role])=>{
+    const [sets,reps]=B[role]||B.iso;
+    return {exId:id,name:exName(id),role,sets,reps,weight:suggestWeight(id,reps,B.pct)};
+  })};
+}
+function cardioRx(key,bwIdx,morning){
+  const c=CARDIO_PLAN[key]; if(!c) return null;
+  const v=c.v[bwIdx];
+  return {key,label:c.label,mode:c.mode,detail:c.detail,morning:!!morning,unit:c.unit||null,
+          reps:c.mode==='sprint'?v:null, distance:c.mode==='sprint'?null:v};
+}
+/* what a prescribed cardio session is worth toward the weekly miles goal */
+function rxMiles(c){
+  if(!c||c.mode==='sprint') return 0;
+  const P=CARDIO_PLAN[c.key];
+  const mi=(P&&P.unit==='min')?c.distance*(P.miPerMin||0.3):c.distance;
+  return c.mode==='bike'?mi*0.5:mi;
+}
+/* A/B/C rotates continuously across weeks, so Tuesday isn't always day A */
+function generateRx(loc){
+  const bw=blockWeek(), base=blockIndex()*4, rx={}; let li=0;
+  DAYS.forEach(d=>{
+    const kind=SCHEDULE[d], where=loc[d]||'home';
+    if(where==='off') return;
+    if(kind==='lift'){
+      if(where==='trainer'){ rx[d]={lift:{trainer:true,name:'Trainer session'}}; }
+      else{
+        const set=TEMPLATES[where]||TEMPLATES.home;
+        rx[d]={lift:buildLift(set[(((base+li)%3)+3)%3],bw)};
+      }
+      li++;
+      if(BONUS_CARDIO.day===d){ const b=cardioRx(BONUS_CARDIO.type,bw,true); if(b){ b.distance=BONUS_CARDIO.v[bw]; rx[d].cardio=b; } }
+    } else {
+      const c=cardioRx(CARDIO_DAY[d],bw,false);
+      if(c) rx[d]={cardio:c};
+    }
+  });
+  return rx;
+}
+function rxFor(day){ const w=week(); return (w.rx&&w.rx[day])||null; }
+function startPrescribed(day){
+  const r=rxFor(day); if(!r||!r.lift) return;
+  if(r.lift.trainer){ startLift(day,null); return; }
+  const w=week(), id=uid();
+  const exercises=r.lift.ex.map(e=>({exId:e.exId,name:e.name,
+    sets:Array.from({length:e.sets},()=>({reps:String(e.reps),weight:e.weight||'',warmup:false,done:false}))}));
+  w.acts[day].push({id,type:'lift',done:false,data:{name:r.lift.name,routineId:null,exercises}});
+  save(); closeSheet(); openWorkout(day,id);
+}
+
+/* ================= ELEVATION: every session is feet climbed ================= */
+/* Balanced against real effort: a main-lift set is the unit, a bike mile is ~1/4 of a
+   run mile, ten sprint sets beat a mile. Lifting lands at ~73% of a full week. */
+const FT_MAIN=20, FT_OTHER=12, FT_RUN_MI=55, FT_BIKE_MI=14, FT_SPRINT_SET=8;
+const COMPOUND_EX=new Set(['squat_bb','deadlift','bench_bb','ohp','row_bb','rdl','pullup','chinup',
+  'bss','bench_db','incline_db','row_db','shoulder_db','dip','pushup','latpull','seatedrow']);
+function setFeet(exId){ return COMPOUND_EX.has(exId)?FT_MAIN:FT_OTHER; }
+function actFeet(a){
+  if(!a||!a.done) return 0;
+  if(a.type==='lift'){
+    let f=0;
+    (a.data.exercises||[]).forEach(ex=>ex.sets.forEach(st=>{
+      if(!st.warmup && num(st.reps)>0 && (num(st.weight)>0||isTimedEx(ex.exId))) f+=setFeet(ex.exId);
+    }));
+    return f;
+  }
+  if(a.type==='cardio'||a.type==='run'||a.type==='sprint'){
+    if(isSprint(a)) return num(a.data&&a.data.reps)*FT_SPRINT_SET;
+    const mi=num(a.data&&a.data.distance), mode=(a.data&&a.data.mode)||'run';
+    return Math.round(mi*(mode==='bike'?FT_BIKE_MI:FT_RUN_MI));
+  }
+  return 0;
+}
+function weekFeet(wk){ let f=0; DAYS.forEach(d=>((wk&&wk.acts&&wk.acts[d])||[]).forEach(a=>f+=actFeet(a))); return f; }
+
+/* the ladder — real Blue Ridge peaks, ascending */
+const PEAKS=[
+  {name:'Springer Mountain',   ft:3782, note:'Southern terminus of the AT'},
+  {name:'Brasstown Bald',      ft:4784, note:'Highest point in Georgia'},
+  {name:'Grandfather Mountain',ft:5946, note:'The old man of the Blue Ridge'},
+  {name:'Clingmans Dome',      ft:6643, note:'Highest on the Appalachian Trail'},
+  {name:'Mount Mitchell',      ft:6684, note:'Highest east of the Mississippi'}
+];
+function peakFor(n){ return PEAKS[Math.min(n,PEAKS.length-1)]; }
+function blockNumber(){ return Math.floor(blockIndex()/4); }              // 0-based block
+function blockMondays(bn){
+  const st=mondayOf(new Date(blockStart()+'T00:00:00'));
+  return [0,1,2,3].map(i=>iso(addDays(st,7*(bn*4+i))));
+}
+function blockFeet(bn){
+  return memo('bf'+bn,()=>blockMondays(bn).reduce((f,k)=>f+weekFeet(DB.weeks&&DB.weeks[k]),0));
+}
+function summitedPeaks(){
+  return memo('summited',()=>{
+    const out=[]; const cur=blockNumber();
+    for(let b=0;b<cur;b++){ const p=peakFor(out.length); if(blockFeet(b)>=p.ft) out.push({peak:p,block:b,ft:blockFeet(b),end:blockMondays(b)[3]}); }
+    return out;
+  });
+}
+function currentPeak(){ return peakFor(summitedPeaks().length); }
+
+/* did you do what the plan asked? */
+function weekAdherence(wk){
+  const rx=(wk&&wk.rx)||{}; let need=0, hit=0;
+  DAYS.forEach(d=>{
+    const r=rx[d]; if(!r) return;
+    const acts=(wk.acts&&wk.acts[d])||[];
+    if(r.lift){ need++; if(acts.some(a=>a.type==='lift'&&a.done)) hit++; }
+    if(r.cardio){ need++; if(acts.some(a=>(a.type==='cardio')&&a.done)) hit++; }
+  });
+  return {need,hit};
+}
+
 /* ================= SET THE WEEK (2-step wizard) ================= */
 let planDraft=null, questDraft=null, planStep=1;
 function openPlanner(){
-  const w=week(); planDraft={}; DAYS.forEach(d=>planDraft[d]=(w.plan&&w.plan[d])?w.plan[d].slice():[]);
+  const w=week(); planDraft={}; DAYS.forEach(d=>planDraft[d]=(w.plan&&w.plan[d]&&w.plan[d].length)?w.plan[d].slice():['home']);
   questDraft=w.quests.map(q=>({tier:q.tier,kind:questKind(q),target:q.target}));
   planStep=1; renderPlanner(); scrim2El.classList.add('show'); sheet2El.classList.add('show');
 }
-function renderPlanner(){ planStep===1?renderPlanStep():renderQuestStep(); }
+function renderPlanner(){ renderPlanStep(); }
 function renderPlanStep(){
-  const opts=[['cardio','Cardio'],['lift','Lift'],['other','Other'],['rest','Rest']];
-  let h=`<h3>Set the week · plan</h3><div class="plan-note">Step 1 of 2 — a rough plan for each day.</div>`;
+  const B=blockInfo();
+  let h=`<h3>Set the week · where</h3><div class="plan-note">The schedule is fixed. Say where you'll be and it writes the week.</div>`;
+  h+=`<div class="blk"><span class="blk-w">Block week ${blockWeek()+1} of 4 · <b>${B.name}</b></span><span class="blk-n">${B.note}</span></div>`;
   DAYS.forEach(d=>{
-    const sel=planDraft[d]||[];
-    h+=`<div class="plan-prow"><span class="pday">${d}</span><div class="plan-toggles">`;
-    opts.forEach(([v,lab])=>{ const on=sel.includes(v); h+=`<button class="ptog ${v==='rest'?'rest':''} ${on?'on':''}" data-plantoggle="${d}:${v}">${lab}</button>`; });
+    const sel=(planDraft[d]&&planDraft[d][0])||'home';
+    const kind=SCHEDULE[d];
+    h+=`<div class="plan-prow"><span class="pday">${d}<i class="pday-k">${kind==='lift'?'Lift':'Cardio'}</i></span><div class="plan-toggles">`;
+    LOCS.forEach(([v,lab])=>{
+      if(kind==='cardio'&&v==='trainer') return;      // trainer only applies to lift days
+      h+=`<button class="ptog ${v==='off'?'rest':''} ${sel===v?'on':''}" data-plantoggle="${d}:${v}">${lab}</button>`;
+    });
     h+=`</div></div>`;
   });
-  h+=`<div class="sheet-actions"><button class="btn ghost" id="sheet2Cancel">Cancel</button><button class="btn primary" id="planNext">Next →</button></div>`;
+  h+=`<div class="sheet-actions"><button class="btn ghost" id="sheet2Cancel">Cancel</button><button class="btn primary" id="planLock">Lock in the week</button></div>`;
   sheet2Body.innerHTML=h;
 }
-function renderQuestStep(){
-  let h=`<h3>Set the week · quests</h3><div class="plan-note">Step 2 of 2 — three goals, any order. One cleared = Basecamp, two = Ridgeline, all three = Summit.</div>`;
-  questDraft.forEach((q,i)=>{
-    const kd=questKind(q), kl=KIND_LABEL[kd];
-    h+=`<div class="qedit">
-      <div class="qedit-top"><span class="q-tier">${KIND_TITLE[kd]||'Goal'}</span><span class="q-budget">${q.target} ${kl}</span></div>
-      <div class="stepper">
-        <button class="step" data-qdstep="${i}:-1" aria-label="Fewer">−</button>
-        <span class="step-val">${q.target}</span>
-        <button class="step" data-qdstep="${i}:1" aria-label="More">+</button>
-        <span class="step-lbl">${kl}</span>
-      </div>
-      <div class="qseg">${KIND_OPTS.map(([v,l])=>`<button class="qsegb ${questKind(q)===v?'on':''}" data-qdkind="${i}:${v}">${l}</button>`).join('')}</div>
-    </div>`;
-  });
-  h+=`<div class="sheet-actions"><button class="btn ghost" id="planBack">← Back</button><button class="btn primary" id="planLock">Lock in the week</button></div>`;
-  sheet2Body.innerHTML=h;
-}
+
 function togglePlan(day,v){
-  let sel=planDraft[day]||[];
-  if(v==='rest'){ sel = sel.includes('rest')?[]:['rest']; }
-  else { sel=sel.filter(x=>x!=='rest'); sel = sel.includes(v)?sel.filter(x=>x!==v):sel.concat(v); }
-  planDraft[day]=sel; renderPlanner();
+  planDraft[day]=(planDraft[day]&&planDraft[day][0]===v)?[]:[v];
+  renderPlanner();
 }
+
 function computeQuestDefaults(plan){
-  const counts={cardio:0,lift:0,other:0}; let total=0;
-  DAYS.forEach(d=>(plan[d]||[]).forEach(t=>{ if(t!=='rest'&&counts[t]!=null){counts[t]++;total++;} }));
-  const lifts=Math.max(1,counts.lift||4);
-  const sprintSets=10;
-  const miles=Math.max(6,Math.round((counts.cardio||3)*3.5));
-  return [{tier:'basecamp',kind:'lifts',target:lifts},{tier:'ridgeline',kind:'reps',target:sprintSets},{tier:'summit',kind:'miles',target:miles}];
+  const loc={}; DAYS.forEach(d=>loc[d]=(plan[d]&&plan[d][0])||'home');
+  const bw=blockWeek();
+  const lifts=DAYS.filter(d=>SCHEDULE[d]==='lift'&&loc[d]!=='off').length||4;
+  let miles=0, sprints=0;
+  DAYS.forEach(d=>{
+    if(loc[d]==='off') return;
+    if(SCHEDULE[d]==='cardio'){ const c=cardioRx(CARDIO_DAY[d],bw,false);
+      if(c){ if(c.mode==='sprint') sprints+=c.reps; else miles+=rxMiles(c); } }
+    if(SCHEDULE[d]==='lift'&&BONUS_CARDIO.day===d) miles+=BONUS_CARDIO.v[bw];
+  });
+  return [{tier:'basecamp',kind:'lifts',target:lifts},
+          {tier:'ridgeline',kind:'reps',target:Math.max(4,sprints)},
+          {tier:'summit',kind:'miles',target:Math.max(3,Math.round(miles))}];
 }
+
 function lockWeek(){
   const w=week(); w.plan={}; DAYS.forEach(d=>w.plan[d]=planDraft[d]||[]);
+  questDraft=computeQuestDefaults(planDraft);
+  w.loc={}; DAYS.forEach(d=>w.loc[d]=(planDraft[d]&&planDraft[d][0])||'rest');
+  w.rx=generateRx(w.loc);
   questDraft.forEach((qd,i)=>{ const q=w.quests[i]; if(questKind(q)!==qd.kind||q.target!==qd.target) q.reward=null; q.tier=qd.tier; q.kind=qd.kind; delete q.type; q.target=Math.max(1,qd.target); });
   w.locked=true; save(); closeSheet2(); render(); flash('Week locked in');
 }
 
 /* ================= STREAK + SUMMIT LOG ================= */
 function weekCamps(wk){
-  if(!wk||!wk.quests) return 0; let n=0;
-  wk.quests.forEach(q=>{ if(q.target>0 && questProgressIn(wk,q)>=q.target) n++; });
-  return n;
+  if(!wk) return 0;
+  const a=weekAdherence(wk);
+  if(!a.need) return 0;
+  const r=a.hit/a.need;
+  return r>=1?3:r>=0.7?2:r>=0.4?1:0;
 }
+
 function isRestWeek(wk){
   if(!wk||!wk.plan) return false;
   const planned=DAYS.filter(d=>(wk.plan[d]||[]).length);
@@ -1719,28 +1828,6 @@ function computeStreak(){
   return streak;
 }
 function currentStreak(){ return memo('currentStreak',()=>{ try{ return computeStreak(); }catch(e){ let s=0,m=mondayOf(new Date()); if(weekCamps(DB.weeks[iso(m)])<1)m=addDays(m,-7); while(DB.weeks[iso(m)]&&weekCamps(DB.weeks[iso(m)])>=1){s++;m=addDays(m,-7);} return s; } }); }
-function hasData(wk){ if(!wk)return false; const a=DAYS.some(d=>(wk.acts[d]||[]).length); const p=wk.plan&&DAYS.some(d=>(wk.plan[d]||[]).length); return a||p; }
-function streakGlyph(){ return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#c25b3c" stroke-width="2" stroke-linejoin="round"><path d="M3 20 L9 8 L13 14 L16 6 L21 20 Z"/></svg>`; }
-function summitLogHTML(){
-  const entries=Object.keys(DB.weeks||{}).map(k=>({k,mon:new Date(k+'T00:00:00'),wk:DB.weeks[k]}))
-    .filter(e=>hasData(e.wk)).sort((a,b)=>b.mon-a.mon).slice(0,3);
-  let h=`<div class="eyebrow">Summit log</div>`;
-  if(!entries.length){ h+=`<div class="empty2" style="padding:6px 2px">Climb a week to start your log.</div>`; return h; }
-  h+=`<div class="peaks">`;
-  entries.forEach(e=>{
-    const camps=weekCamps(e.wk), isCur=iso(e.mon)===iso(curMon);
-    const graced=(DB.graceUsed||{})[e.k.slice(0,7)]===e.k && camps<1;
-    const rest=isRestWeek(e.wk);
-    const lbl=rest?'Rest':graced?'Grace':camps>=1?milestoneName(camps):'0/3';
-    h+=`<button class="peak ${isCur?'cur':''} ${graced?'graced':''}" data-loadweek="${e.k}">
-      <span class="peak-range">${fmtRange(e.mon)}</span>
-      <span class="peak-dots">${graced?'<i class="hollow"></i><i></i><i></i>':[0,1,2].map(i=>`<i class="${i<camps?'on':''}"></i>`).join('')}</span>
-      <span class="peak-label">${lbl}</span>
-    </button>`;
-  });
-  return h+`</div>`;
-}
-
 /* ================= HOW TOKENS WORK ================= */
 /* ================= SETTINGS / DATA ================= */
 function openSettings(){
