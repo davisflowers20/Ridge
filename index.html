@@ -476,6 +476,37 @@
   .climb-bar i{display:block;height:100%;background:var(--gold-2);border-radius:99px;transition:width .5s ease}
   .climb-foot{font-family:'Space Mono';font-size:11.5px;color:rgba(255,255,255,.65)}
   .climb-foot b{color:#fff}
+  .callout{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--ink);border-radius:12px;padding:13px 14px;margin-bottom:14px}
+  .callout.gold{border-left-color:var(--gold)}
+  .callout b{display:block;font-family:'Space Grotesk';font-size:14px}
+  .callout span{display:block;font-size:12px;color:var(--muted);margin-top:2px;line-height:1.4}
+  .callout-go{all:unset;cursor:pointer;flex:none;font-family:'Space Grotesk';font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;background:var(--ink);color:var(--surface);padding:10px 15px;border-radius:999px}
+  .callout.gold .callout-go{background:var(--gold)}
+  .rv-grp{font-family:'Space Grotesk';font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:18px 0 8px}
+  .rv-grp.advance{color:var(--pine)} .rv-grp.reduce{color:#b03b22}
+  .rv-row{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:11px 12px;margin-bottom:7px}
+  .rv-row.skipped{opacity:.45}
+  .rv-l{flex:1;min-width:0}
+  .rv-n{display:block;font-family:'Space Grotesk';font-weight:600;font-size:13.5px}
+  .rv-w{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+  .rv-move{font-family:'Space Mono';font-size:12px;color:var(--ink-soft);flex:none;white-space:nowrap}
+  .rv-move b{color:var(--gold)}
+  .rv-x{all:unset;cursor:pointer;font-family:'Space Grotesk';font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:6px 4px;flex:none}
+  .bl-row{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:9px}
+  .bl-top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:9px}
+  .bl-n{font-family:'Space Grotesk';font-weight:600;font-size:14px}
+  .bl-now{font-family:'Space Mono';font-size:11px;color:var(--muted)}
+  .bl-now b{color:var(--gold)}
+  .bl-fields{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+  .bl-fields label{display:block;font-family:'Space Grotesk';font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .bl-in{width:100%;box-sizing:border-box;margin-top:4px;font-family:'Space Mono';font-size:15px;text-align:center;background:var(--valley);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:9px 4px}
+  .pl-grid{display:flex;flex-direction:column;gap:7px}
+  .pl-row{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:10px 13px}
+  .pl-w{font-family:'Space Mono';font-weight:700;font-size:14px;width:58px;flex:none}
+  .pl-k{font-family:'Space Grotesk';font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .pl-out{font-family:'Space Mono';font-size:11.5px;color:var(--muted);margin-top:12px}
+  .pl-out b{color:var(--ink)}
+  .bl-note{font-family:'Space Mono';font-size:10px;color:var(--muted);line-height:1.6;margin-top:12px}
   .blkline{font-size:12.5px;color:var(--ink-soft);margin:-6px 2px 13px;line-height:1.5}
   .blkline b{font-family:'Space Grotesk'}
   .stages{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:6px}
@@ -587,6 +618,7 @@
 <div class="scrim" id="scrim2" style="z-index:49"></div>
 <div class="sheet" id="sheet2" style="z-index:50"><div class="grab"></div><div id="sheet2Body"></div></div>
 <div class="workout" id="workout"><div id="workoutBody"></div></div>
+<div class="rsetup" id="rsetup"><div class="rsetup-inner" id="rsetupBody"></div></div>
 <div class="welcome" id="welcome"><div class="welcome-inner">  <svg width="46" height="46" viewBox="0 0 30 30" aria-hidden="true"><circle cx="6.6" cy="6" r="2" fill="#c25b3c"/><path d="M3 24 L10.5 11.5 L14 17 L19.5 8 L27 24" fill="none" stroke="#1e2c35" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg>
   <h2>RIDGE</h2>
   <p class="tagline">A plan that writes itself. Then climb.</p>
@@ -983,7 +1015,12 @@ function rxCardHTML(day){
     if(r.lift.trainer){
       h+=`<div class="rx"><div class="rx-l"><span class="rx-k">Session</span><b>Trainer</b><span class="rx-d">Log what he gives you</span></div><button class="rx-go" data-rxstart="${day}">Start</button></div>`;
     } else {
-      const list=r.lift.ex.map(e=>`${esc(e.name)} <i>${e.sets}×${isTimedEx(e.exId)?e.reps+'s':e.reps}${e.weight?` @ ${e.weight}`:''}</i>`).join('');
+      const list=r.lift.ex.map(e=>{
+      if(e.ramp){ const w=e.ramp.filter(x=>!x.warm), up=e.ramp.filter(x=>x.warm);
+        const tail=w[0].weight?` @ ${w[0].weight}`:'';
+        return `${esc(e.name)} <i>${up.map(x=>x.weight).join(' · ')}${up.length?' · ':''}${w.length}×${w[0].reps}${tail}</i>`; }
+      return `${esc(e.name)} <i>${e.sets}×${isTimedEx(e.exId)?e.reps+'s':e.reps}${e.weight?` @ ${e.weight}`:''}</i>`;
+    }).join('');
       h+=`<div class="rx"><div class="rx-l"><span class="rx-k">Workout ${r.lift.tplKey}</span><b>${esc(r.lift.name)}</b><div class="rx-ex">${list}</div></div><button class="rx-go" data-rxstart="${day}">Start</button></div>`;
     }
   }
@@ -999,7 +1036,11 @@ function questsHTML(){
   const wk=week(), ad=weekAdherence(wk), thisWk=weekFeet(wk);
   const mons=blockMondays(bn);
 
-  let h=`<div class="climb ${summited?'topped':''}">
+  let h='';
+  if(!baselinesReady()) h+=`<div class="callout"><div><b>Set your starting numbers</b><span>The program needs one honest working set per lift to build from.</span></div><button class="callout-go" data-opensetup>Start</button></div>`;
+  const due=blockReviewDue();
+  if(due!==null) h+=`<div class="callout gold"><div><b>Block ${due+1} is done</b><span>See what the numbers say and set the next baseline.</span></div><button class="callout-go" data-openreview="${due}">Review</button></div>`;
+  h+=`<div class="climb ${summited?'topped':''}">
     <div class="climb-top"><div><span class="climb-k">Climbing</span><span class="climb-n">${peak.name}</span><span class="climb-note">${peak.note}</span></div>
       <span class="climb-el">${peak.ft.toLocaleString()}<small>ft</small></span></div>
     <div class="climb-bar"><i style="width:${pct}%"></i></div>
@@ -1131,11 +1172,13 @@ document.getElementById('nextWk').onclick=()=>{curMon=addDays(curMon,7);openDays
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;render();});
 
 view.addEventListener('click',e=>{
-  const t=e.target.closest('[data-openplanner],[data-toggle],[data-edit],[data-del],[data-add],[data-qstep],[data-qkind],[data-loadweek],[data-histex],[data-bpwin],[data-bkup],[data-bkx],[data-startlifttoday],[data-rxstart],[data-prizeset],[data-prizeclaim],[data-prizeclear],[data-calnav]');
+  const t=e.target.closest('[data-openplanner],[data-toggle],[data-edit],[data-del],[data-add],[data-qstep],[data-qkind],[data-loadweek],[data-histex],[data-bpwin],[data-bkup],[data-bkx],[data-startlifttoday],[data-rxstart],[data-prizeset],[data-prizeclaim],[data-prizeclear],[data-opensetup],[data-openreview],[data-calnav]');
   if(!t) return;
   if(t.dataset.calnav){ if(!calMon){const n=new Date();calMon=new Date(n.getFullYear(),n.getMonth(),1);} calMon=new Date(calMon.getFullYear(),calMon.getMonth()+(+t.dataset.calnav),1); render(); return; }
   if(t.dataset.startlifttoday!==undefined){ const d=DAYS[(new Date().getDay()+6)%7]; startLift(d,null); return; }
   if(t.dataset.rxstart){ startPrescribed(t.dataset.rxstart); return; }
+  if(t.dataset.opensetup!==undefined){ openSetup(); return; }
+  if(t.dataset.openreview){ openReview(+t.dataset.openreview); return; }
   if(t.dataset.prizeset){ const el=document.getElementById('prizeIn'); const v=(el&&el.value||'').trim();
     if(!v){flash('Name it first');return;} DB.prizes=DB.prizes||{}; DB.prizes['b'+t.dataset.prizeset]={name:v}; save(); render(); return; }
   if(t.dataset.prizeclaim){ const k='b'+t.dataset.prizeclaim; if(DB.prizes&&DB.prizes[k]){ DB.prizes[k].claimed=iso(new Date()); save(); render(); flash('Earned it — enjoy'); } return; }
@@ -1179,6 +1222,7 @@ sheet.addEventListener('click',e=>{
 
 /* ================= LIFT: full workout screen ================= */
 const woEl=document.getElementById('workout'), woBody=document.getElementById('workoutBody');
+const rsetupEl=document.getElementById('rsetup'), rsetupBody=document.getElementById('rsetupBody');
 const scrim2El=document.getElementById('scrim2'), sheet2El=document.getElementById('sheet2'), sheet2Body=document.getElementById('sheet2Body');
 let WO=null, pickerQuery='';
 
@@ -1263,7 +1307,7 @@ const num=v=>{const n=parseFloat(v);return isNaN(n)?0:n;};
 function fmtDur(sec){ sec=Math.max(0,Math.round(sec)); const h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60),s=sec%60; return h?`${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`:`${m}:${String(s).padStart(2,'0')}`; }
 const e1rm=s=>{const w=num(s.weight),r=num(s.reps);return (w>0&&r>0)?w*(1+r/30):0;};
 const TIMED_EX=new Set(['plank','deadhang']);
-function isTimedEx(exId){ if(TIMED_EX.has(exId)) return true; const n=String(exId).toLowerCase(); return /plank|hold|hang|wall_?sit|carry|iso/.test(n); }
+function isTimedEx(exId){ if(TIMED_EX.has(exId)) return true; const n=String(exId).toLowerCase(); return /plank|hold|deadhang|wall_?sit/.test(n); }
 function exMetric(exId,s){ return isTimedEx(exId) ? num(s.reps) : e1rm(s); }
 const esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 const escAttr=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
@@ -1532,6 +1576,10 @@ function openRoutineManager(){
 scrim2El.onclick=closeSheet2;
 sheet2El.addEventListener('click',e=>{
   if(e.target.id==='pickerDone'||e.target.id==='sheet2Cancel')return closeSheet2();
+  if(e.target.closest('#platesBtn'))return openPlates();
+  const pl=e.target.closest('[data-plate]'); if(pl){ const [v,d]=pl.dataset.plate.split(':'); adjustPlate(parseFloat(v),parseInt(d,10)); return; }
+  if(e.target.closest('#setupBtn')){ closeSheet2(); openSetup(); return; }
+  if(e.target.closest('#baseBtn'))return openBaselines();
   if(e.target.closest('#exportBtn'))return exportData();
   if(e.target.closest('#importBtn'))return document.getElementById('importFile').click();
   if(e.target.closest('#introBtn')){closeSheet2();DB.onboarded=false;save();showWelcome();return;}
@@ -1556,12 +1604,114 @@ sheet2El.addEventListener('click',e=>{
   if(e.target.id==='nameSave'){const v=(document.getElementById('nameInput').value||'').trim();const cb=sheet2El.__cb;closeSheet2();if(cb)cb(v);return;}
 });
 sheet2El.addEventListener('change',e=>{
+  if(e.target.closest('[data-bl]')){ openBaselines(); return; }
   if(e.target.id==='importFile'&&e.target.files&&e.target.files[0]) handleImport(e.target.files[0]);
 });
 sheet2El.addEventListener('input',e=>{
+  const bl=e.target.closest('[data-bl]'); if(bl){ const [id,f]=bl.dataset.bl.split(':'); setBaseline(id,f,e.target.value); return; }
   if(e.target.id==='exSearch'){pickerQuery=e.target.value;renderPicker();const s=document.getElementById('exSearch');if(s){s.focus();s.setSelectionRange(s.value.length,s.value.length);}}
 });
 
+
+/* ================= BARBELL MATH + BASELINES ================= */
+/* Only weights he can actually load: 45lb bar + pairs of 45/35/25/15 and two pairs of 10.
+   Smallest possible jump is 10 lb — which is why progression runs on reps inside a block
+   and on weight between blocks, not week to week. */
+const BAR=45;
+const PLATES_DEFAULT=[45,35,25,15,10,10,5,2.5];      // pairs on hand
+function platePairs(){ if(!Array.isArray(DB.plates)||!DB.plates.length) DB.plates=PLATES_DEFAULT.slice(); return DB.plates; }
+function loadableSet(){
+  return memo('loadable',()=>{ const set=new Set(), P=platePairs();
+    (function rec(i,t){ if(i===P.length){set.add(BAR+2*t);return;} rec(i+1,t); rec(i+1,t+P[i]); })(0,0);
+    return [...set].filter(x=>x<=600).sort((a,b)=>a-b); });
+}
+Object.defineProperty(globalThis,'LOADABLE',{get:loadableSet});
+function snapBar(w){
+  if(!w||w<BAR) return BAR;
+  let best=LOADABLE[0];
+  LOADABLE.forEach(x=>{ if(Math.abs(x-w)<Math.abs(best-w)||(Math.abs(x-w)===Math.abs(best-w)&&x<best)) best=x; });
+  return best;
+}
+const DB_STEP=5;                                     // adjustable dumbbells move in 5s
+function snapDb(w){ return Math.max(5,Math.round(w/DB_STEP)*DB_STEP); }
+const DUMBBELL_EX=new Set(['bench_db','incline_db','shoulder_db','row_db','curl_db','hammer','latraise','kickback']);
+function snapFor(exId,w){ return DUMBBELL_EX.has(exId)?snapDb(w):snapBar(w); }
+
+/* His current numbers — the block-one baseline. ramp = warm-up + work-up, work = the money sets. */
+/* Movements the program prescribes. kind drives how a baseline is entered and progressed. */
+const PROGRAM_EX=[
+  {id:'squat_bb',  name:'Back Squat',       kind:'bar', ramps:2},
+  {id:'bench_bb',  name:'Bench Press',      kind:'bar', ramps:2},
+  {id:'row_bb',    name:'Bent-Over Row',    kind:'bar', ramps:2},
+  {id:'ohp',       name:'Overhead Press',   kind:'bar', ramps:1},
+  {id:'rdl',       name:'Romanian Deadlift',kind:'bar', ramps:2},
+  {id:'bss',       name:'Split Squat',      kind:'bar', ramps:1},
+  {id:'pullup',    name:'Pull-Up',          kind:'bw'},
+  {id:'pushup',    name:'Push-Up',          kind:'bw'},
+  {id:'incline_db',name:'Incline DB Press', kind:'db'},
+  {id:'curl_db',   name:'Curl (Dumbbell)',  kind:'db'},
+  {id:'curl_bb',   name:'Curl (Barbell)',   kind:'bar', ramps:0},
+  {id:'hammer',    name:'Hammer Curl',      kind:'db'},
+  {id:'latraise',  name:'Lateral Raise',    kind:'db'},
+  {id:'kickback',  name:'Tricep Kickback',  kind:'db'},
+  {id:'plank',     name:'Plank',            kind:'hold'},
+  {id:'abwheel',   name:'Ab Wheel',         kind:'bw'},
+  {id:'hlr',       name:'Hanging Leg Raise',kind:'bw'},
+  {id:'rtwist',    name:'Russian Twist',    kind:'bw'}
+];
+function exMeta(id){ return PROGRAM_EX.find(x=>x.id===id)||null; }
+function stepFor(id){ return jumpFor(id); }
+/* a starting point derived from what he's already logged, if anything */
+function deriveBaseline(id){
+  const m=exMeta(id); if(!m) return null;
+  if(m.kind==='bw'||m.kind==='hold') return {bw:true,reps:m.kind==='hold'?30:8,sets:3,timed:m.kind==='hold'};
+  const best=bestE1RM(id,null);
+  if(!best) return null;
+  const work=snapFor(id,(best/(1+5/30))*0.85);        // ~85% of a 5-rep weight
+  const base={work,sets:3};
+  if(m.ramps>0){ base.ramp=[]; 
+    if(m.ramps>=2) base.ramp.push(snapFor(id,work*0.6));
+    base.ramp.push(snapFor(id,work*0.82)); }
+  else base.reps=10;
+  return base;
+}
+function baselinesReady(){ return !!(DB.baselines&&Object.keys(DB.baselines).length); }
+
+function baselines(){ if(!DB.baselines) DB.baselines={}; return DB.baselines; }
+function baseFor(exId){ return baselines()[exId]||null; }
+
+/* reps climb across the block; the weight holds. next block adds a plate jump and resets. */
+const REP_WAVE=[5,6,7,5];
+const BLOCK_JUMP=10;                                  // legacy default
+const LOWER_EX=new Set(['squat_bb','deadlift','rdl','bss']);
+function jumpFor(id){ const m=exMeta(id); if(m&&m.kind==='db') return DB_STEP; return LOWER_EX.has(id)?10:5; }
+function workWeight(exId,bn){
+  const b=baseFor(exId); if(!b) return null;
+  return snapFor(exId,b.work);
+}
+/* returns the full ramp for a prescribed lift: warm-up, work-ups, then the working sets */
+function rampFor(exId,bwIdx,bn){
+  const b=baseFor(exId); if(!b) return null;
+  const deload=bwIdx===3;
+  const sets=[];
+  /* bodyweight: hold the movement, let reps carry the block */
+  if(b.bw){
+    const step=b.timed?5:1;                       // holds add seconds, reps add reps
+    const reps=b.reps+(deload?-step*2:step*bwIdx);
+    const ct=deload?Math.max(1,(b.sets||3)-1):(b.sets||3);
+    for(let i=0;i<ct;i++) sets.push({weight:'',reps:Math.max(1,reps),warm:false});
+    return sets;
+  }
+  const bump=0;                                         // between-block jumps come from the review, not a formula
+  const work=snapFor(exId,b.work+bump);
+  /* accessories keep their own rep target; mains ride the wave */
+  const reps=b.ramp?REP_WAVE[bwIdx]:(b.reps||10);
+  (b.ramp||[]).forEach((r,i)=>sets.push({weight:snapFor(exId,r+bump),reps:i===0?5:3,warm:true}));
+  const wct=deload?Math.max(1,(b.sets||3)-1):(b.sets||3);
+  const wt=(deload&&b.ramp)?snapFor(exId,work-BLOCK_JUMP*2):work;
+  for(let i=0;i<wct;i++) sets.push({weight:wt,reps,warm:false});
+  return sets;
+}
 
 /* ================= PROGRAM: fixed schedule, location-aware, 4-week block ================= */
 /* The week's shape is settled: lift Tue/Thu/Sat/Sun, cardio Mon/Wed/Fri.
@@ -1576,7 +1726,7 @@ const TEMPLATES={
   home:[
     {key:'A',name:'Squat · Bench · Pull',ex:[['squat_bb','main'],['bench_bb','main'],['pullup','main'],['curl_bb','iso'],['kickback','iso'],['abwheel','core']]},
     {key:'B',name:'Split · Press · Row', ex:[['bss','main'],['ohp','main'],['row_bb','main'],['latraise','iso'],['hammer','iso'],['hlr','core']]},
-    {key:'C',name:'Hinge · Incline · Pull',ex:[['rdl','main'],['incline_db','main'],['pullup','main'],['pushdown_band','iso'],['curl_db','iso'],['plank','core']]}
+    {key:'C',name:'Hinge · Push · Pull',ex:[['rdl','main'],['pushup','main'],['pullup','main'],['incline_db','iso'],['curl_db','iso'],['plank','core']]}
   ],
   travel:[
     {key:'T',name:'Dumbbell full body',ex:[['bss','main'],['bench_db','main'],['row_db','main'],['shoulder_db','iso'],['curl_db','iso'],['plank','core']]}
@@ -1616,9 +1766,11 @@ function exName(id){
   for(const g of Object.keys(L)){ const f=L[g].find(x=>x.id===id); if(f) return f.name; }
   return id;
 }
-function buildLift(tpl,bwIdx){
+function buildLift(tpl,bwIdx,bn){
   const B=BLOCK[bwIdx];
   return {tplKey:tpl.key,name:tpl.name,ex:tpl.ex.map(([id,role])=>{
+    const ramp=rampFor(id,bwIdx,bn||0);
+    if(ramp) return {exId:id,name:exName(id),role,ramp,sets:ramp.length,reps:ramp[ramp.length-1].reps,weight:ramp[ramp.length-1].weight};
     const [sets,reps]=B[role]||B.iso;
     return {exId:id,name:exName(id),role,sets,reps,weight:suggestWeight(id,reps,B.pct)};
   })};
@@ -1646,7 +1798,7 @@ function generateRx(loc){
       if(where==='trainer'){ rx[d]={lift:{trainer:true,name:'Trainer session'}}; }
       else{
         const set=TEMPLATES[where]||TEMPLATES.home;
-        rx[d]={lift:buildLift(set[(((base+li)%3)+3)%3],bw)};
+        rx[d]={lift:buildLift(set[(((base+li)%3)+3)%3],bw,blockNumber())};
       }
       li++;
       if(BONUS_CARDIO.day===d){ const b=cardioRx(BONUS_CARDIO.type,bw,true); if(b){ b.distance=BONUS_CARDIO.v[bw]; rx[d].cardio=b; } }
@@ -1663,7 +1815,9 @@ function startPrescribed(day){
   if(r.lift.trainer){ startLift(day,null); return; }
   const w=week(), id=uid();
   const exercises=r.lift.ex.map(e=>({exId:e.exId,name:e.name,
-    sets:Array.from({length:e.sets},()=>({reps:String(e.reps),weight:e.weight||'',warmup:false,done:false}))}));
+    sets:e.ramp
+      ? e.ramp.map(st=>({reps:String(st.reps),weight:String(st.weight),warmup:!!st.warm,done:false}))
+      : Array.from({length:e.sets},()=>({reps:String(e.reps),weight:e.weight||'',warmup:false,done:false}))}));
   w.acts[day].push({id,type:'lift',done:false,data:{name:r.lift.name,routineId:null,exercises}});
   save(); closeSheet(); openWorkout(day,id);
 }
@@ -1829,10 +1983,249 @@ function computeStreak(){
 }
 function currentStreak(){ return memo('currentStreak',()=>{ try{ return computeStreak(); }catch(e){ let s=0,m=mondayOf(new Date()); if(weekCamps(DB.weeks[iso(m)])<1)m=addDays(m,-7); while(DB.weeks[iso(m)]&&weekCamps(DB.weeks[iso(m)])>=1){s++;m=addDays(m,-7);} return s; } }); }
 /* ================= HOW TOKENS WORK ================= */
+/* ================= BLOCK REVIEW: read the block, propose the next baseline ================= */
+/* A block is 4 weeks — three climbing, one deload. Long enough to show a real trend,
+   short enough that a bad call self-corrects fast. */
+const BLOCK_LEN=4;
+const ADVANCE_AT=0.95, HOLD_AT=0.80;    // share of prescribed working reps actually completed
+
+/* every working set of this exercise logged inside the block window */
+function blockSets(exId,bn){
+  const keys=blockMondays(bn), out=[];
+  keys.forEach(k=>{ const w=DB.weeks&&DB.weeks[k]; if(!w||!w.acts) return;
+    DAYS.forEach(d=>(w.acts[d]||[]).forEach(a=>{
+      if(a.type!=='lift'||!a.done) return;
+      (a.data.exercises||[]).forEach(ex=>{ if(ex.exId!==exId) return;
+        ex.sets.forEach(st=>{ if(st.warmup) return;
+          const r=num(st.reps); if(r>0) out.push({reps:r,weight:num(st.weight)}); });
+      });
+    }));
+  });
+  return out;
+}
+/* what the block asked for, so completion is measured against the actual prescription */
+function blockPrescribed(exId,bn){
+  const b=baseFor(exId); if(!b) return {reps:0,weight:0,sessions:0};
+  let reps=0; const wk=[0,1,2,3];
+  wk.forEach(i=>{ const r=rampFor(exId,i,bn); if(!r) return;
+    r.filter(x=>!x.warm).forEach(x=>reps+=x.reps); });
+  return {reps,weight:b.bw?0:snapFor(exId,b.work)};
+}
+function blockPerf(exId,bn){
+  const b=baseFor(exId); if(!b) return null;
+  const sets=blockSets(exId,bn), pres=blockPrescribed(exId,bn);
+  const target=b.bw?0:pres.weight;
+  const counted=sets.filter(x=>b.bw?true:x.weight>=target-0.01);
+  const done=counted.reduce((a,x)=>a+x.reps,0);
+  const top=sets.reduce((m,x)=>Math.max(m,x.weight),0);
+  const bestReps=sets.reduce((m,x)=>Math.max(m,x.reps),0);
+  return {sets:sets.length, done, need:pres.reps, target,
+          ratio:pres.reps?done/pres.reps:0, top, bestReps, trained:sets.length>0};
+}
+/* the proposal: earn the jump, or hold, or back off */
+function proposeBaseline(exId,bn){
+  const b=baseFor(exId), pf=blockPerf(exId,bn);
+  if(!b||!pf) return null;
+  const step=stepFor(exId), next=JSON.parse(JSON.stringify(b));
+  let action, why;
+  if(!pf.trained){ action='hold'; why='Not trained this block'; }
+  else if(pf.ratio>=ADVANCE_AT){ action='advance'; why=`Completed ${Math.round(pf.ratio*100)}% of prescribed reps`; }
+  else if(pf.ratio>=HOLD_AT){ action='hold'; why=`${Math.round(pf.ratio*100)}% completed — repeat and own it`; }
+  else { action='reduce'; why=`Only ${Math.round(pf.ratio*100)}% completed — back off and rebuild`; }
+
+  if(b.bw){
+    if(action==='advance') next.reps=b.reps+(b.timed?5:1);
+    if(action==='reduce')  next.reps=Math.max(b.timed?15:3,b.reps-(b.timed?5:1));
+  } else {
+    const d=action==='advance'?step:action==='reduce'?-step:0;
+    next.work=snapFor(exId,b.work+d);
+    if(b.ramp&&d) next.ramp=b.ramp.map(r=>snapFor(exId,r+d));
+  }
+  return {exId,action,why,from:b,to:next,perf:pf};
+}
+function blockProposals(bn){
+  return Object.keys(baselines()).map(id=>proposeBaseline(id,bn)).filter(Boolean);
+}
+/* a block is reviewable once its four weeks are behind us and it hasn't been reviewed */
+function blockReviewDue(){
+  const prev=blockNumber()-1;
+  if(prev<0) return null;
+  const last=(DB.lastReview==null?-1:DB.lastReview);
+  return last<prev?prev:null;
+}
+function applyProposals(bn,props){
+  const B=baselines();
+  props.forEach(pr=>{ if(pr.skip) return; B[pr.exId]=pr.to; });
+  DB.lastReview=bn; save();
+}
+
+/* ---- first run: enter what you lift today ---- */
+let setupDraft=null;
+function openSetup(){
+  setupDraft={};
+  PROGRAM_EX.forEach(m=>{ setupDraft[m.id]=baseFor(m.id)||deriveBaseline(m.id)||
+    (m.kind==='bw'||m.kind==='hold'?{bw:true,reps:m.kind==='hold'?30:8,sets:3,timed:m.kind==='hold'}
+     :{work:'',sets:3,ramp:m.ramps>0?[]:undefined,reps:m.ramps>0?undefined:10}); });
+  renderSetup(); rsetupEl.classList.add('show'); document.body.style.overflow='hidden';
+}
+function closeSetup(){ rsetupEl.classList.remove('show'); document.body.style.overflow=''; render(); }
+function renderSetup(){
+  let h=`<div class="rs-head"><h2>Your starting numbers</h2><p class="tagline">What you lift <b>today</b> — one honest working set per movement. Everything after this the app proposes for you at the end of each ${BLOCK_LEN}-week block.</p></div>`;
+  PROGRAM_EX.forEach(m=>{
+    const b=setupDraft[m.id];
+    h+=`<div class="bl-row"><div class="bl-top"><span class="bl-n">${m.name}</span><span class="bl-now">${m.kind==='bar'?'barbell':m.kind==='db'?'dumbbell':m.kind==='hold'?'hold':'bodyweight'}</span></div><div class="bl-fields">`;
+    if(b.bw){
+      h+=`<label>${m.kind==='hold'?'Seconds':'Reps'}<input class="bl-in" data-su="${m.id}:reps" value="${b.reps||''}" inputmode="numeric"></label>
+          <label>Sets<input class="bl-in" data-su="${m.id}:sets" value="${b.sets||3}" inputmode="numeric"></label>`;
+    } else {
+      h+=`<label>Working<input class="bl-in" data-su="${m.id}:work" value="${b.work||''}" inputmode="numeric" placeholder="lb"></label>
+          <label>Sets<input class="bl-in" data-su="${m.id}:sets" value="${b.sets||3}" inputmode="numeric"></label>`;
+      if(m.ramps>0) h+=`<label>Warm-up<input class="bl-in" data-su="${m.id}:ramp0" value="${(b.ramp&&b.ramp[0])||''}" inputmode="numeric"></label>`;
+      if(m.ramps>1) h+=`<label>Work-up<input class="bl-in" data-su="${m.id}:ramp1" value="${(b.ramp&&b.ramp[1])||''}" inputmode="numeric"></label>`;
+      if(m.ramps===0) h+=`<label>Reps<input class="bl-in" data-su="${m.id}:reps" value="${b.reps||10}" inputmode="numeric"></label>`;
+    }
+    h+=`</div></div>`;
+  });
+  h+=`<div class="bl-note">Barbell weights snap to what your plates can make: ${LOADABLE.filter(x=>x<=325).join(' · ')}</div>`;
+  h+=`<div class="sheet-actions"><button class="btn primary" id="setupSave">Start the block →</button></div>`;
+  rsetupBody.innerHTML=h;
+}
+function saveSetup(){
+  const B={};
+  PROGRAM_EX.forEach(m=>{
+    const d=setupDraft[m.id]; if(!d) return;
+    if(d.bw){ if(num(d.reps)>0) B[m.id]={bw:true,reps:num(d.reps),sets:num(d.sets)||3,timed:!!d.timed}; return; }
+    if(num(d.work)>0){
+      const o={work:snapFor(m.id,num(d.work)),sets:num(d.sets)||3};
+      if(m.ramps>0){ o.ramp=(d.ramp||[]).filter(x=>num(x)>0).map(x=>snapFor(m.id,num(x))); }
+      else o.reps=num(d.reps)||10;
+      B[m.id]=o;
+    }
+  });
+  if(!Object.keys(B).length){ flash('Fill in at least one lift'); return; }
+  DB.baselines=B; DB.blockStart=iso(mondayOf(new Date())); DB.lastReview=-1; save();
+  closeSetup(); flash('Block one begins');
+}
+
+/* ---- end of block: what happened, and what changes ---- */
+let reviewProps=null, reviewBn=null;
+function openReview(bn){
+  reviewBn=bn; reviewProps=blockProposals(bn);
+  renderReview(); rsetupEl.classList.add('show'); document.body.style.overflow='hidden';
+}
+function renderReview(){
+  const peak=peakFor(summitedPeaks().length), ft=blockFeet(reviewBn);
+  let h=`<div class="rs-head"><h2>Block ${reviewBn+1} review</h2><p class="tagline">${ft.toLocaleString()} ft climbed. Here's what the numbers say about where to start next.</p></div>`;
+  const grp={advance:[],hold:[],reduce:[]};
+  reviewProps.forEach((pr,i)=>grp[pr.action].push([pr,i]));
+  [['advance','Move up'],['hold','Hold here'],['reduce','Back off']].forEach(([k,lbl])=>{
+    if(!grp[k].length) return;
+    h+=`<div class="rv-grp ${k}">${lbl}</div>`;
+    grp[k].forEach(([pr,i])=>{
+      const m=exMeta(pr.exId)||{name:pr.exId};
+      const from=pr.from.bw?`${pr.from.reps}${pr.from.timed?'s':' reps'}`:`${pr.from.work} lb`;
+      const to=pr.to.bw?`${pr.to.reps}${pr.to.timed?'s':' reps'}`:`${pr.to.work} lb`;
+      h+=`<div class="rv-row ${pr.skip?'skipped':''}">
+        <div class="rv-l"><span class="rv-n">${m.name}</span><span class="rv-w">${pr.why}</span></div>
+        <span class="rv-move">${from}${from!==to?` → <b>${to}</b>`:''}</span>
+        <button class="rv-x" data-rvskip="${i}">${pr.skip?'undo':'skip'}</button>
+      </div>`;
+    });
+  });
+  h+=`<div class="sheet-actions"><button class="btn primary" id="reviewApply">Set the new baseline →</button></div>`;
+  rsetupBody.innerHTML=h;
+}
+
+rsetupEl.addEventListener('input',e=>{
+  const su=e.target.closest('[data-su]'); if(su){ const [id,f]=su.dataset.su.split(':'); const d=setupDraft[id]; if(!d)return;
+    if(f==='ramp0'||f==='ramp1'){ d.ramp=d.ramp||[]; d.ramp[f==='ramp0'?0:1]=e.target.value; }
+    else d[f]=e.target.value; return; }
+});
+rsetupEl.addEventListener('click',e=>{
+  if(e.target.closest('#setupSave')) return saveSetup();
+  const sk=e.target.closest('[data-rvskip]'); if(sk){ const i=+sk.dataset.rvskip; reviewProps[i].skip=!reviewProps[i].skip; renderReview(); return; }
+  if(e.target.closest('#reviewApply')){ applyProposals(reviewBn,reviewProps);
+    rsetupEl.classList.remove('show'); document.body.style.overflow=''; render(); flash('New baseline set'); return; }
+});
+
+/* ================= BASELINE EDITOR ================= */
+const BASE_ORDER=[['squat_bb','Back Squat'],['bench_bb','Bench Press'],['row_bb','Bent-Over Row'],
+  ['ohp','Overhead Press'],['rdl','Romanian Deadlift'],['deadlift','Deadlift'],['bss','Split Squat'],
+  ['pullup','Pull-Up'],['pushup','Push-Up'],['incline_db','Incline DB Press'],['curl_db','Curl (DB)'],
+  ['curl_bb','Curl (Barbell)'],['hammer','Hammer Curl'],['latraise','Lateral Raise'],['kickback','Tricep Kickback'],
+  ['plank','Plank (sec)'],['abwheel','Ab Wheel'],['hlr','Hanging Leg Raise'],['rtwist','Russian Twist']];
+function openBaselines(){
+  const B=baselines(), bn=blockNumber();
+  let h=`<h3>Baseline lifts</h3><div class="plan-note">Your working sets today. Reps climb across the block; the weight bumps ${BLOCK_JUMP} lb each new block. Only weights you can actually load are allowed.</div>`;
+  BASE_ORDER.forEach(([id,nm])=>{
+    const b=B[id]; if(!b) return;
+    h+=`<div class="bl-row">
+      <div class="bl-top"><span class="bl-n">${nm}</span><span class="bl-now">${b.bw?'bodyweight':`block ${bn+1}: <b>${workWeight(id,bn)}</b>`}</span></div>
+      <div class="bl-fields">`;
+    if(b.bw){
+      h+=`<label>Reps<input class="bl-in" data-bl="${id}:reps" value="${b.reps}" inputmode="numeric"></label>
+          <label>Sets<input class="bl-in" data-bl="${id}:sets" value="${b.sets}" inputmode="numeric"></label>`;
+    } else if(b.ramp){
+      h+=`<label>Warm-up<input class="bl-in" data-bl="${id}:ramp0" value="${(b.ramp&&b.ramp[0])||''}" inputmode="numeric"></label>
+          <label>Work-up<input class="bl-in" data-bl="${id}:ramp1" value="${(b.ramp&&b.ramp[1])||''}" inputmode="numeric"></label>
+          <label>Working<input class="bl-in" data-bl="${id}:work" value="${b.work}" inputmode="numeric"></label>
+          <label>Sets<input class="bl-in" data-bl="${id}:sets" value="${b.sets}" inputmode="numeric"></label>`;
+    } else {
+      h+=`<label>Weight<input class="bl-in" data-bl="${id}:work" value="${b.work}" inputmode="numeric"></label>
+          <label>Reps<input class="bl-in" data-bl="${id}:reps" value="${b.reps}" inputmode="numeric"></label>
+          <label>Sets<input class="bl-in" data-bl="${id}:sets" value="${b.sets}" inputmode="numeric"></label>`;
+    }
+    h+=`</div></div>`;
+  });
+  h+=`<div class="bl-note">Loadable with your plates: ${LOADABLE.filter(x=>x<=325).join(' · ')}</div>`;
+  h+=`<button class="btn primary" id="sheet2Cancel" style="margin-top:14px">Done</button>`;
+  sheet2Body.innerHTML=h; scrim2El.classList.add('show'); sheet2El.classList.add('show');
+}
+function setBaseline(id,field,val){
+  const B=baselines(), b=B[id]; if(!b) return;
+  const n=num(val);
+  if(field==='sets'){ b.sets=Math.max(1,Math.min(6,Math.round(n)||1)); }
+  else if(field==='reps'){ b.reps=Math.max(1,Math.min(50,Math.round(n)||1)); }
+  else if(field==='work'){ b.work=snapFor(id,n); }
+  else { const i=field==='ramp0'?0:1; b.ramp=b.ramp||[];
+    if(n>0) b.ramp[i]=snapFor(id,n); else b.ramp.splice(i,1);
+    b.ramp=b.ramp.filter(x=>x>0); }
+  save();
+}
+
+/* ---- what plates you own drives every prescribed weight ---- */
+const PLATE_OPTS=[45,35,25,15,10,5,2.5];
+function openPlates(){
+  const P=platePairs();
+  const count=v=>P.filter(x=>x===v).length;
+  let h=`<h3>Your plates</h3><div class="plan-note">Pairs on hand. Every prescribed weight snaps to something you can actually load, and your smallest jump sets how progression works.</div>`;
+  h+=`<div class="pl-grid">`;
+  PLATE_OPTS.forEach(v=>{
+    h+=`<div class="pl-row"><span class="pl-w">${v} lb</span>
+      <span class="stepper mini"><button class="step" data-plate="${v}:-1">−</button><span class="step-val">${count(v)}</span><button class="step" data-plate="${v}:1">+</button></span>
+      <span class="pl-k">pair${count(v)===1?'':'s'}</span></div>`;
+  });
+  h+=`</div>`;
+  const L=loadableSet(), g=[]; for(let i=1;i<L.length;i++) g.push(L[i]-L[i-1]);
+  h+=`<div class="pl-out"><b>${L.length}</b> loadable weights · smallest jump <b>${g.length?Math.min(...g):0} lb</b> · ceiling <b>${L[L.length-1]} lb</b></div>`;
+  h+=`<div class="bl-note">${L.filter(x=>x<=365).join(' · ')}</div>`;
+  h+=`<button class="btn primary" id="sheet2Cancel" style="margin-top:14px">Done</button>`;
+  sheet2Body.innerHTML=h; scrim2El.classList.add('show'); sheet2El.classList.add('show');
+}
+function adjustPlate(v,d){
+  const P=platePairs(); const n=P.filter(x=>x===v).length+d;
+  DB.plates=P.filter(x=>x!==v);
+  for(let i=0;i<Math.max(0,Math.min(6,n));i++) DB.plates.push(v);
+  DB.plates.sort((a,b)=>b-a); save(); openPlates();
+}
+
 /* ================= SETTINGS / DATA ================= */
 function openSettings(){
   sheet2Body.innerHTML=`<h3>Settings</h3>
     <div class="set-list">
+      <button class="set-row2" id="platesBtn"><div><b>Your plates</b><span>What you can actually load</span></div>${IC.cr}</button>
+      <button class="set-row2" id="setupBtn"><div><b>Reset baselines</b><span>Re-enter your starting numbers</span></div>${IC.cr}</button>
+      <button class="set-row2" id="baseBtn"><div><b>Baseline lifts</b><span>Your working weights</span></div>${IC.cr}</button>
       <button class="set-row2" id="exportBtn"><div><b>Export data</b><span>Download a backup (.json)</span></div>${IC.cr}</button>
       <button class="set-row2" id="importBtn"><div><b>Import data</b><span>Restore from a backup file</span></div>${IC.cr}</button>
       <div class="set-row2"><div><b>Rest timer</b><span>Same for every workout</span></div><div class="stepper rest-step"><button class="step" data-rest-set="-15" aria-label="Less">−</button><span class="step-val">${fmtDur(DB.restDefault||120)}</span><button class="step" data-rest-set="15" aria-label="More">+</button></div></div>
@@ -1866,7 +2259,7 @@ document.getElementById('wkBtn').onclick=()=>{ curMon=mondayOf(new Date()); rend
 
 /* ================= FIRST RUN ================= */
 function showWelcome(){ document.getElementById('welcome').classList.add('show'); }
-function closeWelcome(start){ DB.onboarded=true; save(); document.getElementById('welcome').classList.remove('show'); if(start) openPlanner(); }
+function closeWelcome(start){ DB.onboarded=true; save(); document.getElementById('welcome').classList.remove('show'); if(start){ baselinesReady()?openPlanner():openSetup(); } }
 document.getElementById('welcomeStart').onclick=()=>closeWelcome(true);
 document.getElementById('welcomeSkip').onclick=()=>closeWelcome(false);
 
